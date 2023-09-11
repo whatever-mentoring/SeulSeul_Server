@@ -27,7 +27,7 @@ out/
 !**/src/test/**/out/
 application-aws.yml
 application-API-KEY.yml
-
+*.properties
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
