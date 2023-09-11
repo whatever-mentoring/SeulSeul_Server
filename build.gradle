@@ -29,6 +29,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//firebase fcm 라이브러리
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
 }
 
 tasks.named('test') {

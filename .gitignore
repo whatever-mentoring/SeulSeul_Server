@@ -25,9 +25,10 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-application-aws.yml
-application-API-KEY.yml
 *.properties
+*.yml
+/src/main/resources/firebase/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
