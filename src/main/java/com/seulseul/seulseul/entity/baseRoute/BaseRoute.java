@@ -16,11 +16,11 @@ public class BaseRoute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "start_x")
-//    private double startx;
-//
-//    @Column(name="start_y")
-//    private double starty;
+    @Column(name = "start_x")
+    private double startx;
+
+    @Column(name="start_y")
+    private double starty;
 
     @Column(name = "end_x")
     private double endx;
@@ -29,11 +29,11 @@ public class BaseRoute {
     private double endy;
 
     //entity -> dto 변환
-    public BaseRouteDto toDto(BaseRoute  entity) {
+    public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
         dto.setId(entity.getId());
-//        dto.setStartx(entity.getStartx());
-//        dto.setStarty(entity.getStarty());
+        dto.setStartx(entity.getStartx());
+        dto.setStarty(entity.getStarty());
         dto.setEndx(entity.getEndx());
         dto.setEndy(entity.getEndy());
         return dto;

@@ -12,11 +12,12 @@ import lombok.*;
 public class BaseRouteDto {
     @JsonProperty("id")
     private Long id;
-//    @JsonProperty("startx")
-//    private double startx;
-//
-//    @JsonProperty("starty")
-//    private double starty;
+
+    @JsonProperty("startx")
+    private double startx;
+
+    @JsonProperty("starty")
+    private double starty;
 
     @JsonProperty("endx")
     private double endx;
@@ -28,8 +29,8 @@ public class BaseRouteDto {
     public BaseRoute toEntity(BaseRouteDto dto) {
         BaseRoute entity = new BaseRoute();
         entity.setId(dto.getId());
-//        entity.setStartx(dto.getStartx());
-//        entity.setStarty(dto.getStarty());
+        entity.setStartx(dto.getStartx());
+        entity.setStarty(dto.getStarty());
         entity.setEndx(dto.getEndx());
         entity.setEndy(dto.getEndy());
         return entity;
