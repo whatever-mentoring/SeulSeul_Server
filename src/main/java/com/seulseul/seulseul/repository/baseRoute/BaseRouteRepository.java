@@ -1,4 +1,7 @@
 package com.seulseul.seulseul.repository.baseRoute;
 
-public interface BaseRouteRepository {
+import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import org.springframework.data.repository.CrudRepository;
+
+public interface BaseRouteRepository extends CrudRepository<BaseRoute, Long> {
 }
