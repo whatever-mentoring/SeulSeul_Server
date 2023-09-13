@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteJsonDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +55,13 @@ public class BaseRouteService {
 
         String jsonString = sb.toString();
         return jsonString;
+    }
+
+    // 현재 위치(좌표), 요일 받아오기
+    @Transactional(readOnly = false)
+    public BaseRouteStartReqDto getStartCoordination(BaseRouteStartReqDto reqDto) {
+        baseRouteRepository.save(new BaseRoute(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo()));
+        return reqDto;
     }
 
     public BaseRouteDto getStationID() throws IOException {
