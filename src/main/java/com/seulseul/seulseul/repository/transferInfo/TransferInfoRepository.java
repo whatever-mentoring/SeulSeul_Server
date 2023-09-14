@@ -1,4 +1,7 @@
 package com.seulseul.seulseul.repository.transferInfo;
 
-public interface TransferInfoRepository {
+import com.seulseul.seulseul.entity.transferInfo.TransferInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TransferInfoRepository extends JpaRepository<TransferInfo, Long> {
 }
