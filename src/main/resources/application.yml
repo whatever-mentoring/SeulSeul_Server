@@ -2,8 +2,6 @@ server:
   port: 8080
 
 spring:
-  config:
-    import: "application-API-KEY.properties"
   datasource:
     url: "jdbc:h2:mem:seulseul;MODE=MYSQL;NON_KEYWORDS=USER" # user 키워드 테이블에서 사용하게 설정(원래는 예약어)
     username: "sa"
