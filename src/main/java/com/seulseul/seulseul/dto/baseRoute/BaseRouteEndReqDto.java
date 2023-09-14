@@ -13,7 +13,4 @@ public class BaseRouteEndReqDto {
     private double endX;
     private double endY;
 
-    public BaseRoute toEntity(BaseRouteEndReqDto dto) {
-        BaseRoute entity = new BaseRoute();
-    }
 }
