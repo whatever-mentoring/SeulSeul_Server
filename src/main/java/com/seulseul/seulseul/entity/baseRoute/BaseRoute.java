@@ -38,11 +38,13 @@ public class BaseRoute {
     // 요일
     private String dayInfo;
 
-    public BaseRoute(String firstStation, String lastStation, int startStation, int endStation) {
+    public BaseRoute(String firstStation, String lastStation, int startStation, int endStation, double startX, double startY) {
         this.firstStation = firstStation;
         this.lastStation= lastStation;
         this.startStation = startStation;
         this.endStation = endStation;
+        this.startX = startX;
+        this.startY = startY;
     }
 
     public BaseRoute(double startX, double startY, String dayInfo) {

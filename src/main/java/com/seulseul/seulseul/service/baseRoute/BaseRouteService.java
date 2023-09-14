@@ -28,15 +28,15 @@ public class BaseRouteService {
         this.baseRouteRepository = baseRouteRepository;
     }
 
-    public String getUrl() throws IOException{
-        String urlInfo = "https://api.odsay.com/v1/api/searchPubTransPathT?lang=0&SX={from android}&SY={from android}&EX={from android}&EY={from android}&SearchPathType=1&apiKey="
+    public String getUrl(double startX, double startY) throws IOException{
+        String urlInfo = "https://api.odsay.com/v1/api/searchPubTransPathT?lang=0&SX=" + startX + "&SY=" + startY + "&EX={}&EY={}&SearchPathType=1&apiKey="
                 + URLEncoder.encode(apiKey.getApiKey(), "UTF-8");
         return urlInfo;
     }
 
-    public String getJson() throws IOException {
+    public String getJson(double startX, double startY) throws IOException {
         // http 연결
-        String urlInfo = getUrl();
+        String urlInfo = getUrl(startX, startY);
         URL url = new URL(urlInfo);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("GET");
@@ -60,13 +60,14 @@ public class BaseRouteService {
     // 현재 위치(좌표), 요일 받아오기
     @Transactional(readOnly = false)
     public BaseRouteStartReqDto getStartCoordination(BaseRouteStartReqDto reqDto) {
-        baseRouteRepository.save(new BaseRoute(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo()));
+//        baseRouteRepository.save(new BaseRoute(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo()));
         return reqDto;
     }
 
-    public BaseRouteDto getStationID() throws IOException {
+    // 역 ID 받아오기
+    public BaseRouteDto getStationID(double startX, double startY, String dayInfo) throws IOException {
         // json 받기
-        String jsonString = getJson();
+        String jsonString = getJson(startX, startY);
         // parsing
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
@@ -87,7 +88,11 @@ public class BaseRouteService {
             dto.setLastStation(lastStation);
             dto.setStartStation(startStation);
             dto.setEndStation(endStation);
-            baseRouteRepository.save(new BaseRoute(dto.getFirstStation(), dto.getLastStation(),dto.getStartStation(), dto.getEndStation()));
+            dto.setStartX(startX);
+            dto.setStartY(startY);
+            dto.setDayInfo(dayInfo);
+            baseRouteRepository.save(new BaseRoute(dto.getFirstStation(), dto.getLastStation(),dto.getStartStation(), dto.getEndStation()
+                                                    , dto.getStartX(), dto.getStartY()));
             return dto;
         }
         catch (Exception e) {
