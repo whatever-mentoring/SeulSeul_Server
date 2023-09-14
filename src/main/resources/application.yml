@@ -3,8 +3,6 @@ server:
 
 spring:
   config:
-    activate:
-      on-profile: local
     import: "application-API-KEY.properties"
   datasource:
     url: "jdbc:h2:mem:seulseul;MODE=MYSQL;NON_KEYWORDS=USER" # user 키워드 테이블에서 사용하게 설정(원래는 예약어)
@@ -25,24 +23,5 @@ spring:
       enabled: true
       path: /h2-console # 이 주소로 들어가면 됨
 ---
-spring:
-  config:
-    activate:
-      on-profile: aws
-  datasource:
-    url: ${url}
-    username: ${name}
-    password: ${password}
-    driver-class-name: com.mysql.cj.jdbc.Driver # aws에서는 mysql 사용
 
-  jpa:
-    hibernate:
-      ddl-auto: create # 서버 시작될 때마다 테이블 제거
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-      open-in-view: false
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
 
