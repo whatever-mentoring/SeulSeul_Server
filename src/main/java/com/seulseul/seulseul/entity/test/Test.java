@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Test {
     @Id
-    private Long userId;
-    private Long id;
+    private String userId;
+    private String  id;
     private String title;
     private String body;
 
-    public Test(Long userId, Long id, String title, String body) {
+    public Test(String userId, String id, String title, String body) {
         this.userId = userId;
         this.id = id;
         this.title = title;

@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 public class TestDto {
-    private Long userId;
-    private Long id;
+    private String userId;
+    private String id;
     private String title;
     private String body;
 
