@@ -1,14 +1,13 @@
 package com.seulseul.seulseul.controller;
 
 import com.seulseul.seulseul.dto.test.TestDto;
+import com.seulseul.seulseul.dto.test.TestUpdateDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.service.test.TestService;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
 @RestController
 public class HelloController {
@@ -63,5 +63,20 @@ public class HelloController {
     public ResponseEntity<TestDto> saveDto(@RequestBody TestDto dto) {
         testService.save(dto);
         return new ResponseEntity<TestDto>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/v1/test")
+    public ResponseEntity<List<TestDto>> getTest() {
+        return new ResponseEntity<List<TestDto>>(testService.getTests(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("v1/test/{id}")
+    public void deleteTest(@PathVariable String id) {
+        testService.deleteTest(id);
+    }
+
+    @PatchMapping("/v1/test")
+    public void updateTest(@RequestBody TestUpdateDto dto) {
+        testService.updateTest(dto);
     }
 }
