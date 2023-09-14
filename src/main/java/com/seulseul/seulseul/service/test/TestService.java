@@ -37,8 +37,9 @@ public class TestService {
     }
 
     @Transactional
-    public void updateTest(TestUpdateDto dto) {
+    public Test updateTest(TestUpdateDto dto) {
         Test test = testRepository.findById(dto.getId());
         test.updateTitle(dto.getTitle(), dto.getBody());
+        return test;
     }
 }

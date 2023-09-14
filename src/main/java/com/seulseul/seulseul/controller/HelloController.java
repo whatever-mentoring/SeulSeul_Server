@@ -3,6 +3,7 @@ package com.seulseul.seulseul.controller;
 import com.seulseul.seulseul.dto.test.TestDto;
 import com.seulseul.seulseul.dto.test.TestUpdateDto;
 import com.seulseul.seulseul.entity.ApiKey;
+import com.seulseul.seulseul.entity.test.Test;
 import com.seulseul.seulseul.service.test.TestService;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -76,7 +77,7 @@ public class HelloController {
     }
 
     @PatchMapping("/v1/test")
-    public void updateTest(@RequestBody TestUpdateDto dto) {
-        testService.updateTest(dto);
+    public Test updateTest(@RequestBody TestUpdateDto dto) {
+        return testService.updateTest(dto);
     }
 }
