@@ -36,10 +36,6 @@ public class BaseRouteTransferDto {
         @JsonProperty("laneName")
         private String laneName;
 
-        @JsonProperty("startName")
-        private String startName;
-
-
         @JsonProperty("wayCode")
         private int wayCode;
 
@@ -63,32 +59,6 @@ public class BaseRouteTransferDto {
 
         private int fastDoor;
         private int exWalkTime;
-    }
-
-    //저장해햐하나 ..?
-    @Getter
-    @NoArgsConstructor
-    public class StationSet {
-        private List<Stations> stations;
-
-    }
-    @Getter
-    @NoArgsConstructor
-    public class Stations {
-        @JsonProperty("startID")
-        private int startID;
-
-        @JsonProperty("startName")
-        private String startName;
-
-        @JsonProperty("endSID")
-        private int endSID;
-
-        @JsonProperty("endName")
-        private String endName;
-
-        @JsonProperty("travelTime")
-        private int travelTime;
     }
 
 }

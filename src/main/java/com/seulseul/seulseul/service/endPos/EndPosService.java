@@ -25,7 +25,6 @@ public class EndPosService {
 
         //2. baseRoute table에 저장
         BaseRouteDto baseRouteDto = new BaseRouteDto();
-        baseRouteDto.setId(endPos.getId());
         baseRouteDto.setEndx(endPosDto.getEndx());
         baseRouteDto.setEndy(endPosDto.getEndy());
 //        baseRouteRepository.save(baseRouteDto.toEntity(baseRouteDto));
