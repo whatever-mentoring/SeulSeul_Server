@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-;
 
 @Entity
 @Getter
@@ -76,5 +75,15 @@ public class BaseRoute {
     public void updateStartCoordination(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
+
+    //entity -> dto 변환
+    public BaseRouteDto toDto(BaseRoute entity) {
+        BaseRouteDto dto = new BaseRouteDto();
+        dto.setId(entity.getId());
+        dto.setStartx(entity.getStartx());
+        dto.setStarty(entity.getStarty());
+        dto.setEndx(entity.getEndx());
+        dto.setEndy(entity.getEndy());
+        return dto;
     }
 }
