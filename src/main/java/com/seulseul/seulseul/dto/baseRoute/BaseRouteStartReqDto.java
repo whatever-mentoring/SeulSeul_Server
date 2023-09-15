@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseRouteStartReqDto {
+    private Long id;
     private double startX;
     private double startY;
     private String dayInfo;

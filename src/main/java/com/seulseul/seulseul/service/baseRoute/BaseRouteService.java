@@ -31,9 +31,9 @@ public class BaseRouteService {
     // 현재 위치(좌표), 요일 받아오기
     @Transactional(readOnly = false)
     public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto) {
-        BaseRoute baseRoute = baseRouteRepository.save(new BaseRoute(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo()));
-        Long id = baseRoute.getId();
-        return new BaseRouteStartDto(id, reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
+        Optional<BaseRoute> baseRoute = baseRouteRepository.findById(reqDto.getId());
+        baseRoute.get().saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
+        return new BaseRouteStartDto(baseRoute.get().getId(), reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
     }
 
     // 현재 위치 변경하기
