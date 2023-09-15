@@ -24,13 +24,13 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<BaseRouteStartDto> getStartCoordination(@RequestBody BaseRouteStartReqDto dto) throws IOException {
+    public ResponseEntity<BaseRouteStartDto> saveStartInfo(@RequestBody BaseRouteStartReqDto dto) throws IOException {
         BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto);
         return new ResponseEntity<BaseRouteStartDto>(reqDto, HttpStatus.OK);
     }
 
     @PatchMapping("/v1/start")
-    public ResponseEntity<BaseRouteStartDto> updateStartCoordination(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
+    public ResponseEntity<BaseRouteStartDto> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
         BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
         return new ResponseEntity<BaseRouteStartDto>(startDto, HttpStatus.OK);
     }
