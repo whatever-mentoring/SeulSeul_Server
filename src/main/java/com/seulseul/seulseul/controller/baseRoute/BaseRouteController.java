@@ -1,24 +1,37 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
-import com.seulseul.seulseul.entity.ApiKey;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.sql.BatchUpdateException;
 
-@Controller
 @RestController
-//@RequiredArgsConstructor    //service 선언한 후 초기화 단계 필요한데, 초기화하지 않아도 되도록 해줌
 public class BaseRouteController {
+    private final BaseRouteService baseRouteService;
 
+    public BaseRouteController(BaseRouteService baseRouteService) {
+        this.baseRouteService = baseRouteService;
+    }
 
+    @PostMapping("/v1/start")
+    public ResponseEntity<BaseRouteStartDto> saveStartInfo(@RequestBody BaseRouteStartReqDto dto) throws IOException {
+        BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto);
+        return new ResponseEntity<BaseRouteStartDto>(reqDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/v1/start")
+    public ResponseEntity<BaseRouteStartDto> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
+        BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
+        return new ResponseEntity<BaseRouteStartDto>(startDto, HttpStatus.OK);
+    }
 }

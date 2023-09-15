@@ -1,38 +1,80 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name="BaseRoute")
+@Getter
+@NoArgsConstructor
 public class BaseRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_x")
-    private double startx;
+    private double startX;
 
-    @Column(name="start_y")
-    private double starty;
+    private double startY;
 
-    @Column(name = "end_x")
-    private double endx;
+    private double endX;
 
-    @Column(name="end_y")
-    private double endy;
+    private double endY;
 
-    @Column(name="start_station")
-    private int startStatinoId;
+    // 출발역 ID
+    private int startId;
 
-    @Column(name="end_station")
-    private int endStationId;
+    // 도착역 ID
+    private int endId;
+
+    // 출발역 이름
+    private String firstStation;
+
+    // 도착역 이름
+    private String lastStation;
+
+    // 요일
+    private String dayInfo;
+
+    public BaseRoute(String firstStation, String lastStation, int startId, int endId, double startX, double startY) {
+        this.firstStation = firstStation;
+        this.lastStation= lastStation;
+        this.startId = startId;
+        this.endId = endId;
+        this.startX = startX;
+        this.startY = startY;
+    }
+
+    public BaseRoute(double startX, double startY, String dayInfo) {
+        this.startX = startX;
+        this.startY = startY;
+        this.dayInfo = dayInfo;
+    }
+
+    public void saveStartInfo(double startX,double startY, String dayInfo) {
+        this.startX = startX;
+        this.startY = startY;
+        this.dayInfo = dayInfo;
+    }
+
+    public void saveInfo(double startX, double startY, double endX, double endY, int startId, int endId, String firstStation, String lastStation
+                            , String dayInfo) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+        this.startId = startId;
+        this.endId = endId;
+        this.firstStation = firstStation;
+        this.lastStation = lastStation;
+        this.dayInfo = dayInfo;
+    }
+
+    public void updateStartCoordination(double startX, double startY) {
+        this.startX = startX;
+        this.startY = startY;
 
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
