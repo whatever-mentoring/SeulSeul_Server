@@ -32,14 +32,14 @@ public class BaseRouteDto {
     private int endStationId;
 
     //dto -> entity 변환
-    public BaseRoute toEntity(BaseRouteDto dto) {
-        BaseRoute entity = new BaseRoute();
-        entity.setId(dto.getId());
-        entity.setStartx(dto.getStartx());
-        entity.setStarty(dto.getStarty());
-        entity.setEndx(dto.getEndx());
-        entity.setEndy(dto.getEndy());
-        return entity;
-    }
+//    public BaseRoute toEntity(BaseRouteDto dto) {
+//        BaseRoute entity = new BaseRoute();
+//        entity.setId(dto.getId());
+//        entity.setStartx(dto.getStartx());
+//        entity.setStarty(dto.getStarty());
+//        entity.setEndx(dto.getEndx());
+//        entity.setEndy(dto.getEndy());
+//        return entity;
+//    }
 
 }

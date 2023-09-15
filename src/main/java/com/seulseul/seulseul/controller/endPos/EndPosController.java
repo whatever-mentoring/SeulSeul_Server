@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class EndPosController {
     private final EndPosService endPosService;
 
-    //(1)endPos table에 저장: 사용자가 입력한 값에 기반 -> (2)baseRoute table에 저장
     @PostMapping("/addDest")
     public ResponseEntity<?> addDest(@RequestBody EndPosDto form) {
         EndPosDto dto = endPosService.addDest(form);

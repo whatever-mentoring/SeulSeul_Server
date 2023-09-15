@@ -4,6 +4,8 @@ import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -17,31 +19,67 @@ public class BaseRoute {
     private Long id;
 
     @Column(name = "start_x")
-    private double startx;
+    private double startX;
 
     @Column(name="start_y")
-    private double starty;
+    private double startY;
 
     @Column(name = "end_x")
-    private double endx;
+    private double endX;
 
     @Column(name="end_y")
-    private double endy;
+    private double endY;
 
     @Column(name="start_station")
-    private int startStatinoId;
+    private int startStationId;
 
     @Column(name="end_station")
     private int endStationId;
+
+    @Column(name="transfer_station")
+    private List<Integer> exSID;
+
+    public BaseRoute(Long id, int startStationId, int endStationId, List<Integer> exSID) {
+        this.id = id;
+        this.startStationId = startStationId;
+        this.endStationId = endStationId;
+        this.exSID = exSID;
+    }
+
+
+//    @Column(name="wayCode")
+//    private int wayCode;
+//
+//    @Column(name="wayName")
+//    private String wayName;
+//
+//    @Column(name="exWalkTime")
+//    private int exWalkTime;
+//
+//    @Column(name="exName")
+//    private String exName;
+//
+//    @Column(name="travelTime")
+//    private int travelTime;
+//
+//    @Column(name="globalTravelTime")
+//    private int globalTravelTime;
+
 
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
         dto.setId(entity.getId());
-        dto.setStartx(entity.getStartx());
-        dto.setStarty(entity.getStarty());
-        dto.setEndx(entity.getEndx());
-        dto.setEndy(entity.getEndy());
+        dto.setStartx(entity.getStartX());
+        dto.setStarty(entity.getStartY());
+        dto.setEndx(entity.getEndX());
+        dto.setEndy(entity.getEndY());
         return dto;
+    }
+
+    public void saveTransfer(int startStatinoId, int endStationId, List<Integer> exSID) {
+        this.startStationId = startStatinoId;
+        this.endStationId = endStationId;
+        this.exSID = exSID;
     }
 }
