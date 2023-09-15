@@ -40,21 +40,6 @@ public class BaseRoute {
     // 요일
     private String dayInfo;
 
-    public BaseRoute(String firstStation, String lastStation, int startStationId, int endStationId, double startX, double startY) {
-        this.firstStation = firstStation;
-        this.lastStation= lastStation;
-        this.startStationId = startStationId;
-        this.endStationId = endStationId;
-        this.startX = startX;
-        this.startY = startY;
-    }
-
-    public BaseRoute(double startX, double startY, String dayInfo) {
-        this.startX = startX;
-        this.startY = startY;
-        this.dayInfo = dayInfo;
-    }
-
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
         this.startX = baseRouteDto.getStartX();
@@ -69,17 +54,11 @@ public class BaseRoute {
         this.dayInfo = dayInfo;
     }
 
-    public void saveInfo(double startX, double startY, double endX, double endY, int startStationId, int endStationId, String firstStation, String lastStation
-                            , String dayInfo) {
-        this.startX = startX;
-        this.startY = startY;
-        this.endX = endX;
-        this.endY = endY;
+    public void saveIdAndNameInfo(int startStationId, int endStationId, String firstStation, String lastStation) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.firstStation = firstStation;
         this.lastStation = lastStation;
-        this.dayInfo = dayInfo;
     }
 
     public void updateStartCoordination(double startX, double startY) {
