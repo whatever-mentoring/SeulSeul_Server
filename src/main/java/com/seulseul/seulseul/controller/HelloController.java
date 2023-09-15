@@ -18,12 +18,10 @@ public class HelloController {
 
     private final ApiKey apiService;
     private final BaseRouteService baseRouteService;
-    private final TransferInfoService transferInfoService;
 
-    public HelloController(ApiKey apiService, BaseRouteService baseRouteService, TransferInfoService transferInfoService) {
+    public HelloController(ApiKey apiService, BaseRouteService baseRouteService) {
         this.apiService = apiService;
         this.baseRouteService = baseRouteService;
-        this.transferInfoService = transferInfoService;
     }
 /*
     @GetMapping("/hello")

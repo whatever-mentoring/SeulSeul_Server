@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
+import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
@@ -24,14 +25,16 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<BaseRouteStartDto> saveStartInfo(@RequestBody BaseRouteStartReqDto dto) throws IOException {
+    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto) throws IOException {
         BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto);
-        return new ResponseEntity<BaseRouteStartDto>(reqDto, HttpStatus.OK);
+        ResponseData responseData = new ResponseData(200, reqDto);
+        return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
 
     @PatchMapping("/v1/start")
-    public ResponseEntity<BaseRouteStartDto> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
+    public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
         BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
-        return new ResponseEntity<BaseRouteStartDto>(startDto, HttpStatus.OK);
+        ResponseData responseData = new ResponseData(200, startDto);
+        return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
 }
