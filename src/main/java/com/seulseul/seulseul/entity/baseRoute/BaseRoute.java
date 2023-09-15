@@ -1,18 +1,17 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
-import com.seulseul.seulseul.entity.transferInfo.TransferInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-import javax.xml.crypto.Data;
-import java.util.Date;
-import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class BaseRoute {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,9 +24,11 @@ public class BaseRoute {
 
     private double endY;
 
-    private int startStation;
+    // 출발역 ID
+    private int startId;
 
-    private int endStation;
+    // 도착역 ID
+    private int endId;
 
     // 출발역 이름
     private String firstStation;
@@ -38,11 +39,11 @@ public class BaseRoute {
     // 요일
     private String dayInfo;
 
-    public BaseRoute(String firstStation, String lastStation, int startStation, int endStation, double startX, double startY) {
+    public BaseRoute(String firstStation, String lastStation, int startId, int endId, double startX, double startY) {
         this.firstStation = firstStation;
         this.lastStation= lastStation;
-        this.startStation = startStation;
-        this.endStation = endStation;
+        this.startId = startId;
+        this.endId = endId;
         this.startX = startX;
         this.startY = startY;
     }
@@ -51,5 +52,29 @@ public class BaseRoute {
         this.startX = startX;
         this.startY = startY;
         this.dayInfo = dayInfo;
+    }
+
+    public void saveStartInfo(double startX,double startY, String dayInfo) {
+        this.startX = startX;
+        this.startY = startY;
+        this.dayInfo = dayInfo;
+    }
+
+    public void saveInfo(double startX, double startY, double endX, double endY, int startId, int endId, String firstStation, String lastStation
+                            , String dayInfo) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+        this.startId = startId;
+        this.endId = endId;
+        this.firstStation = firstStation;
+        this.lastStation = lastStation;
+        this.dayInfo = dayInfo;
+    }
+
+    public void updateStartCoordination(double startX, double startY) {
+        this.startX = startX;
+        this.startY = startY;
     }
 }

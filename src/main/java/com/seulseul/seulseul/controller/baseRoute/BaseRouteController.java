@@ -1,15 +1,19 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.sql.BatchUpdateException;
 
 @RestController
 public class BaseRouteController {
@@ -20,11 +24,14 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<BaseRouteDto> getStartCoordination(@RequestBody BaseRouteStartReqDto dto) throws IOException {
-        // 좌표값 dto에 저장해서
-        BaseRouteStartReqDto reqDto = baseRouteService.getStartCoordination(dto);
-        // 넘겨주기
-        BaseRouteDto routeDto = baseRouteService.getStationID(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
-        return new ResponseEntity<>(routeDto, HttpStatus.OK);
+    public ResponseEntity<BaseRouteStartDto> getStartCoordination(@RequestBody BaseRouteStartReqDto dto) throws IOException {
+        BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto);
+        return new ResponseEntity<BaseRouteStartDto>(reqDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/v1/start")
+    public ResponseEntity<BaseRouteStartDto> updateStartCoordination(@RequestBody BaseRouteStartUpdateDto dto) throws IOException {
+        BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
+        return new ResponseEntity<BaseRouteStartDto>(startDto, HttpStatus.OK);
     }
 }
