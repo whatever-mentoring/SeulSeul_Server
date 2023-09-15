@@ -7,10 +7,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="EndPos")
 public class EndPos {
@@ -30,10 +28,23 @@ public class EndPos {
     @Column(name="roadNameAddress")
     private String roadNameAddress;
 
+    public EndPos() {
+        this.endX = endX;
+        this.endY = endY;
+        this.endNickName = endNickName;
+        this.roadNameAddress = roadNameAddress;
+    }
+
+    public EndPos(EndPosDto form) {
+        this.endX = form.getEndX();
+        this.endY = form.getEndY();
+        this.endNickName = form.getEndNickName();
+        this.roadNameAddress = form.getRoadNameAddress();
+    }
+
     //entity -> dto 변환
     public EndPosDto toDto(EndPos entity) {
         EndPosDto dto = new EndPosDto();
-        dto.setId(entity.getId());
         dto.setEndX(entity.getEndX());
         dto.setEndY(entity.getEndY());
         dto.setEndNickName(entity.getEndNickName());

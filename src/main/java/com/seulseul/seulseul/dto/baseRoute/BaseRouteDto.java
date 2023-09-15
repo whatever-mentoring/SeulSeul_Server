@@ -14,16 +14,16 @@ public class BaseRouteDto {
     private Long id;
 
     @JsonProperty("startx")
-    private double startx;
+    private double startX;
 
     @JsonProperty("starty")
-    private double starty;
+    private double startY;
 
     @JsonProperty("endx")
-    private double endx;
+    private double endX;
 
     @JsonProperty("endy")
-    private double endy;
+    private double endY;
 
     @JsonProperty("startStationId")
     private int startStationId;
@@ -32,14 +32,13 @@ public class BaseRouteDto {
     private int endStationId;
 
     //dto -> entity 변환
-    public BaseRoute toEntity(BaseRouteDto dto) {
-        BaseRoute entity = new BaseRoute();
-        entity.setId(dto.getId());
-        entity.setStartx(dto.getStartx());
-        entity.setStarty(dto.getStarty());
-        entity.setEndx(dto.getEndx());
-        entity.setEndy(dto.getEndy());
-        return entity;
-    }
-
+//    public BaseRoute toEntity(BaseRouteDto dto) {
+//        BaseRoute entity = new BaseRoute();
+//        entity.setId(dto.getId());
+//        entity.setStartX(dto.getStartX());
+//        entity.setStartY(dto.getStartY());
+//        entity.setEndX(dto.getEndX());
+//        entity.setEndY(dto.getEndY());
+//        return entity;
+//    }
 }

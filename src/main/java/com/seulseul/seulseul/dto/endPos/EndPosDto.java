@@ -12,14 +12,12 @@ import lombok.*;
 @NoArgsConstructor  //파라미터가 없는 생성자(기본 생성자) 자동 생성
 @AllArgsConstructor //모든 필드를 파라미터로 받는 생성자 자동 생성
 public class EndPosDto {
-    @JsonProperty("id")
-    private Long id;
 
     @JsonProperty("endx")
-    private double endx;
+    private double endX;
 
     @JsonProperty("endy")
-    private double endy;
+    private double endY;
 
     @JsonProperty("endNickName")
     private String endNickName;
@@ -27,13 +25,13 @@ public class EndPosDto {
     @JsonProperty("roadNameAddress")
     private String roadNameAddress;
 
-    public EndPos toEntity(EndPosDto dto) {
-        EndPos entity = new EndPos();
-        entity.setId(dto.getId());
-        entity.setEndx(dto.getEndx());
-        entity.setEndy(dto.getEndy());
-        entity.setEndNickName(dto.getEndNickName());
-        entity.setRoadNameAddress(dto.getRoadNameAddress());
-        return entity;
-    }
+//    public EndPos toEntity(EndPosDto dto) {
+//        EndPos entity = new EndPos();
+//        entity.setEndX(dto.getEndX());
+//        entity.setEndY(dto.getEndY());
+//        entity.setEndNickName(dto.getEndNickName());
+//        entity.setRoadNameAddress(dto.getRoadNameAddress());
+//        return entity;
+//    }
+
 }

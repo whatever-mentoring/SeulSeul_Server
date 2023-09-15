@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -52,6 +53,14 @@ public class BaseRoute {
         this.startX = startX;
         this.startY = startY;
         this.dayInfo = dayInfo;
+    }
+
+    public BaseRoute(BaseRouteDto baseRouteDto) {
+        this.id = baseRouteDto.getId();
+        this.startX = baseRouteDto.getStartX();
+        this.startY = baseRouteDto.getStartY();
+        this.endX = baseRouteDto.getEndX();
+        this.endY = baseRouteDto.getEndY();
     }
 
     public void saveStartInfo(double startX,double startY, String dayInfo) {

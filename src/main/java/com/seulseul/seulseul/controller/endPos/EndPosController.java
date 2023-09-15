@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.controller.endPos;
 
+import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.service.endPos.EndPosService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class EndPosController {
     @PostMapping("/v1/end")
     public ResponseEntity<?> addDest(@RequestBody EndPosDto form) {
         EndPosDto dto = endPosService.addDest(form);
-
-        return ResponseEntity.ok(dto);
+        ResponseData responseData = new ResponseData(200, dto);
+        return ResponseEntity.ok(responseData);
     }
 
 }
