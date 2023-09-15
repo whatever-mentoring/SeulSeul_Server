@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="EndPos")
 public class EndPos {
@@ -27,13 +28,6 @@ public class EndPos {
 
     @Column(name="roadNameAddress")
     private String roadNameAddress;
-
-    public EndPos() {
-        this.endX = endX;
-        this.endY = endY;
-        this.endNickName = endNickName;
-        this.roadNameAddress = roadNameAddress;
-    }
 
     public EndPos(EndPosDto form) {
         this.endX = form.getEndX();
