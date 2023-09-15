@@ -19,10 +19,10 @@ public class EndPos {
     private Long id;
 
     @Column(name = "end_x") //경도
-    private double endx;
+    private double endX;
 
     @Column(name="end_y")   //위도
-    private double endy;
+    private double endY;
 
     @Column(name = "endNickName")   //endNickName:안드로이드 => Home: 본가, LivingAlone: 자취방, Dormitory: 기숙사, ??:기타(사용자지정)
     private String endNickName;
@@ -34,8 +34,8 @@ public class EndPos {
     public EndPosDto toDto(EndPos entity) {
         EndPosDto dto = new EndPosDto();
         dto.setId(entity.getId());
-        dto.setEndx(entity.getEndx());
-        dto.setEndy(entity.getEndy());
+        dto.setEndX(entity.getEndX());
+        dto.setEndY(entity.getEndY());
         dto.setEndNickName(entity.getEndNickName());
         dto.setRoadNameAddress(entity.getRoadNameAddress());
         return dto;

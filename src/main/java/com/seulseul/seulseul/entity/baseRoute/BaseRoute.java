@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,10 +25,10 @@ public class BaseRoute {
     private double endY;
 
     // 출발역 ID
-    private int startId;
+    private int startStationId;
 
     // 도착역 ID
-    private int endId;
+    private int endStationId;
 
     // 출발역 이름
     private String firstStation;
@@ -38,11 +39,11 @@ public class BaseRoute {
     // 요일
     private String dayInfo;
 
-    public BaseRoute(String firstStation, String lastStation, int startId, int endId, double startX, double startY) {
+    public BaseRoute(String firstStation, String lastStation, int startStationId, int endStationId, double startX, double startY) {
         this.firstStation = firstStation;
         this.lastStation= lastStation;
-        this.startId = startId;
-        this.endId = endId;
+        this.startStationId = startStationId;
+        this.endStationId = endStationId;
         this.startX = startX;
         this.startY = startY;
     }
@@ -59,14 +60,14 @@ public class BaseRoute {
         this.dayInfo = dayInfo;
     }
 
-    public void saveInfo(double startX, double startY, double endX, double endY, int startId, int endId, String firstStation, String lastStation
+    public void saveInfo(double startX, double startY, double endX, double endY, int startStationId, int endStationId, String firstStation, String lastStation
                             , String dayInfo) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
         this.endY = endY;
-        this.startId = startId;
-        this.endId = endId;
+        this.startStationId = startStationId;
+        this.endStationId = endStationId;
         this.firstStation = firstStation;
         this.lastStation = lastStation;
         this.dayInfo = dayInfo;
@@ -76,14 +77,16 @@ public class BaseRoute {
         this.startX = startX;
         this.startY = startY;
 
+    }
+
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
         dto.setId(entity.getId());
-        dto.setStartx(entity.getStartx());
-        dto.setStarty(entity.getStarty());
-        dto.setEndx(entity.getEndx());
-        dto.setEndy(entity.getEndy());
+        dto.setStartY(entity.getStartX());
+        dto.setStartY(entity.getStartY());
+        dto.setEndX(entity.getEndX());
+        dto.setEndY(entity.getEndY());
         return dto;
     }
 }
