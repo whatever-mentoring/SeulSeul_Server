@@ -28,7 +28,7 @@ public class EndPosService {
         baseRouteDto.setId(endPos.getId());
         baseRouteDto.setEndx(endPosDto.getEndx());
         baseRouteDto.setEndy(endPosDto.getEndy());
-        baseRouteRepository.save(baseRouteDto.toEntity(baseRouteDto));
+//        baseRouteRepository.save(baseRouteDto.toEntity(baseRouteDto));
 
         return endPosDto;
     }

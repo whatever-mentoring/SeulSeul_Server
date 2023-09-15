@@ -30,6 +30,12 @@ public class BaseRoute {
     @Column(name="end_y")
     private double endY;
 
+    @Column(name="SID")
+    private int SID;
+
+    @Column(name="EID")
+    private int EID;
+
     @Column(name="start_station")
     private int startStationId;
 
@@ -37,16 +43,11 @@ public class BaseRoute {
     private int endStationId;
 
     @Column(name="transfer_station")
-    private List<Integer> exSID;
+    private List<Integer> exSIDList;
 
-    public BaseRoute(Long id, int startStationId, int endStationId, List<Integer> exSID) {
-        this.id = id;
-        this.startStationId = startStationId;
-        this.endStationId = endStationId;
-        this.exSID = exSID;
+    public void updateExSID(List<Integer> exSIDList) {
+        this.exSIDList = exSIDList;
     }
-
-
 //    @Column(name="wayCode")
 //    private int wayCode;
 //
@@ -77,9 +78,4 @@ public class BaseRoute {
         return dto;
     }
 
-    public void saveTransfer(int startStatinoId, int endStationId, List<Integer> exSID) {
-        this.startStationId = startStatinoId;
-        this.endStationId = endStationId;
-        this.exSID = exSID;
-    }
 }
