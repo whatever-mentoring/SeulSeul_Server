@@ -28,6 +28,12 @@ public class BaseRoute {
     @Column(name="end_y")
     private double endy;
 
+    @Column(name="start_station")
+    private int startStatinoId;
+
+    @Column(name="end_station")
+    private int endStationId;
+
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();

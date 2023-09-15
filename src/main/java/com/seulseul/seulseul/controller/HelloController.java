@@ -43,11 +43,7 @@ public class HelloController {
 
         // 결과 출력
         System.out.println(sb.toString());
-        return "hello";
+        return sb.toString();
     }
 
-    @GetMapping("/test")
-    public String Test() {
-        return "test";
-    }
 }

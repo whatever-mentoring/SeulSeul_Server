@@ -25,6 +25,12 @@ public class BaseRouteDto {
     @JsonProperty("endy")
     private double endy;
 
+    @JsonProperty("startStationId")
+    private int startStationId;
+
+    @JsonProperty("endStationId")
+    private int endStationId;
+
     //dto -> entity 변환
     public BaseRoute toEntity(BaseRouteDto dto) {
         BaseRoute entity = new BaseRoute();

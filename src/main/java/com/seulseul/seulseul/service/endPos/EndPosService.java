@@ -16,10 +16,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class EndPosService {
     private final EndPosRepository endPosRepository;
+    private final BaseRouteRepository baseRouteRepository;
     @Transactional
     public EndPosDto addDest(EndPosDto form) {
-        EndPos entity = endPosRepository.save(form.toEntity(form));
-        EndPosDto dto = entity.toDto(entity);
-        return dto;
+        //1. endPos table에 저장
+        EndPos endPos = endPosRepository.save(form.toEntity(form));
+        EndPosDto endPosDto = endPos.toDto(endPos);
+
+        //2. baseRoute table에 저장
+        BaseRouteDto baseRouteDto = new BaseRouteDto();
+        baseRouteDto.setId(endPos.getId());
+        baseRouteDto.setEndx(endPosDto.getEndx());
+        baseRouteDto.setEndy(endPosDto.getEndy());
+        baseRouteRepository.save(baseRouteDto.toEntity(baseRouteDto));
+
+        return endPosDto;
     }
 }
