@@ -94,6 +94,9 @@ public class BaseRouteService {
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             BaseRouteJsonDto jsonDto = mapper.readValue(jsonString, BaseRouteJsonDto.class);
+            System.out.println("mapper jsonDto:"+jsonDto);
+            System.out.println("mapper jsonDto:"+jsonDto.getResult());
+            System.out.println("mapper jsonDto:"+jsonDto.getResult().getPath());
             // 원하는 값을 추출
             String firstStation = jsonDto.getResult().getPath().get(0).getInfo().getFirstStartStation();
             String lastStation = jsonDto.getResult().getPath().get(0).getInfo().getLastEndStation();
@@ -155,8 +158,6 @@ public class BaseRouteService {
     public BaseRoute findTransferData(Long id) throws IOException {
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
-        System.out.println("id:"+id);
-        System.out.println("baseRoute:"+ baseRoute);
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         String string = getFromAPI(baseRoute.getSID(), baseRoute.getEID());
         //원하는 데이터 찾기
