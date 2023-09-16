@@ -1,6 +1,5 @@
 package com.seulseul.seulseul.controller.endPos;
 
-import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.service.endPos.EndPosService;
 import lombok.RequiredArgsConstructor;

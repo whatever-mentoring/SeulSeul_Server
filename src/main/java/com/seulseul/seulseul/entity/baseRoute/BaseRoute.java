@@ -1,17 +1,18 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Entity
+import java.util.List;
+
 @Getter
+@Setter
+@ToString
+@AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name="BaseRoute")
 public class BaseRoute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +26,12 @@ public class BaseRoute {
 
     private double endY;
 
-    // 출발역 ID
-    private int startStationId;
+    @Column(name="SID")
+    private int SID;
 
-    // 도착역 ID
-    private int endStationId;
+    @Column(name="EID")
+    private int EID;
+
 
     // 출발역 이름
     private String firstStation;
@@ -39,6 +41,27 @@ public class BaseRoute {
 
     // 요일
     private String dayInfo;
+
+    @Column(name="transfer_station")
+    private List<Integer> exSID;
+
+    @Column(name="laneName")
+    private List<String> laneName;
+
+    @Column(name="wayCode")
+    private List<Integer> wayCode;
+
+    @Column(name="wayName")
+    private List<String> wayName;
+
+    @Column(name="fastDoor")
+    private List<Integer> fastDoor;
+
+    @Column(name="exWalkTime")
+    private List<Integer> exWalkTime;
+
+    @Column(name="exName")
+    private List<String> exName;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -67,14 +90,24 @@ public class BaseRoute {
 
     }
 
+    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList, List<Integer> fastDoorList, List<Integer> exWalkTimeList) {
+        this.laneName = laneNameList;
+
+        this.laneName = laneNameList;
+        this.wayCode = wayCodeList;
+        this.wayName = wayNameList;
+        this.exName = exNameList;
+        this.exSID = exSIDList;
+        this.fastDoor = fastDoorList;
+        this.exWalkTime = exWalkTimeList;
+    }
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
-        dto.setId(entity.getId());
-        dto.setStartY(entity.getStartX());
-        dto.setStartY(entity.getStartY());
-        dto.setEndX(entity.getEndX());
-        dto.setEndY(entity.getEndY());
+        dto.setStartx(entity.getStartX());
+        dto.setStarty(entity.getStartY());
+        dto.setEndx(entity.getEndX());
+        dto.setEndy(entity.getEndY());
         return dto;
     }
 }
