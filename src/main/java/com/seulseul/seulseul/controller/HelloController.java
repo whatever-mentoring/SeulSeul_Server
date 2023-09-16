@@ -6,6 +6,7 @@ import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.test.Test;
 import com.seulseul.seulseul.service.test.TestService;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +62,13 @@ public class HelloController {
     }
 
     @PostMapping("/v1/test")
-    public ResponseEntity<TestDto> saveDto(@RequestBody TestDto dto) {
+    public ResponseEntity<TestDto> saveDto(@RequestBody TestDto dto, @RequestHeader("Auth") String uuid,
+                                           @RequestHeader("Day") String day) {
+        System.out.println(uuid);
+        System.out.println(day);
+        HttpHeaders headers = new HttpHeaders();
         testService.save(dto);
-        return new ResponseEntity<TestDto>(dto, HttpStatus.OK);
+        return new ResponseEntity<TestDto>(dto, headers, HttpStatus.OK);
     }
 
     @GetMapping("/v1/test")
