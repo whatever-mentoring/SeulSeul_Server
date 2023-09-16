@@ -13,10 +13,10 @@ import lombok.*;
 @AllArgsConstructor //모든 필드를 파라미터로 받는 생성자 자동 생성
 public class EndPosDto {
 
-    @JsonProperty("endx")
+    @JsonProperty("endX")
     private double endX;
 
-    @JsonProperty("endy")
+    @JsonProperty("endX")
     private double endY;
 
     @JsonProperty("endNickName")
