@@ -13,16 +13,12 @@ import lombok.*;
 @AllArgsConstructor //모든 필드를 파라미터로 받는 생성자 자동 생성
 public class EndPosDto {
 
-    @JsonProperty("endX")
     private double endX;
 
-    @JsonProperty("endX")
     private double endY;
 
-    @JsonProperty("endNickName")
     private String endNickName;
 
-    @JsonProperty("roadNameAddress")
     private String roadNameAddress;
 
 //    public EndPos toEntity(EndPosDto dto) {

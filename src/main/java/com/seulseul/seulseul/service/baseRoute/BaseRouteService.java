@@ -63,6 +63,7 @@ public class BaseRouteService {
         conn.disconnect();
 
         String jsonString = sb.toString();
+        System.out.println("jsonString: "+jsonString);
         return jsonString;
     }
 
@@ -94,6 +95,9 @@ public class BaseRouteService {
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             BaseRouteJsonDto jsonDto = mapper.readValue(jsonString, BaseRouteJsonDto.class);
+            System.out.println("mapper jsonDto:"+jsonDto);
+            System.out.println("mapper jsonDto:"+jsonDto.getResult());
+            System.out.println("mapper jsonDto:"+jsonDto.getResult().getPath());
             // 원하는 값을 추출
             String firstStation = jsonDto.getResult().getPath().get(0).getInfo().getFirstStartStation();
             String lastStation = jsonDto.getResult().getPath().get(0).getInfo().getLastEndStation();
