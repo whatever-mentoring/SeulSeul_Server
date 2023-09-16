@@ -1,7 +1,20 @@
 package com.seulseul.seulseul.service.user;
 
+import com.seulseul.seulseul.dto.user.UserDto;
+import com.seulseul.seulseul.entity.user.User;
+import com.seulseul.seulseul.repository.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
+    private final UserRepository userRepository;
+
+    @Transactional(readOnly = false)
+    public User saveUser(UserDto userDto) {
+        return userRepository.save(new User(userDto.getUuid()));
+    }
 }
