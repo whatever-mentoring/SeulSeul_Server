@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class HelloController {
@@ -62,11 +63,14 @@ public class HelloController {
     }
 
     @PostMapping("/v1/test")
-    public ResponseEntity<TestDto> saveDto(@RequestBody TestDto dto, @RequestHeader("Auth") String uuid,
+    public ResponseEntity<TestDto> saveDto(@RequestBody TestDto dto,
+                                           @RequestHeader("Auth") UUID auth,
                                            @RequestHeader("Day") String day) {
-        System.out.println(uuid);
-        System.out.println(day);
+
         HttpHeaders headers = new HttpHeaders();
+        headers.set("Auth", String.valueOf(auth));
+        headers.set("Day", day);
+        System.out.println(headers.getFirst("Auth"));
         testService.save(dto);
         return new ResponseEntity<TestDto>(dto, headers, HttpStatus.OK);
     }
