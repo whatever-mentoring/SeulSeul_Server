@@ -1,15 +1,19 @@
 package com.seulseul.seulseul.service.baseRoute;
 
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulseul.seulseul.dto.baseRoute.*;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
+import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.endPos.EndPosRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.BufferedReader;
@@ -20,13 +24,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
 @Service
+@Transactional(readOnly = true)
 public class BaseRouteService {
-    private ApiKey apiKey;
-    private BaseRouteRepository baseRouteRepository;
+    private final ApiKey apiKey;
+    private final BaseRouteRepository baseRouteRepository;
 
 
     // Odsay API 불러오기
@@ -61,7 +67,7 @@ public class BaseRouteService {
     }
 
     // 현재 위치(좌표), 요일 받아오기
-    @Transactional(readOnly = false)
+    @org.springframework.transaction.annotation.Transactional
     public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto) {
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(reqDto.getId());
         baseRoute.get().saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
@@ -116,11 +122,11 @@ public class BaseRouteService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public String getFromAPI(int SID, int EID) throws IOException {
         //1. API 연결
 
-        String urlInfo = "https://api.odsay.com/v1/api/subwayPath?lang=0&CID=1000&SID="+ SID +"&EID="+ EID +"&Sopt=2&apiKey=" + URLEncoder.encode(apiService.getApiKey(), "UTF-8");
+        String urlInfo = "https://api.odsay.com/v1/api/subwayPath?lang=0&CID=1000&SID="+ SID +"&EID="+ EID +"&Sopt=2&apiKey=" + URLEncoder.encode(apiKey.getApiKey(), "UTF-8");
 
         // http 연결
         URL url = new URL(urlInfo);

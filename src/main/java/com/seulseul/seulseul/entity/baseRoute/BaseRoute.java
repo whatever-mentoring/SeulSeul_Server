@@ -77,9 +77,9 @@ public class BaseRoute {
         this.dayInfo = dayInfo;
     }
 
-    public void saveIdAndNameInfo(int startStationId, int endStationId, String firstStation, String lastStation) {
-        this.startStationId = startStationId;
-        this.endStationId = endStationId;
+    public void saveIdAndNameInfo(int SID, int EID, String firstStation, String lastStation) {
+        this.SID = SID;
+        this.EID = EID;
         this.firstStation = firstStation;
         this.lastStation = lastStation;
     }
@@ -104,10 +104,10 @@ public class BaseRoute {
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
-        dto.setStartx(entity.getStartX());
-        dto.setStarty(entity.getStartY());
-        dto.setEndx(entity.getEndX());
-        dto.setEndy(entity.getEndY());
+        dto.setStartX(entity.getStartX());
+        dto.setStartY(entity.getStartY());
+        dto.setEndX(entity.getEndX());
+        dto.setEndY(entity.getEndY());
         return dto;
     }
 }

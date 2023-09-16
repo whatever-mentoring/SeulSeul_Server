@@ -4,6 +4,7 @@ import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
@@ -14,12 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.util.Optional;
 
 @Controller
 @RestController
@@ -29,14 +26,12 @@ public class BaseRouteController {
 
     private final BaseRouteService baseRouteService;
 
-//    public HelloController(ApiKey apiService) {
-//        this.apiService = apiService;
-//    }
-
     @GetMapping("/transfer/{id}")
-    public void findTransfer(@PathVariable Long id) throws IOException {
-        System.out.println("id"+id);
-        BaseRoute baseRoute = baseRouteService.findTransferData(id);
+    public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
+        Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
+        BaseRoute result = baseRouteService.findTransferData(baseRoute.get().getId());
+        ResponseData responseData = new ResponseData(200, result);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     @PostMapping("/v1/start")
@@ -50,14 +45,6 @@ public class BaseRouteController {
     public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) {
         BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
         ResponseData responseData = new ResponseData(200, startDto);
-        return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
-    }
-
-    // 임시 endpoint
-    @GetMapping("/v1/start/info/{id}")
-    public ResponseEntity<ResponseData> getStationIdAndName(@PathVariable Long id) throws IOException {
-        Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
-        ResponseData responseData = new ResponseData(200, baseRoute);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
 }
