@@ -2,6 +2,7 @@ package com.seulseul.seulseul.dto.baseRoute;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.user.User;
 import lombok.*;
 
 @ToString
@@ -31,6 +32,7 @@ public class BaseRouteDto {
     @JsonProperty("endStationId")
     private int endStationId;
 
+    private User user;
     //dto -> entity 변환
 //    public BaseRoute toEntity(BaseRouteDto dto) {
 //        BaseRoute entity = new BaseRoute();
