@@ -10,6 +10,7 @@ import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.endPos.EndPos;
+import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.endPos.EndPosRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -70,18 +72,21 @@ public class BaseRouteService {
 
     // 현재 위치(좌표), 요일 받아오기
     @Transactional
-    public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto) {
-        Optional<BaseRoute> baseRoute = baseRouteRepository.findById(reqDto.getId());
-        baseRoute.get().saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
-        return new BaseRouteStartDto(baseRoute.get().getId(), reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
+    public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto, User user) {
+        // 알림 테이블 정보 + User 정보로 원하는 디비 row 찾기
+        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(reqDto.getId(), user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        baseRoute.saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
+        return new BaseRouteStartDto(baseRoute.getId(), reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
     }
 
     // 현재 위치 변경하기
-    @Transactional(readOnly = false)
-    public BaseRouteStartDto updateStartInfo(BaseRouteStartUpdateDto dto) {
-        Optional<BaseRoute> baseRoute = baseRouteRepository.findById(dto.getId());
-        baseRoute.get().updateStartCoordination(dto.getStartX(), dto.getStartY());
-        return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.get().getDayInfo());
+    @Transactional
+    public BaseRouteStartDto updateStartInfo(BaseRouteStartUpdateDto dto, User user) {
+        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        baseRoute.updateStartCoordination(dto.getStartX(), dto.getStartY());
+        return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.getDayInfo());
     }
 
     // 역 ID와 역 이름 가져오기
@@ -90,7 +95,7 @@ public class BaseRouteService {
         // baseRoute 객체 찾기
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
         if (baseRoute.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_BASEROUTE);
+            throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
         }
         // json 가져오기
         String jsonString = getJson(baseRoute.get().getStartX(), baseRoute.get().getStartY(), baseRoute.get().getEndX(),
@@ -150,7 +155,7 @@ public class BaseRouteService {
     public BaseRoute findTransferData(Long id) throws IOException {
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_BASEROUTE));
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         String string = getFromAPI(baseRoute.getSID(), baseRoute.getEID());
         //원하는 데이터 찾기

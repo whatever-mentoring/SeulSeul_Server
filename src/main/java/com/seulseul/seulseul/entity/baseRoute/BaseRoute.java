@@ -1,6 +1,7 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
@@ -71,12 +72,17 @@ public class BaseRoute {
     @Column(name="travelTime")
     private List<Integer> travelTime;
 
+    @OneToOne
+    private User user;
+
+
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
         this.startX = baseRouteDto.getStartX();
         this.startY = baseRouteDto.getStartY();
         this.endX = baseRouteDto.getEndX();
         this.endY = baseRouteDto.getEndY();
+        this.user = baseRouteDto.getUser();
     }
 
     public void saveStartInfo(double startX,double startY, String dayInfo) {
