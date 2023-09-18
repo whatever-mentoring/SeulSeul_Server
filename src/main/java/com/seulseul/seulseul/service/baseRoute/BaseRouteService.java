@@ -3,6 +3,8 @@ package com.seulseul.seulseul.service.baseRoute;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulseul.seulseul.config.CustomException;
+import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.baseRoute.*;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.ApiKey;
@@ -67,7 +69,7 @@ public class BaseRouteService {
     }
 
     // 현재 위치(좌표), 요일 받아오기
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto) {
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(reqDto.getId());
         baseRoute.get().saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
@@ -87,6 +89,9 @@ public class BaseRouteService {
     public Optional<BaseRoute> getStationIdAndName(Long id) throws IOException {
         // baseRoute 객체 찾기
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
+        if (baseRoute.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_BASEROUTE);
+        }
         // json 가져오기
         String jsonString = getJson(baseRoute.get().getStartX(), baseRoute.get().getStartY(), baseRoute.get().getEndX(),
                 baseRoute.get().getEndY());
@@ -94,9 +99,6 @@ public class BaseRouteService {
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             BaseRouteJsonDto jsonDto = mapper.readValue(jsonString, BaseRouteJsonDto.class);
-            System.out.println("mapper jsonDto:"+jsonDto);
-            System.out.println("mapper jsonDto:"+jsonDto.getResult());
-            System.out.println("mapper jsonDto:"+jsonDto.getResult().getPath());
             // 원하는 값을 추출
             String firstStation = jsonDto.getResult().getPath().get(0).getInfo().getFirstStartStation();
             String lastStation = jsonDto.getResult().getPath().get(0).getInfo().getLastEndStation();
@@ -105,16 +107,6 @@ public class BaseRouteService {
 
             int subPathLen = jsonDto.getResult().getPath().get(0).getSubPath().size();
             int endId = jsonDto.getResult().getPath().get(0).getSubPath().get(subPathLen - 2).getEndID();
-            // 객체 찾고
-            // 여기서 인스턴스화 괜찮..?
-            BaseRouteDto dto = new BaseRouteDto();
-            // setter말고 다르게 저장하자 -> setter 괜찮다. 단순 데이터 전달이라서. 근데 너무 코드 가독성이 떨어진다..
-//            dto.setFirstStation(firstStation);
-//            dto.setLastStation(lastStation);
-//            dto.setStartId(startId);
-//            dto.setEndId(endId);
-            /*baseRouteRepository.save(new BaseRoute(dto.getFirstStation(), dto.getLastStation(),dto.getStartId(), dto.getEndId()
-                                                    , dto.getStartX(), dto.getStartY()));*/
             // 해당 디비 row에 저장
             baseRoute.get().saveIdAndNameInfo(startId, endId, firstStation, lastStation);
             return baseRoute;
@@ -157,7 +149,8 @@ public class BaseRouteService {
     @Transactional
     public BaseRoute findTransferData(Long id) throws IOException {
         //기존에 존재하는 baseRoute id로 해당 row 찾기
-        BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
+        BaseRoute baseRoute = baseRouteRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_BASEROUTE));
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         String string = getFromAPI(baseRoute.getSID(), baseRoute.getEID());
         //원하는 데이터 찾기
@@ -212,8 +205,4 @@ public class BaseRouteService {
         }
         return baseRoute;
     }
-
-
-
-
 }
