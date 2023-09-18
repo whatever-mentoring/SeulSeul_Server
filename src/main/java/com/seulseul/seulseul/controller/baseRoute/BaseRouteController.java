@@ -1,13 +1,13 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
 import com.seulseul.seulseul.dto.Response.ResponseData;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
-import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
+import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RestController
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class BaseRouteController {
 
     private final BaseRouteService baseRouteService;
+    private final UserService userService;
 
     @GetMapping("/transfer/{id}")
     public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
@@ -35,15 +37,17 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto) {
-        BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto);
+    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) {
+        User user = userService.getUserByUuid(uuid);
+        BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, reqDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
 
     @PatchMapping("/v1/start")
-    public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto) {
-        BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto);
+    public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto, @RequestHeader("Auth") UUID uuid) {
+        User user = userService.getUserByUuid(uuid);
+        BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, startDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
