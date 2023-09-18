@@ -3,6 +3,7 @@ package com.seulseul.seulseul.entity.baseRoute;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 import java.util.List;
@@ -55,8 +56,12 @@ public class BaseRoute {
     @Column(name="wayName")
     private List<String> wayName;
 
-    @Column(name="fastDoor")
-    private List<Integer> fastDoor;
+    @Column(name="fastTrainDoor")
+    private List<String> fastTrainDoor;
+//    @Column(name="fastTrain")
+//    private List<Integer> fastTrain;
+//    @Column(name="fastDoor")
+//    private List<Integer> fastDoor;
 
     @Column(name="exWalkTime")
     private List<Integer> exWalkTime;
@@ -64,8 +69,12 @@ public class BaseRoute {
     @Column(name="exName")
     private List<String> exName;
 
+    @Column(name="travelTime")
+    private List<Integer> travelTime;
+
     @OneToOne
     private User user;
+
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -95,7 +104,7 @@ public class BaseRoute {
 
     }
 
-    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList, List<Integer> fastDoorList, List<Integer> exWalkTimeList) {
+    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
         this.laneName = laneNameList;
 
         this.laneName = laneNameList;
@@ -103,8 +112,11 @@ public class BaseRoute {
         this.wayName = wayNameList;
         this.exName = exNameList;
         this.exSID = exSIDList;
-        this.fastDoor = fastDoorList;
+        this.fastTrainDoor = fastTrainDoorList;
+//        this.fastTrain = fastTrainList;
+//        this.fastDoor = fastDoorList;
         this.exWalkTime = exWalkTimeList;
+        this.travelTime = travelTime;
     }
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
