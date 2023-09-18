@@ -16,9 +16,13 @@ public class BaseRouteTransferDto {
     @Getter
     @NoArgsConstructor
     public class Result {
-        @JsonProperty("exChangeInfoSet")
+        @JsonProperty("driveInfoSet")
         private DriveInfoSet driveInfoSet;
+        @JsonProperty("exChangeInfoSet")
         private ExChangeInfoSet exChangeInfoSet;
+
+        @JsonProperty("stationSet")
+        private StationSet stationSet;
 
     }
 
@@ -56,9 +60,21 @@ public class BaseRouteTransferDto {
 
         private String exName;
         private int exSID;
-
+        private int fastTrain;
         private int fastDoor;
         private int exWalkTime;
     }
+    @Getter
+    @NoArgsConstructor
+    public class StationSet {
+        @JsonProperty("stations")
+        private List<Stations> stations;
+    }
 
+    @Getter
+    @NoArgsConstructor
+    public class Stations {
+
+        private int travelTime;
+    }
 }

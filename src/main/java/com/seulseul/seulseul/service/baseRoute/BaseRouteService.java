@@ -161,15 +161,19 @@ public class BaseRouteService {
             //각 배열에 접근
             JsonNode driveInfoArray = jsonNode.get("result").get("driveInfoSet").get("driveInfo");
             JsonNode exChangeInfoArray = jsonNode.get("result").get("exChangeInfoSet").get("exChangeInfo");
+            JsonNode stationSetArray = jsonNode.get("result").get("stationSet").get("stations");
 
             // "exSID" 값을 저장할 리스트 생성
             List<Integer> exSIDList = new ArrayList<>();    //환승역 stationId
             List<String> laneNameList = new ArrayList<>();  //몇호선(ex. 9호선-> 1호선)
             List<Integer> wayCodeList = new ArrayList<>();  //wayCode(방면코드. 1:상행 2:하행)
             List<String> wayNameList = new ArrayList<>();   //방면명
-            List<Integer> fastDoorList = new ArrayList<>(); //최소환승
+            List<String> fastTrainDoorList = new ArrayList<>();    //최소환승
             List<Integer> exWalkTimeList = new ArrayList<>();//환승 역 사이의 소요시간
             List<String> exNameList = new ArrayList<>();    //환승역 이름
+            List<Integer> travelTimeList = new ArrayList<>();   //역<->역 이동 시간
+
+            String globalEndName = String.valueOf(jsonNode.get("result").get("globalEndName").asText());
 
             // driveInfoArray 내의 데이터
             for (JsonNode driveInfo : driveInfoArray) {
@@ -186,17 +190,48 @@ public class BaseRouteService {
             for (JsonNode exChangeInfo : exChangeInfoArray) {
                 String exName = exChangeInfo.get("exName").asText();
                 Integer exSID = exChangeInfo.get("exSID").asInt();
+                Integer fastTrain = exChangeInfo.get("fastTrain").asInt();
                 Integer fastDoor = exChangeInfo.get("fastDoor").asInt();
                 Integer exWalkTime = exChangeInfo.get("exWalkTime").asInt();
+                exWalkTime = exWalkTime / 60;
+                if (exWalkTime % 60 != 0) {
+                    exWalkTime += 1;
+                }
 
                 exNameList.add(exName);
                 exSIDList.add(exSID);
-                fastDoorList.add(fastDoor);
+                fastTrainDoorList.add(fastTrain+"-"+fastDoor);
                 exWalkTimeList.add(exWalkTime);
             }
 
+            if (!exNameList.isEmpty()) {
+                int cnt = 0;
+                int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
+                for (JsonNode stations : stationSetArray) {
+                    if (exNameList.contains(stations.get("endName").asText()) ||stations.get("endName").asText().equals(globalEndName)) {
+                        if (cnt == 0) {
+                            Integer travelTime = stations.get("travelTime").asInt();
+                            prev = travelTime + exWalkTimeList.get(0);
+                            travelTimeList.add(travelTime);
+                            cnt += 1;
+                        } else {
+                            Integer travelTime = stations.get("travelTime").asInt();
+                            System.out.println("travel2 "+travelTime);
+                            travelTime -= prev;
+                            System.out.println("travel2:"+travelTime);
+                            System.out.println("prev2: "+prev);
+//                            prev += travelTime;
+                            travelTimeList.add(travelTime);
+                            cnt += 1;
+//                            prev = travelTime + exWalkTimeList.get(0);
+                        }
+                    }
+                }
+            }
+
+
             //객체에 넣어서 실제 DB에 저장
-            baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList, fastDoorList, exWalkTimeList);
+            baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList, fastTrainDoorList, exWalkTimeList, travelTimeList);
 
             baseRouteRepository.save(baseRoute);
 
