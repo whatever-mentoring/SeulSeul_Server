@@ -207,23 +207,21 @@ public class BaseRouteService {
             if (!exNameList.isEmpty()) {
                 int cnt = 0;
                 int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
+                int travelTime = 0;
+                int currentTravelTime = 0;
                 for (JsonNode stations : stationSetArray) {
                     if (exNameList.contains(stations.get("endName").asText()) ||stations.get("endName").asText().equals(globalEndName)) {
                         if (cnt == 0) {
-                            Integer travelTime = stations.get("travelTime").asInt();
-                            prev = travelTime + exWalkTimeList.get(0);
+                            travelTime = stations.get("travelTime").asInt();
+                            prev = travelTime;
                             travelTimeList.add(travelTime);
                             cnt += 1;
                         } else {
-                            Integer travelTime = stations.get("travelTime").asInt();
-                            System.out.println("travel2 "+travelTime);
-                            travelTime -= prev;
-                            System.out.println("travel2:"+travelTime);
-                            System.out.println("prev2: "+prev);
-//                            prev += travelTime;
+                            currentTravelTime = stations.get("travelTime").asInt();
+                            prev += exWalkTimeList.get(cnt-1);
+                            travelTime = currentTravelTime - prev + 1;  //exWalkTime 시 반올림하기 때문에 발생하는 1분만 추가
                             travelTimeList.add(travelTime);
                             cnt += 1;
-//                            prev = travelTime + exWalkTimeList.get(0);
                         }
                     }
                 }
