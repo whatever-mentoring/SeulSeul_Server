@@ -22,6 +22,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -69,6 +71,9 @@ public class StopTimeListService {
         //출발역, 도착역, 환승역 stationId
         List<Integer> stationIdList = new ArrayList<>();
 
+        //방면
+        String wayName;
+
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
@@ -91,6 +96,9 @@ public class StopTimeListService {
             }
             //API 사용
             String string = getStopTimeListFromAPI(stationId, baseRoute.getWayCode().get(idx));
+            //wayName 방면
+            wayName = baseRoute.getWayName().get(idx);
+
             check += 1;
 
             //원하는 데이터 찾기
@@ -103,9 +111,6 @@ public class StopTimeListService {
 
                 //각 배열에 접근
                 JsonNode ordArray;
-                System.out.println("idx"+baseRoute.getWayCode().get(idx));
-                System.out.println("day"+baseRoute.getDayInfo());
-                System.out.println(baseRoute.getDayInfo().equals("토"));
                 if (baseRoute.getWayCode().get(idx) == 1) {
                     if (baseRoute.getDayInfo().equals("토")) {
                         ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
@@ -134,9 +139,29 @@ public class StopTimeListService {
                     String minutes = ordInfo.get("list").asText();
                     String[] minute = minutes.split(" ");
 
-                    for (int j=0; j<minute.length; j++) {
-                        // "exSID" 값을 저장할 리스트 생성
-                        timeList.add(hour + "-" + minute[j]);
+                    //wayName에 해당하는 시간만 DB에 저장
+                    if (wayName.contains(".")) {
+                        // 정규표현식 패턴 설정
+                        Pattern pattern = Pattern.compile("\\.");
+                        String[] parts = pattern.split(wayName);
+
+                        // 문자열을 점(".")을 기준으로 분할한 결과를 배열로 저장
+                        for (String part : parts) {
+                            for (String m : minute) {
+                                if (m.contains(part)) {
+                                    String min = m.split("\\(")[0];
+                                    timeList.add(hour + "-" + min);
+                                }
+                            }
+                        }
+
+                    } else {
+                        for (String m : minute) {
+                            if (m.contains(wayName)) {
+                                String min = m.split("\\(")[0];
+                                timeList.add(hour + "-" + min);
+                            }
+                        }
                     }
                 }
                 //객체에 넣어서 실제 DB에 저장
