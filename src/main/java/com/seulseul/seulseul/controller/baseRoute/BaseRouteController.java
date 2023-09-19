@@ -1,6 +1,7 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
 import com.seulseul.seulseul.dto.Response.ResponseData;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteAlarmReqDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
@@ -50,5 +51,13 @@ public class BaseRouteController {
         BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, startDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
+    }
+
+    @PostMapping("/v1/alarm")
+    public ResponseEntity<ResponseData> saveAlarm(@RequestBody BaseRouteAlarmReqDto dto, @RequestHeader("Auth") UUID uuid) {
+        User user = userService.getUserByUuid(uuid);
+        BaseRouteAlarmReqDto alarmReqDto = baseRouteService.saveAlarm(dto, user);
+        ResponseData responseData = new ResponseData(200, alarmReqDto);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

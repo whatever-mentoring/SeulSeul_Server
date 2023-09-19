@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -242,5 +243,13 @@ public class BaseRouteService {
             log.info(e.toString());
         }
         return baseRoute;
+    }
+
+    @Transactional(readOnly = false)
+    public BaseRouteAlarmReqDto saveAlarm(BaseRouteAlarmReqDto dto, User user) {
+        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        baseRoute.saveAlarm(true, Duration.ofMinutes(dto.getAlarmTime()), Duration.ofMinutes(dto.getAlarmTerm()));
+        return new BaseRouteAlarmReqDto(dto.getId(), true, dto.getAlarmTime(), dto.getAlarmTerm());
     }
 }

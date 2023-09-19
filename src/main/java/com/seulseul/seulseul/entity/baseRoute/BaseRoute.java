@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
+import java.time.Duration;
 import java.util.List;
 
 @Getter
@@ -75,6 +76,11 @@ public class BaseRoute {
     @OneToOne
     private User user;
 
+    private boolean isAlarm;
+
+    private Duration alarmTime;
+
+    private Duration alarmTerm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -118,6 +124,13 @@ public class BaseRoute {
         this.exWalkTime = exWalkTimeList;
         this.travelTime = travelTime;
     }
+
+    public void saveAlarm(boolean isAlarm, Duration alarmTime, Duration alarmTerm) {
+        this.isAlarm = isAlarm;
+        this.alarmTime = alarmTime;
+        this.alarmTerm = alarmTerm;
+    }
+
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
