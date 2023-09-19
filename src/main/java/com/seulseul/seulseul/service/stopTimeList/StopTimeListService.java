@@ -62,45 +62,54 @@ public class StopTimeListService {
         return sb.toString();
     }
 
-    // 데이터 저장 => 일단 출발역만!!!!!!
+    // 데이터 저장 => 일단 출발역만!!!!!!. 변하는것: 역Id, wayCode에따라up/down, 요일에따라OrdList/SatList/SunList
     @Transactional
     public StopTimeList findStopTimeListData(Long id) throws IOException {
+        //출발역, 도착역, 환승역 stationId
+        List<Integer> stationId = new ArrayList<>();
+
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        //거치는 모든 역의 stationId 순서대로 :출발->환승->도착
+        stationId.add(baseRoute.getSID());
+        for (int i=0; i<baseRoute.getExSID().size(); i++) {
+            stationId.add(baseRoute.getExSID().get(i));
+        }
+        stationId.add(baseRoute.getEID());
 
-        System.out.println("sid"+baseRoute.getSID() + "waycode"+ baseRoute.getWayCode().get(0));
+
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         String string = getStopTimeListFromAPI(baseRoute.getSID(), baseRoute.getWayCode().get(0));
+
         //원하는 데이터 찾기
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
-            System.out.println("jsonNode"+jsonNode.get("result").get("OrdList").get("down"));
             //각 배열에 접근
             JsonNode ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
 //            JsonNode satArray = jsonNode.get("result").get("SatList").get("up").get("time");
 //            JsonNode sunArray = jsonNode.get("result").get("SunList").get("up").get("time");
-            System.out.println("ordArray:"+ordArray);
 
             // "exSID" 값을 저장할 리스트 생성
-//            List<Integer> hourList = new ArrayList<>();      //시간
-//            List<String> minuteList = new ArrayList<>();    //분
             List<String> timeList = new ArrayList<>();
 
-            // driveInfoArray 내의 데이터
-            for (JsonNode ordInfo : ordArray) {
+            int totalElements = ordArray.size(); // ordArray의 총 요소 개수
+            int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
+
+            for (int i = startIndex; i < totalElements; i++) {
+                JsonNode ordInfo = ordArray.get(i);
                 Integer hour = ordInfo.get("Idx").asInt();
-                String minute = ordInfo.get("list").asText();
+                String minutes = ordInfo.get("list").asText();
+                String[] minute = minutes.split(" ");
 
-                timeList.add(hour + "-" + minute);
+                for (int j=0; j<minute.length; j++) {
+                    timeList.add(hour + "-" + minute[j]);
+                }
             }
-
             //객체에 넣어서 실제 DB에 저장
-            stopTimeListRepository.save(new StopTimeList(timeList));
-//            stopTimeList.update(hourList, minuteList);
-//
-//            stopTimeListRepository.save(stopTimeList);
+            StopTimeList stopTimeList = new StopTimeList(timeList);
+            stopTimeListRepository.save(stopTimeList);
 
         } catch (Exception e) {
             log.info(e.toString());

@@ -43,9 +43,7 @@ public class StopTimeListController {
 
     @PostMapping("/stopTimeList/{id}")
     public ResponseEntity<ResponseData> findStopTimeList(@PathVariable Long id) throws IOException {
-        System.out.println("first");
         StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(id);
-
         ResponseData responseData = new ResponseData(200, stopTimeList);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
