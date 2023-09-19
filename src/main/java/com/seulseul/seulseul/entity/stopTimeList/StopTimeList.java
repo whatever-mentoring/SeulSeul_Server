@@ -17,24 +17,18 @@ public class StopTimeList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private Integer SID;
-//
-//    private Integer EID;
-//
-//    private List<Integer> ExSID;
-//
-//    private List<Integer> SIDIdx;
-//
-//    private List<String> SIDList;
-//
-//    private List<Integer> EIDIdx;
-//    private List<String> EIDList;
-//    private List<Integer> ExSIDIdx;
-//    private List<String> ExSIDList;
-
+    private Integer stationId;
+    private Long alarmId;
     private List<String> time;
 
     public StopTimeList(List<String> timeList) {
+        this.time = timeList;
+    }
+
+
+    public void update(Long id, Integer stationId,List<String> timeList) {
+        this.alarmId = id;
+        this.stationId = stationId;
         this.time = timeList;
     }
 

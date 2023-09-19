@@ -68,57 +68,76 @@ public class StopTimeListService {
     public StopTimeList findStopTimeListData(Long id) throws IOException {
         //출발역, 도착역, 환승역 stationId
         List<Integer> stationIdList = new ArrayList<>();
-        // "exSID" 값을 저장할 리스트 생성
-        List<String> timeList = new ArrayList<>();
+//        // "exSID" 값을 저장할 리스트 생성
+//        List<String> timeList = new ArrayList<>();
+        // 저장할 객체
+//        StopTimeList stopTimeList = new StopTimeList();
 
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        //거치는 모든 역의 stationId 순서대로 :출발->환승->도착
+        //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
         stationIdList.add(baseRoute.getSID());
         for (int i=0; i<baseRoute.getExSID1().size(); i++) {
             stationIdList.add(baseRoute.getExSID1().get(i));
             stationIdList.add(baseRoute.getExSID2().get(i));
         }
         stationIdList.add(baseRoute.getEID());
-        System.out.println("stationId" + stationIdList);
+        System.out.println("stationId" + stationIdList + "size: "+stationIdList.size());
+
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
-
-//        for (Integer stationId : stationIdList) {
-//
-//        }
-        String string = getStopTimeListFromAPI(baseRoute.getSID(), baseRoute.getWayCode().get(0));
-
-        //원하는 데이터 찾기
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
-            //각 배열에 접근
-            JsonNode ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
-//            JsonNode satArray = jsonNode.get("result").get("SatList").get("up").get("time");
-//            JsonNode sunArray = jsonNode.get("result").get("SunList").get("up").get("time");
-
-
-            int totalElements = ordArray.size(); // ordArray의 총 요소 개수
-            int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
-
-            for (int i = startIndex; i < totalElements; i++) {
-                JsonNode ordInfo = ordArray.get(i);
-                Integer hour = ordInfo.get("Idx").asInt();
-                String minutes = ordInfo.get("list").asText();
-                String[] minute = minutes.split(" ");
-
-                for (int j=0; j<minute.length; j++) {
-                    timeList.add(hour + "-" + minute[j]);
-                }
+        int check = 0;
+        int idx = 0;
+        for (Integer stationId : stationIdList) {
+            if (check == 2) {
+                idx += 1;
+                check = 0;
             }
-            //객체에 넣어서 실제 DB에 저장
-            StopTimeList stopTimeList = new StopTimeList(timeList);
-            stopTimeListRepository.save(stopTimeList);
+            //API 사용
+            String string = getStopTimeListFromAPI(stationId, baseRoute.getWayCode().get(idx));
+            check += 1;
 
-        } catch (Exception e) {
-            log.info(e.toString());
+            //원하는 데이터 찾기
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            try {
+                JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
+                // "exSID" 값을 저장할 리스트 생성
+                List<String> timeList = new ArrayList<>();
+
+                //각 배열에 접근
+                JsonNode ordArray;
+                if (baseRoute.getWayCode().get(idx) == 1) {
+                    ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
+                } else {
+                    ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
+                }
+
+                //가져온 값을 뒤에서 5시간까지만 받아오기
+                int totalElements = ordArray.size(); // ordArray의 총 요소 개수
+                int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
+
+                for (int i = startIndex; i < totalElements; i++) {
+                    JsonNode ordInfo = ordArray.get(i);
+                    Integer hour = ordInfo.get("Idx").asInt();
+                    String minutes = ordInfo.get("list").asText();
+                    String[] minute = minutes.split(" ");
+
+                    for (int j=0; j<minute.length; j++) {
+                        // "exSID" 값을 저장할 리스트 생성
+                        timeList.add(hour + "-" + minute[j]);
+                    }
+                }
+                //객체에 넣어서 실제 DB에 저장
+                StopTimeList stopTimeList = new StopTimeList();
+                stopTimeList.update(id, stationId, timeList);
+                stopTimeListRepository.save(stopTimeList);
+
+            } catch (Exception e) {
+                log.info(e.toString());
+            }
         }
+
         return stopTimeList;
     }
 }
