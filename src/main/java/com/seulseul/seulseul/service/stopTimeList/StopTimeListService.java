@@ -68,14 +68,11 @@ public class StopTimeListService {
     public StopTimeList findStopTimeListData(Long id) throws IOException {
         //출발역, 도착역, 환승역 stationId
         List<Integer> stationIdList = new ArrayList<>();
-//        // "exSID" 값을 저장할 리스트 생성
-//        List<String> timeList = new ArrayList<>();
-        // 저장할 객체
-//        StopTimeList stopTimeList = new StopTimeList();
 
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+
         //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
         stationIdList.add(baseRoute.getSID());
         for (int i=0; i<baseRoute.getExSID1().size(); i++) {
@@ -83,7 +80,6 @@ public class StopTimeListService {
             stationIdList.add(baseRoute.getExSID2().get(i));
         }
         stationIdList.add(baseRoute.getEID());
-        System.out.println("stationId" + stationIdList + "size: "+stationIdList.size());
 
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         int check = 0;
@@ -107,10 +103,25 @@ public class StopTimeListService {
 
                 //각 배열에 접근
                 JsonNode ordArray;
+                System.out.println("idx"+baseRoute.getWayCode().get(idx));
+                System.out.println("day"+baseRoute.getDayInfo());
+                System.out.println(baseRoute.getDayInfo().equals("토"));
                 if (baseRoute.getWayCode().get(idx) == 1) {
-                    ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
+                    if (baseRoute.getDayInfo().equals("토")) {
+                        ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
+                    } else if (baseRoute.getDayInfo().equals("일")) {
+                        ordArray = jsonNode.get("result").get("SunList").get("up").get("time");
+                    } else {
+                        ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
+                    }
                 } else {
-                    ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
+                    if (baseRoute.getDayInfo().equals("토")) {
+                        ordArray = jsonNode.get("result").get("SatList").get("down").get("time");
+                    } else if (baseRoute.getDayInfo().equals("일")) {
+                        ordArray = jsonNode.get("result").get("SunList").get("down").get("time");
+                    } else {
+                        ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
+                    }
                 }
 
                 //가져온 값을 뒤에서 5시간까지만 받아오기
