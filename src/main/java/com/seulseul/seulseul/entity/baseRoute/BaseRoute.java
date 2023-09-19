@@ -58,10 +58,6 @@ public class BaseRoute {
 
     @Column(name="fastTrainDoor")
     private List<String> fastTrainDoor;
-//    @Column(name="fastTrain")
-//    private List<Integer> fastTrain;
-//    @Column(name="fastDoor")
-//    private List<Integer> fastDoor;
 
     @Column(name="exWalkTime")
     private List<Integer> exWalkTime;
@@ -104,6 +100,7 @@ public class BaseRoute {
 
     }
 
+    // 대중교통 길찾기 API
     public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
         this.laneName = laneNameList;
 
