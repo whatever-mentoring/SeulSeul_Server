@@ -75,16 +75,18 @@ public class HelloController {
         return new ResponseEntity<TestDto>(dto, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/v1/test")
-    public ResponseEntity<List<TestDto>> getTest(@RequestHeader("Auth") UUID auth,
-                                                 @RequestHeader("Day") String day) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Auth", String.valueOf(auth));
-        headers.set("Day", day);
-        return new ResponseEntity<List<TestDto>>(testService.getTests(), headers, HttpStatus.OK);
+    @GetMapping("/v1/test/{id}")
+    public ResponseEntity<Test> getTest(@PathVariable("id") String id) {
+        System.out.println("getget");
+        return new ResponseEntity<Test>(testService.getTest(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("v1/test/{id}")
+    @GetMapping("/v1/test")
+    public ResponseEntity<List<TestDto>> getTest() {
+        return new ResponseEntity<List<TestDto>>(testService.getTests(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/v1/test/{id}")
     public void deleteTest(@PathVariable String id) {
         testService.deleteTest(id);
     }

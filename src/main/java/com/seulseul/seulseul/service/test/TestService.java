@@ -30,6 +30,12 @@ public class TestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public Test getTest(String id) {
+        Test test = testRepository.findById(id);
+        return test;
+    }
+
     @Transactional
     public void deleteTest(String id) {
         Test test = testRepository.findById(id);
