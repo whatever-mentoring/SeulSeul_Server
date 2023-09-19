@@ -76,8 +76,12 @@ public class HelloController {
     }
 
     @GetMapping("/v1/test")
-    public ResponseEntity<List<TestDto>> getTest() {
-        return new ResponseEntity<List<TestDto>>(testService.getTests(), HttpStatus.OK);
+    public ResponseEntity<List<TestDto>> getTest(@RequestHeader("Auth") UUID auth,
+                                                 @RequestHeader("Day") String day) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Auth", String.valueOf(auth));
+        headers.set("Day", day);
+        return new ResponseEntity<List<TestDto>>(testService.getTests(), headers, HttpStatus.OK);
     }
 
     @DeleteMapping("v1/test/{id}")
