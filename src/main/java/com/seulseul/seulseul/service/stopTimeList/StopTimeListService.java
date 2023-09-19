@@ -63,23 +63,30 @@ public class StopTimeListService {
     }
 
     // 데이터 저장 => 일단 출발역만!!!!!!. 변하는것: 역Id, wayCode에따라up/down, 요일에따라OrdList/SatList/SunList
+    //[시작역,환승역1,도착역], [2,1]
     @Transactional
     public StopTimeList findStopTimeListData(Long id) throws IOException {
         //출발역, 도착역, 환승역 stationId
-        List<Integer> stationId = new ArrayList<>();
+        List<Integer> stationIdList = new ArrayList<>();
+        // "exSID" 값을 저장할 리스트 생성
+        List<String> timeList = new ArrayList<>();
 
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         //거치는 모든 역의 stationId 순서대로 :출발->환승->도착
-        stationId.add(baseRoute.getSID());
-        for (int i=0; i<baseRoute.getExSID().size(); i++) {
-            stationId.add(baseRoute.getExSID().get(i));
+        stationIdList.add(baseRoute.getSID());
+        for (int i=0; i<baseRoute.getExSID1().size(); i++) {
+            stationIdList.add(baseRoute.getExSID1().get(i));
+            stationIdList.add(baseRoute.getExSID2().get(i));
         }
-        stationId.add(baseRoute.getEID());
-
-
+        stationIdList.add(baseRoute.getEID());
+        System.out.println("stationId" + stationIdList);
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
+
+//        for (Integer stationId : stationIdList) {
+//
+//        }
         String string = getStopTimeListFromAPI(baseRoute.getSID(), baseRoute.getWayCode().get(0));
 
         //원하는 데이터 찾기
@@ -91,8 +98,6 @@ public class StopTimeListService {
 //            JsonNode satArray = jsonNode.get("result").get("SatList").get("up").get("time");
 //            JsonNode sunArray = jsonNode.get("result").get("SunList").get("up").get("time");
 
-            // "exSID" 값을 저장할 리스트 생성
-            List<String> timeList = new ArrayList<>();
 
             int totalElements = ordArray.size(); // ordArray의 총 요소 개수
             int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
