@@ -76,11 +76,11 @@ public class BaseRoute {
     @OneToOne
     private User user;
 
-    private boolean isAlarm;
+    private boolean alarmEnabled;
 
-    private Duration alarmTime;
+    private Long alarmTime;
 
-    private Duration alarmTerm;
+    private Long alarmTerm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -125,8 +125,8 @@ public class BaseRoute {
         this.travelTime = travelTime;
     }
 
-    public void saveAlarm(boolean isAlarm, Duration alarmTime, Duration alarmTerm) {
-        this.isAlarm = isAlarm;
+    public void saveAlarm(Long alarmTime, Long alarmTerm) {
+        this.alarmEnabled = true;
         this.alarmTime = alarmTime;
         this.alarmTerm = alarmTerm;
     }

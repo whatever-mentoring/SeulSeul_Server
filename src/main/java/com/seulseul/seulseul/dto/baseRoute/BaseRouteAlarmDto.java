@@ -2,15 +2,12 @@ package com.seulseul.seulseul.dto.baseRoute;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.Duration;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class BaseRouteAlarmReqDto {
+public class BaseRouteAlarmDto {
     private Long id;
+    private boolean alarmEnabled;
     private Long alarmTime;
     private Long alarmTerm;
 }

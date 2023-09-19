@@ -246,10 +246,16 @@ public class BaseRouteService {
     }
 
     @Transactional(readOnly = false)
-    public BaseRouteAlarmReqDto saveAlarm(BaseRouteAlarmReqDto dto, User user) {
+    public BaseRouteAlarmDto saveAlarm(BaseRouteAlarmReqDto dto, User user) {
         BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        baseRoute.saveAlarm(true, Duration.ofMinutes(dto.getAlarmTime()), Duration.ofMinutes(dto.getAlarmTerm()));
-        return new BaseRouteAlarmReqDto(dto.getId(), true, dto.getAlarmTime(), dto.getAlarmTerm());
+        baseRoute.saveAlarm(dto.getAlarmTime(), dto.getAlarmTerm());
+        return new BaseRouteAlarmDto(dto.getId(), true, dto.getAlarmTime(), dto.getAlarmTerm());
     }
+
+    /*@Transactional(readOnly = false)
+    public BaseRouteAlarmReqDto updateAlarm(BaseRouteAlarmReqDto dto, User user) {
+        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+    }*/
 }
