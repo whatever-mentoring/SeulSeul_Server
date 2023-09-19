@@ -44,8 +44,11 @@ public class BaseRoute {
     // 요일
     private String dayInfo;
 
-    @Column(name="transfer_station")
-    private List<Integer> exSID;
+    @Column(name="exSID")
+    private List<Integer> exSID1;
+
+    @Column(name="exSID2")
+    private List<Integer> exSID2;
 
     @Column(name="laneName")
     private List<String> laneName;
@@ -58,10 +61,6 @@ public class BaseRoute {
 
     @Column(name="fastTrainDoor")
     private List<String> fastTrainDoor;
-//    @Column(name="fastTrain")
-//    private List<Integer> fastTrain;
-//    @Column(name="fastDoor")
-//    private List<Integer> fastDoor;
 
     @Column(name="exWalkTime")
     private List<Integer> exWalkTime;
@@ -104,17 +103,17 @@ public class BaseRoute {
 
     }
 
-    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
+    // 대중교통 길찾기 API
+    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList1, List<Integer> exSIDList2, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
         this.laneName = laneNameList;
 
         this.laneName = laneNameList;
         this.wayCode = wayCodeList;
         this.wayName = wayNameList;
         this.exName = exNameList;
-        this.exSID = exSIDList;
+        this.exSID1 = exSIDList1;
+        this.exSID2 = exSIDList2;
         this.fastTrainDoor = fastTrainDoorList;
-//        this.fastTrain = fastTrainList;
-//        this.fastDoor = fastDoorList;
         this.exWalkTime = exWalkTimeList;
         this.travelTime = travelTime;
     }
