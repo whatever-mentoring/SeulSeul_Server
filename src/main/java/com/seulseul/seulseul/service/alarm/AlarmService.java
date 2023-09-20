@@ -4,6 +4,7 @@ import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.alarm.AlarmDto;
 import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
+import com.seulseul.seulseul.dto.alarm.AlarmUpdateDto;
 import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
@@ -32,4 +33,16 @@ public class AlarmService {
         return new AlarmDto(alarm);
     }
 
+    @Transactional(readOnly = false)
+    public AlarmDto updateAlarm(AlarmUpdateDto updateDto, User user) {
+        // 경로 찾고
+        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(updateDto.getBase_route_id(), user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        // 알림 찾고
+        Alarm alarm = alarmRepository.findById(updateDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FONUD));
+        // 알림 시간, 간격 업데이트 해주기
+        alarm.updateAlarm(updateDto.getAlarmTime(), updateDto.getAlarmTerm());
+        return new AlarmDto(alarm);
+    }
 }
