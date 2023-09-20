@@ -5,19 +5,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
+import com.seulseul.seulseul.dto.alarm.AlarmDto;
+import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
 import com.seulseul.seulseul.dto.baseRoute.*;
-import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
-import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
-import com.seulseul.seulseul.repository.endPos.EndPosRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,11 +23,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -244,18 +240,4 @@ public class BaseRouteService {
         }
         return baseRoute;
     }
-
-    @Transactional(readOnly = false)
-    public BaseRouteAlarmDto saveAlarm(BaseRouteAlarmReqDto dto, User user) {
-        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        baseRoute.saveAlarm(dto.getAlarmTime(), dto.getAlarmTerm());
-        return new BaseRouteAlarmDto(dto.getId(), true, dto.getAlarmTime(), dto.getAlarmTerm());
-    }
-
-    /*@Transactional(readOnly = false)
-    public BaseRouteAlarmReqDto updateAlarm(BaseRouteAlarmReqDto dto, User user) {
-        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-    }*/
 }

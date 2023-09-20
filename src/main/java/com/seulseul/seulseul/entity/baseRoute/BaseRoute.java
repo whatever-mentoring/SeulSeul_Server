@@ -1,16 +1,14 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
+import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
-import java.time.Duration;
 import java.util.List;
 
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -76,11 +74,9 @@ public class BaseRoute {
     @OneToOne
     private User user;
 
-    private boolean alarmEnabled;
-
-    private Long alarmTime;
-
-    private Long alarmTerm;
+    @OneToOne
+    @JoinColumn(name = "alarm_id")
+    private Alarm alarm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -125,10 +121,8 @@ public class BaseRoute {
         this.travelTime = travelTime;
     }
 
-    public void saveAlarm(Long alarmTime, Long alarmTerm) {
-        this.alarmEnabled = true;
-        this.alarmTime = alarmTime;
-        this.alarmTerm = alarmTerm;
+    public void saveAlarmInfo(Alarm alarm) {
+        this.alarm = alarm;
     }
 
     //entity -> dto 변환
