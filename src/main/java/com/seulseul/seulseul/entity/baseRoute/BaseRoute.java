@@ -1,15 +1,14 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
+import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 import java.util.List;
 
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -74,6 +73,9 @@ public class BaseRoute {
     @OneToOne
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "alarm_id")
+    private Alarm alarm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.id = baseRouteDto.getId();
@@ -117,6 +119,11 @@ public class BaseRoute {
         this.exWalkTime = exWalkTimeList;
         this.travelTime = travelTime;
     }
+
+    public void saveAlarmInfo(Alarm alarm) {
+        this.alarm = alarm;
+    }
+
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();

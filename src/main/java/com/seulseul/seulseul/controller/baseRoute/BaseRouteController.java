@@ -1,9 +1,9 @@
 package com.seulseul.seulseul.controller.baseRoute;
 
 import com.seulseul.seulseul.dto.Response.ResponseData;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
+import com.seulseul.seulseul.dto.alarm.AlarmDto;
+import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
+import com.seulseul.seulseul.dto.baseRoute.*;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
