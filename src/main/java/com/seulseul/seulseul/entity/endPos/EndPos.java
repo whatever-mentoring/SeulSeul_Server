@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.entity.endPos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
@@ -31,6 +32,7 @@ public class EndPos {
     private String roadNameAddress;
 
     // 연관관계의 주인 -> endPos
+    @JsonIgnore
     @ManyToOne
     private User user;
 

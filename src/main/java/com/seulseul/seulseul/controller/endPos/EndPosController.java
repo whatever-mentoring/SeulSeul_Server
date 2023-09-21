@@ -4,17 +4,17 @@ import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
+import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.endPos.EndPosService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -33,4 +33,12 @@ public class EndPosController {
         return ResponseEntity.ok(responseData);
     }
 
+    // 유저의 모든 목적지 List로 보여주기
+    @GetMapping("/v1/end")
+    public ResponseEntity<ResponseData> getAllEndPos(@RequestHeader("Auth") UUID uuid) {
+        User user = userService.getUserByUuid(uuid);
+        List<EndPos> endPosList = endPosService.getAllEndPos(user);
+        ResponseData responseData = new ResponseData(200, endPosList);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 }
