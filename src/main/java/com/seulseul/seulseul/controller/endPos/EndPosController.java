@@ -4,6 +4,7 @@ import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
+import com.seulseul.seulseul.dto.endPos.EndPosResDto;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.endPos.EndPosService;
@@ -28,7 +29,7 @@ public class EndPosController {
     @PostMapping("/v1/end")
     public ResponseEntity<?> addDest(@RequestBody EndPosDto form, @RequestHeader("Auth") UUID uuid) {
         User user = userService.getUserByUuid(uuid);
-        EndPosDto dto = endPosService.addDest(form, user);
+        EndPosResDto dto = endPosService.addDest(form, user);
         ResponseData responseData = new ResponseData(200, dto);
         return ResponseEntity.ok(responseData);
     }

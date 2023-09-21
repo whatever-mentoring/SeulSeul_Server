@@ -78,7 +78,6 @@ public class BaseRoute {
     private Alarm alarm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
-        this.id = baseRouteDto.getId();
         this.startX = baseRouteDto.getStartX();
         this.startY = baseRouteDto.getStartY();
         this.endX = baseRouteDto.getEndX();

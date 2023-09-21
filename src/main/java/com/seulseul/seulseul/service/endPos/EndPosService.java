@@ -1,7 +1,10 @@
 package com.seulseul.seulseul.service.endPos;
 
+import com.seulseul.seulseul.config.CustomException;
+import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
+import com.seulseul.seulseul.dto.endPos.EndPosResDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -22,14 +26,13 @@ public class EndPosService {
     private final BaseRouteRepository baseRouteRepository;
 
     @Transactional
-    public EndPosDto addDest(EndPosDto form, User user) {
+    public EndPosResDto addDest(EndPosDto form, User user) {
         //1. endPos table에 저장(첫 번째 + 두 번째 접속)
         EndPos endPos = endPosRepository.save(new EndPos(form));
         endPos.setUser(user);
         EndPosDto endPosDto = endPos.toDto(endPos);
 
         //2. baseRoute table에 저장
-        BaseRouteDto baseRouteDto = new BaseRouteDto();
 
         /*
         1. 최초 접속 시 최초 본가 설정
@@ -38,17 +41,27 @@ public class EndPosService {
         BaseRoute, EndPos에 모두 저장
         */
         if (baseRouteRepository.findByUser(user).isEmpty()) {
-            baseRouteDto.setId(endPos.getId());
+            BaseRouteDto baseRouteDto = new BaseRouteDto();
+            // baseRouteDto.setId(endPos.getId()); // 변경해야할듯
+            System.out.println(endPos.getId());
             baseRouteDto.setEndX(endPosDto.getEndX());
             baseRouteDto.setEndY(endPosDto.getEndY());
             baseRouteDto.setUser(user);
-            baseRouteRepository.save(new BaseRoute(baseRouteDto));
+            BaseRoute baseRoute = baseRouteRepository.save(new BaseRoute(baseRouteDto));
+            return new EndPosResDto(endPos.getId(), baseRoute.getId(), endPos.getEndX(), endPos.getEndY(), endPos.getEndNickName()
+                    , endPos.getRoadNameAddress());
         }
         /*
         2. 두 번째 접속 시 본가 주소 추가
         두 번째 접속 시부터 본가 주소 추가 시에는 EndPos에만 저장해준다.
         */
-        return endPosDto;
+        // EndPosResDto로 응답 -> base_route_id가 필요하다.
+        Optional<BaseRoute> baseRoute = baseRouteRepository.findByUser(user);
+        if (baseRoute.isEmpty()) {
+            throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
+        }
+        return new EndPosResDto(endPos.getId(), baseRoute.get().getId(), endPos.getEndX(), endPos.getEndY(), endPos.getEndNickName()
+                , endPos.getRoadNameAddress());
     }
 
     // 사용자의 모든 endPos 가져오기
