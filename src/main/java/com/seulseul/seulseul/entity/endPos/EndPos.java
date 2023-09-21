@@ -3,6 +3,7 @@ package com.seulseul.seulseul.entity.endPos;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,11 +30,19 @@ public class EndPos {
     @Column(name="roadNameAddress")
     private String roadNameAddress;
 
+    // 연관관계의 주인 -> endPos
+    @ManyToOne
+    private User user;
+
     public EndPos(EndPosDto form) {
         this.endX = form.getEndX();
         this.endY = form.getEndY();
         this.endNickName = form.getEndNickName();
         this.roadNameAddress = form.getRoadNameAddress();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     //entity -> dto 변환

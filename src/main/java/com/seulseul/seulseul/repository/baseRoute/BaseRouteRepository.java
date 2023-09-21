@@ -10,4 +10,5 @@ public interface BaseRouteRepository extends JpaRepository<BaseRoute, Long> {
     Optional<BaseRoute> findByStartXAndStartY(double startX, double startY);
 
     Optional<BaseRoute> findByIdAndUser(Long id, User user);
+    Optional<BaseRoute> findByUser(User user);
 }
