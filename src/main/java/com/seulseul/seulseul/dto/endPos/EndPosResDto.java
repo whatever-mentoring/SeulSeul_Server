@@ -12,4 +12,5 @@ public class EndPosResDto {
     private double endY;
     private String endNickName;
     private String roadNameAddress;
+    private String jibunAddress;
 }

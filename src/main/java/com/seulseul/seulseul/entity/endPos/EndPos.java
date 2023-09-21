@@ -31,6 +31,9 @@ public class EndPos {
     @Column(name="roadNameAddress")
     private String roadNameAddress;
 
+    @Column(name = "jibunAddress")
+    private String jibunAddress; // 지번주소
+
     // 연관관계의 주인 -> endPos
     @JsonIgnore
     @ManyToOne

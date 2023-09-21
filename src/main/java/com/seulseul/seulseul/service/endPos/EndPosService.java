@@ -33,7 +33,6 @@ public class EndPosService {
         EndPosDto endPosDto = endPos.toDto(endPos);
 
         //2. baseRoute table에 저장
-
         /*
         1. 최초 접속 시 최초 본가 설정
         최초 접속 구분 -> user로 한다.
@@ -49,7 +48,7 @@ public class EndPosService {
             baseRouteDto.setUser(user);
             BaseRoute baseRoute = baseRouteRepository.save(new BaseRoute(baseRouteDto));
             return new EndPosResDto(endPos.getId(), baseRoute.getId(), endPos.getEndX(), endPos.getEndY(), endPos.getEndNickName()
-                    , endPos.getRoadNameAddress());
+                    , endPos.getRoadNameAddress(), endPos.getJibunAddress());
         }
         /*
         2. 두 번째 접속 시 본가 주소 추가
@@ -61,7 +60,7 @@ public class EndPosService {
             throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
         }
         return new EndPosResDto(endPos.getId(), baseRoute.get().getId(), endPos.getEndX(), endPos.getEndY(), endPos.getEndNickName()
-                , endPos.getRoadNameAddress());
+                , endPos.getRoadNameAddress(), endPos.getJibunAddress());
     }
 
     // 사용자의 모든 endPos 가져오기
