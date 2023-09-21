@@ -46,7 +46,7 @@ public class EndPosService {
         }
         /*
         2. 두 번째 접속 시 본가 주소 추가
-        두 번째 접속 시에는 EndPos에만 저장해준다.
+        두 번째 접속 시부터 본가 주소 추가 시에는 EndPos에만 저장해준다.
         */
         return endPosDto;
     }
