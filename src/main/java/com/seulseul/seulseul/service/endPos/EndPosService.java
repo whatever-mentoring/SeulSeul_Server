@@ -2,6 +2,7 @@ package com.seulseul.seulseul.service.endPos;
 
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
+import com.seulseul.seulseul.dto.endPos.EndPosResDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
@@ -20,7 +21,7 @@ public class EndPosService {
     private final BaseRouteRepository baseRouteRepository;
 
     @Transactional
-    public EndPosDto addDest(EndPosDto form, User user) {
+    public EndPosResDto addDest(EndPosDto form, User user) {
         //1. endPos table에 저장
 //        EndPos endPos = endPosRepository.save(form.toEntity(form));
         // 생성자로 저장
@@ -36,6 +37,7 @@ public class EndPosService {
 //        baseRouteRepository.save(baseRouteDto.toEntity(baseRouteDto));
         // 생성자로 저장
         baseRouteRepository.save(new BaseRoute(baseRouteDto));
-        return endPosDto;
+        return new EndPosResDto(endPos.getId(), baseRouteDto.getId(), endPos.getEndX(), endPos.getEndY(), endPos.getEndNickName()
+        , endPos.getRoadNameAddress());
     }
 }
