@@ -44,6 +44,7 @@ public class EndPos {
         this.endY = form.getEndY();
         this.endNickName = form.getEndNickName();
         this.roadNameAddress = form.getRoadNameAddress();
+        this.jibunAddress = form.getJibunAddress();
     }
 
     public void setUser(User user) {
@@ -57,6 +58,7 @@ public class EndPos {
         dto.setEndY(entity.getEndY());
         dto.setEndNickName(entity.getEndNickName());
         dto.setRoadNameAddress(entity.getRoadNameAddress());
+        dto.setJibunAddress(entity.getJibunAddress());
         return dto;
     }
 
