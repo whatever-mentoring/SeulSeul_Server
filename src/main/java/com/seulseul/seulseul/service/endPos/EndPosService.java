@@ -63,9 +63,20 @@ public class EndPosService {
                 , endPos.getRoadNameAddress(), endPos.getJibunAddress());
     }
 
-    // 사용자의 모든 endPos 가져오기
+    // 사용자의 모든 endPos(목적지) 가져오기
     public List<EndPos> getAllEndPos(User user) {
         List<EndPos> endPosList = endPosRepository.findAllByUser(user);
         return endPosList;
+    }
+
+    // 선택한 endPos(목적지) 가져오기
+    public EndPosResDto getEndPos(Long id, User user) {
+        // endPos id와 uuid로 디비에 저장된 목적지 가져옴
+        EndPos endPos = endPosRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new CustomException(ErrorCode.ENDPOS_NOT_FOUND));
+        // EndPosResDto에서 base_route_id 넘겨주기 위해서 baseRoute 가져오기
+        BaseRoute baseRoute = baseRouteRepository.findByUser(user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        return new EndPosResDto(endPos, baseRoute.getId());
     }
 }

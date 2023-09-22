@@ -42,4 +42,13 @@ public class EndPosController {
         ResponseData responseData = new ResponseData(200, endPosList);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    // 선택한 목적지 보여주기
+    @GetMapping("/v1/end/{id}")
+    public ResponseEntity<ResponseData> getEndPos(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) {
+        User user = userService.getUserByUuid(uuid);
+        EndPosResDto dto = endPosService.getEndPos(id, user);
+        ResponseData responseData = new ResponseData(200, dto);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 }

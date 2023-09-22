@@ -6,7 +6,10 @@ import jdk.dynalink.linker.LinkerServices;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EndPosRepository extends CrudRepository<EndPos, Long> {
     List<EndPos> findAllByUser(User user);
+
+    Optional<EndPos> findByIdAndUser(Long id, User user);
 }
