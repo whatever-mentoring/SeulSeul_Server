@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -91,6 +92,7 @@ public class BaseRouteService {
     public Optional<BaseRoute> getStationIdAndName(Long id) throws IOException {
         // baseRoute 객체 찾기
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
+        System.out.println("getStationIdandName: "+ baseRoute.isEmpty());
         if (baseRoute.isEmpty()) {
             throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
         }
@@ -244,4 +246,16 @@ public class BaseRouteService {
         }
         return baseRoute;
     }
+
+    @Transactional
+    public BaseRoute findByUser(User user) {
+        BaseRoute baseRoute = baseRouteRepository.findByUser(user).orElse(null);
+        return baseRoute;
+    }
+
+//    public BaseRouteDto findByUser(User user) {
+//        Optional<BaseRoute> baseRoute = baseRouteRepository.findByUser(user);
+//        BaseRouteDto baseRouteDto = baseRoute.toDto(baseRoute);
+//        return baseRouteDto;
+//    }
 }

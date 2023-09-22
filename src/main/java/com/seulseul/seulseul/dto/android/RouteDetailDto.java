@@ -20,8 +20,7 @@ public class RouteDetailDto {
     private List<String> laneName;    //지하철 호선
     private List<String> wayName;   //방면(ex.중앙보훈병원 방면)
     private List<String> exName;    //환승역 이름
-    private  List<Integer> fastTrain; //빠른 환승
-    private List<Integer> fastDoor; //빠른 환승
+    private  List<String> fastTrainDoor; //빠른 환승
     private List<Integer> exWalkTime;   //환승역에서 환승하는데 소요되는 시간
     private List<Integer> travelTime;   //누적 시간: 환승을 2번 이상 하는 경우 역<->역 시간은 exWalkTime을 뺀 시간
 
@@ -30,5 +29,15 @@ public class RouteDetailDto {
     private Date minTime;   //출발역에서의 출발 시간
     private Date departTime;    //지하철 역에서 지하철이 출발하는 시간
 
+    //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
+    public void updateFromBaseRoute(String firstStation, String lastStation, List<String> exName, List<Integer> exWalkTime, List<String> fastTrainDoor, List<String> laneName, List<String> wayName) {
+        this.firstStation = firstStation;
+        this.lastStation = lastStation;
+        this.exName = exName;
+        this.exWalkTime = exWalkTime;
+        this.fastTrainDoor = fastTrainDoor;
+        this.laneName = laneName;
+        this.wayName = wayName;
+    }
 
 }

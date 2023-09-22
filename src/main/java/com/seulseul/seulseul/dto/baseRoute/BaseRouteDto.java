@@ -36,6 +36,7 @@ public class BaseRouteDto {
     private User user;
 
     private Alarm alarm;
+
     //dto -> entity 변환
 //    public BaseRoute toEntity(BaseRouteDto dto) {
 //        BaseRoute entity = new BaseRoute();

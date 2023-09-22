@@ -31,6 +31,7 @@ public class BaseRouteController {
     @GetMapping("/transfer/{id}")
     public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
         Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
+        System.out.println("baseRoute: "+baseRoute);
         BaseRoute result = baseRouteService.findTransferData(baseRoute.get().getId());
         ResponseData responseData = new ResponseData(200, result);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
