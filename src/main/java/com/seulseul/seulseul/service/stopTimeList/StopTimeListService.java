@@ -59,8 +59,6 @@ public class StopTimeListService {
         bufferedReader.close();
         conn.disconnect();
 
-        System.out.println(sb.toString());
-
         return sb.toString();
     }
 
@@ -85,6 +83,14 @@ public class StopTimeListService {
             stationIdList.add(baseRoute.getExSID2().get(i));
         }
         stationIdList.add(baseRoute.getEID());
+
+        //기존의 값이 존재하는 경우 삭제
+        if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
+            List<StopTimeList> stopTimeList1 = stopTimeListRepository.findByBaseRouteId(id);
+            for (int i=0;i<stopTimeList1.size();i++) {
+                stopTimeListRepository.delete(stopTimeList1.get(i));
+            }
+        }
 
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         int check = 0;
