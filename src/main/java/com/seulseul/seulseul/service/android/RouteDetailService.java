@@ -122,7 +122,29 @@ public class RouteDetailService {
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
 
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-        detailDto.updateTimeList(timeList);
+        String startTime = timeList.get(0);
+        String endTime = timeList.get(timeList.size()-1);
+
+        String[] parts = startTime.split(":");
+        String[] part = endTime.split(":");
+
+        // 분리된 문자열을 정수로 변환
+        int startH = Integer.parseInt(parts[0]);
+        int startM = Integer.parseInt(parts[1]);
+        int endH = Integer.parseInt(part[0]);
+        int endM = Integer.parseInt(part[1]);
+
+        //time
+        int resultH = endH - startH;
+        int resultM = endM - startM;
+
+        if (resultM < 0) {
+            resultM += 60;
+        }
+
+        String totalTime = resultH+"시간 "+resultM+"분";
+
+        detailDto.updateTimeList(timeList, totalTime);
 
         return detailDto;
     }

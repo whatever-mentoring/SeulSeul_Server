@@ -22,13 +22,11 @@ public class RouteDetailDto {
     private List<String> exName;    //환승역 이름
     private  List<String> fastTrainDoor; //빠른 환승
     private List<Integer> exWalkTime;   //환승역에서 환승하는데 소요되는 시간
-    private List<Integer> travelTime;   //누적 시간: 환승을 2번 이상 하는 경우 역<->역 시간은 exWalkTime을 뺀 시간
 
 
     //아직 구현 X
     private List<String> timeList;
-    private Date minTime;   //출발역에서의 출발 시간
-    private Date departTime;    //지하철 역에서 지하철이 출발하는 시간
+    private String totalTime;
 
 
     //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
@@ -42,7 +40,8 @@ public class RouteDetailDto {
         this.wayName = wayName;
     }
 
-    public void updateTimeList(List<String> timeList) {
+    public void updateTimeList(List<String> timeList, String totalTime) {
         this.timeList = timeList;
+        this.totalTime = totalTime;
     }
 }
