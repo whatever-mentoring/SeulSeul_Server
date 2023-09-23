@@ -1,19 +1,36 @@
 package com.seulseul.seulseul.controller.firbase;//package com.seulseul.seulseul.controller.firbase;
-//
+
+import com.seulseul.seulseul.dto.Response.ResponseData;
 //import com.seulseul.seulseul.dto.firebase.RequestDTO;
+import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.user.User;
+import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 //import com.seulseul.seulseul.service.firebase.FirebaseCloudMessageService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
+import com.seulseul.seulseul.service.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+public class FcmController {
+    private BaseRouteService baseRouteService;
+    private UserService userService;
+
+//    @PostMapping("/v1/fcm/check")
+//    public ResponseEntity<ResponseData> findTransfer(@RequestHeader("Auth") UUID uuid, @RequestBody FCMDto fcmDto) throws IOException {
+//        User user = userService.getUserByUuid(uuid);
+//        BaseRoute baseRoute = baseRouteService.findByUser(user);
 //
-//import java.io.IOException;
-//
-//@RestController
-//@RequiredArgsConstructor
-//public class FcmController {
-//
+//        ResponseData responseData = new ResponseData(200, result);
+//        return new ResponseEntity<>(responseData, HttpStatus.OK);
+//    }
+
 //    private final FirebaseCloudMessageService firebaseCloudMessageService;
 //
 //    @PostMapping("/api/fcm")
@@ -27,5 +44,5 @@ package com.seulseul.seulseul.controller.firbase;//package com.seulseul.seulseul
 //                requestDTO.getBody());
 //        return ResponseEntity.ok().build();
 //    }
-//
-//}
+
+}

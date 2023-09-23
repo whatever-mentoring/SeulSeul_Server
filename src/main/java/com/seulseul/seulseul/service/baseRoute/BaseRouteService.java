@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -142,9 +143,6 @@ public class BaseRouteService {
         bufferedReader.close();
         conn.disconnect();
 
-        log.info("sb.toString() :", sb.toString());
-        System.out.println(sb.toString());
-
         return sb.toString();
     }
 
@@ -208,7 +206,6 @@ public class BaseRouteService {
             }
 
             if (!exNameList.isEmpty()) {
-                System.out.println("exNamelist");
                 int cnt = 0;
                 int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
                 int travelTime = 0;
@@ -244,4 +241,11 @@ public class BaseRouteService {
         }
         return baseRoute;
     }
+
+    @Transactional
+    public BaseRoute findByUser(User user) {
+        BaseRoute baseRoute = baseRouteRepository.findByUser(user).orElse(null);
+        return baseRoute;
+    }
+
 }
