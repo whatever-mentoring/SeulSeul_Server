@@ -117,6 +117,81 @@ public class RouteDetailService {
         return result;
     }
 
+    @Transactional(readOnly = false)
+    public List<String> checkTimeList(Long id, List<String> timeList) throws ParseException {
+        //id로 stopTimeList 가져오기
+        List<StopTimeList> stopTimeLists = stopTimeListRepository.findByBaseRouteId(id);
+        BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
+        List<Integer> exWalkTime = baseRoute.getExWalkTime();
+
+        //맨 처음(출발역)부터
+        StopTimeList lst;
+        List<String> time;
+        List<String> resultTime = new ArrayList<>();
+        List<String> originalTimeList = timeList;
+        String prev;
+        String current;
+        int index;
+        int hours;
+        int minutes;
+        int h;
+        int m;
+        int transfer=0; //0인 경우 출발, 목적역 / 1인 경우 첫번째 환승역에서 내린 경우 / 2인 경우 환승역에서 exWalkTime 계산 후 타는 경우
+        int exWalkIdx = 0;
+
+        //앞에서 계산한 timeList 시간과 lst에 있는 가장 가까운 시간 비교
+        for (int i=0; i<stopTimeLists.size()-1; i++) {
+            lst = stopTimeLists.get(i);
+            time = lst.getTime();
+            index = 0;
+
+            if (i!=0 && i!=stopTimeLists.size()-1) {
+                transfer += 1;
+            } else {
+                transfer = 0;
+            }
+
+            if (i==0) { //출발지에서 출발시간인 경우 resultTime에 추가
+                resultTime.add(originalTimeList.get(0));
+            } else {
+                prev = resultTime.get(i-1); //이전역에서 출발한 시간
+                String[] parts = prev.split(":");
+
+                // 분리된 문자열을 정수로 변환
+                hours = Integer.parseInt(parts[0]);
+                minutes = Integer.parseInt(parts[1]);
+
+                if (transfer == 2) {
+                    minutes += exWalkTime.get(exWalkIdx);
+                    if (minutes > 60) {
+                        minutes -= 60;
+                        hours += 1;
+                    }
+                    exWalkIdx += 1;
+                }
+
+                //현재역과 직전역의 시간 비교
+                while (true) {
+                    //현재 역에서의 시간
+                    current = time.get(index);
+                    // 콜론을 기준으로 문자열을 분리
+                    String[] p = current.split(":");
+                    // 분리된 문자열을 정수로 변환
+                    h = Integer.parseInt(p[0]);
+                    m = Integer.parseInt(p[1]);
+                    if (h>hours || (h==hours && m>minutes)) {
+                        resultTime.add(time.get(index));
+                        break;
+                    } else {
+                        index += 1;
+                    }
+                }
+            }
+        }
+        System.out.println("checkTeamList resultTime: "+resultTime);
+        return resultTime;
+    }
+
     @Transactional
     public RouteDetailDto updateTimeList(Long id, RouteDetailDto detailDto, List<String> timeList) {
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);

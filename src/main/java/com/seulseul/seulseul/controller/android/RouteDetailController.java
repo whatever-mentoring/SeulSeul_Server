@@ -37,11 +37,16 @@ public class RouteDetailController {
         //baseRoute에 존재하는 데이터 전달
         RouteDetailDto routeDetailDto = routeDetailService.routeDetailFromBaseRoute(baseRoute.getId());
 
-        //실제 시간 계산 로직
+        //실제 시간 계산 로직 => 뒤에서부터 확인
         List<String> timeList = routeDetailService.compute(baseRoute.getId());
+
+        //재확인 => 목적지 역 이전에 먼저 끊기는 역이 존재하는 경우 해당 시간에 맞춰 timeList 변경
+        timeList = routeDetailService.checkTimeList(baseRoute.getId(), timeList);
 
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList);
+
+
 
         ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
