@@ -10,13 +10,12 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.endPos.EndPosService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -35,4 +34,21 @@ public class EndPosController {
         return ResponseEntity.ok(responseData);
     }
 
+    // 유저의 모든 목적지 List로 보여주기
+    @GetMapping("/v1/end")
+    public ResponseEntity<ResponseData> getAllEndPos(@RequestHeader("Auth") UUID uuid) {
+        User user = userService.getUserByUuid(uuid);
+        List<EndPos> endPosList = endPosService.getAllEndPos(user);
+        ResponseData responseData = new ResponseData(200, endPosList);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    // 선택한 목적지 보여주기
+    @GetMapping("/v1/end/{id}")
+    public ResponseEntity<ResponseData> getEndPos(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) {
+        User user = userService.getUserByUuid(uuid);
+        EndPosResDto dto = endPosService.getEndPos(id, user);
+        ResponseData responseData = new ResponseData(200, dto);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 }

@@ -1,8 +1,10 @@
 package com.seulseul.seulseul.entity.endPos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,11 +31,24 @@ public class EndPos {
     @Column(name="roadNameAddress")
     private String roadNameAddress;
 
+    @Column(name = "jibunAddress")
+    private String jibunAddress; // 지번주소
+
+    // 연관관계의 주인 -> endPos
+    @JsonIgnore
+    @ManyToOne
+    private User user;
+
     public EndPos(EndPosDto form) {
         this.endX = form.getEndX();
         this.endY = form.getEndY();
         this.endNickName = form.getEndNickName();
         this.roadNameAddress = form.getRoadNameAddress();
+        this.jibunAddress = form.getJibunAddress();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     //entity -> dto 변환
@@ -43,6 +58,7 @@ public class EndPos {
         dto.setEndY(entity.getEndY());
         dto.setEndNickName(entity.getEndNickName());
         dto.setRoadNameAddress(entity.getRoadNameAddress());
+        dto.setJibunAddress(entity.getJibunAddress());
         return dto;
     }
 

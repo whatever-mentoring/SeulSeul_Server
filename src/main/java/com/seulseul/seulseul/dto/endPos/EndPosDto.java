@@ -21,6 +21,8 @@ public class EndPosDto {
 
     private String roadNameAddress;
 
+    private String jibunAddress;
+
 //    public EndPos toEntity(EndPosDto dto) {
 //        EndPos entity = new EndPos();
 //        entity.setEndX(dto.getEndX());
