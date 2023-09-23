@@ -2,6 +2,7 @@ package com.seulseul.seulseul.controller.firbase;//package com.seulseul.seulseul
 
 import com.seulseul.seulseul.dto.Response.ResponseData;
 //import com.seulseul.seulseul.dto.firebase.RequestDTO;
+import com.seulseul.seulseul.dto.firebase.FCMDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
@@ -19,17 +20,18 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class FcmController {
-    private BaseRouteService baseRouteService;
-    private UserService userService;
+    private final BaseRouteService baseRouteService;
+    private final UserService userService;
 
-//    @PostMapping("/v1/fcm/check")
-//    public ResponseEntity<ResponseData> findTransfer(@RequestHeader("Auth") UUID uuid, @RequestBody FCMDto fcmDto) throws IOException {
-//        User user = userService.getUserByUuid(uuid);
-//        BaseRoute baseRoute = baseRouteService.findByUser(user);
-//
-//        ResponseData responseData = new ResponseData(200, result);
-//        return new ResponseEntity<>(responseData, HttpStatus.OK);
-//    }
+    @PostMapping("/v1/fcm/check")
+    public ResponseEntity<ResponseData> findTransfer(@RequestHeader("Auth") UUID uuid, @RequestBody FCMDto fcmDto) throws IOException {
+        User user = userService.getUserByUuid(uuid);
+        BaseRoute baseRoute = baseRouteService.findByUser(user);
+        userService.saveToken(uuid, fcmDto);
+
+        ResponseData responseData = new ResponseData(200, user);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 
 //    private final FirebaseCloudMessageService firebaseCloudMessageService;
 //

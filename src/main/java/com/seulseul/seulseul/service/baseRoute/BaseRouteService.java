@@ -8,6 +8,7 @@ import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.alarm.AlarmDto;
 import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
 import com.seulseul.seulseul.dto.baseRoute.*;
+import com.seulseul.seulseul.dto.firebase.FCMDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
