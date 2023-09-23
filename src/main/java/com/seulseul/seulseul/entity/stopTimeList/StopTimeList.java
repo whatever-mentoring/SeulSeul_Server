@@ -18,7 +18,7 @@ public class StopTimeList {
     private Long id;
 
     private Integer stationId;
-    private Long alarmId;
+    private Long baseRouteId;
     private List<String> time;
 
     public StopTimeList(List<String> timeList) {
@@ -27,7 +27,7 @@ public class StopTimeList {
 
 
     public void update(Long id, Integer stationId,List<String> timeList) {
-        this.alarmId = id;
+        this.baseRouteId = id;
         this.stationId = stationId;
         this.time = timeList;
     }
