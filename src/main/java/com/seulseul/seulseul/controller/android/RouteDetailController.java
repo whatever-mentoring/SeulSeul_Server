@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,11 +33,15 @@ public class RouteDetailController {
     public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) throws ParseException {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
+
         //baseRoute에 존재하는 데이터 전달
         RouteDetailDto routeDetailDto = routeDetailService.routeDetailFromBaseRoute(baseRoute.getId());
 
         //실제 시간 계산 로직
-        routeDetailService.compute(routeDetailDto, baseRoute.getId());
+        List<String> timeList = routeDetailService.compute(baseRoute.getId());
+
+        //시간 업데이트
+        routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList);
 
         ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);

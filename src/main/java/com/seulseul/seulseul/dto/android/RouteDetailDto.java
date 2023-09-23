@@ -26,8 +26,10 @@ public class RouteDetailDto {
 
 
     //아직 구현 X
+    private List<String> timeList;
     private Date minTime;   //출발역에서의 출발 시간
     private Date departTime;    //지하철 역에서 지하철이 출발하는 시간
+
 
     //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
     public void updateFromBaseRoute(String firstStation, String lastStation, List<String> exName, List<Integer> exWalkTime, List<String> fastTrainDoor, List<String> laneName, List<String> wayName) {
@@ -40,4 +42,7 @@ public class RouteDetailDto {
         this.wayName = wayName;
     }
 
+    public void updateTimeList(List<String> timeList) {
+        this.timeList = timeList;
+    }
 }

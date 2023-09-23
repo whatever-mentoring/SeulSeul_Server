@@ -92,7 +92,6 @@ public class BaseRouteService {
     public Optional<BaseRoute> getStationIdAndName(Long id) throws IOException {
         // baseRoute 객체 찾기
         Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
-        System.out.println("getStationIdandName: "+ baseRoute.isEmpty());
         if (baseRoute.isEmpty()) {
             throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
         }
@@ -207,7 +206,6 @@ public class BaseRouteService {
             }
 
             if (!exNameList.isEmpty()) {
-                System.out.println("exNamelist");
                 int cnt = 0;
                 int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
                 int travelTime = 0;
@@ -250,9 +248,4 @@ public class BaseRouteService {
         return baseRoute;
     }
 
-//    public BaseRouteDto findByUser(User user) {
-//        Optional<BaseRoute> baseRoute = baseRouteRepository.findByUser(user);
-//        BaseRouteDto baseRouteDto = baseRoute.toDto(baseRoute);
-//        return baseRouteDto;
-//    }
 }
