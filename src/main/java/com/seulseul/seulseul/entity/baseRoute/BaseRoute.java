@@ -123,6 +123,11 @@ public class BaseRoute {
         this.alarm = alarm;
     }
 
+    public void updateEndCoordination(double endX, double endY) {
+        this.endX = endX;
+        this.endY = endY;
+    }
+
     //entity -> dto 변환
     public BaseRouteDto toDto(BaseRoute entity) {
         BaseRouteDto dto = new BaseRouteDto();
