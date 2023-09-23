@@ -69,11 +69,12 @@ public class BaseRouteService {
 
     // 현재 위치(좌표), 요일 받아오기
     @Transactional
-    public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto, User user) {
+    public BaseRouteStartDto saveStartInfo(BaseRouteStartReqDto reqDto, User user) throws IOException {
         // 알림 테이블 정보 + User 정보로 원하는 디비 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(reqDto.getId(), user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         baseRoute.saveStartInfo(reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
+        getUrl(reqDto.getStartX(), reqDto.getStartY(), baseRoute.getEndX(), baseRoute.getEndY());
         return new BaseRouteStartDto(baseRoute.getId(), reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
     }
 

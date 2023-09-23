@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,7 +72,7 @@ public class EndPosService {
     }
 
     // 선택한 endPos(목적지) 가져오기
-    public EndPosResDto getEndPos(Long id, User user) {
+    public EndPosResDto getEndPos(Long id, User user) throws IOException {
         // endPos id와 uuid로 디비에 저장된 목적지 가져옴
         EndPos endPos = endPosRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.ENDPOS_NOT_FOUND));

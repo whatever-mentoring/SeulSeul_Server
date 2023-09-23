@@ -37,7 +37,7 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) {
+    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) throws IOException {
         User user = userService.getUserByUuid(uuid);
         BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, reqDto);
