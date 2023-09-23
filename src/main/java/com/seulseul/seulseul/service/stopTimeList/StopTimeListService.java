@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -156,7 +157,7 @@ public class StopTimeListService {
                             for (String m : minute) {
                                 if (m.contains(part)) {
                                     String min = m.split("\\(")[0];
-                                    timeList.add(hour + "-" + min);
+                                    timeList.add(hour + ":" + min);
                                 }
                             }
                         }
@@ -165,7 +166,7 @@ public class StopTimeListService {
                         for (String m : minute) {
                             if (m.contains(wayName)) {
                                 String min = m.split("\\(")[0];
-                                timeList.add(hour + "-" + min);
+                                timeList.add(hour + ":" + min);
                             }
                         }
                     }

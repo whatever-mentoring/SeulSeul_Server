@@ -144,9 +144,6 @@ public class BaseRouteService {
         bufferedReader.close();
         conn.disconnect();
 
-        log.info("sb.toString() :", sb.toString());
-        System.out.println(sb.toString());
-
         return sb.toString();
     }
 
