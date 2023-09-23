@@ -78,7 +78,6 @@ public class BaseRoute {
     private Alarm alarm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
-        this.id = baseRouteDto.getId();
         this.startX = baseRouteDto.getStartX();
         this.startY = baseRouteDto.getStartY();
         this.endX = baseRouteDto.getEndX();
@@ -122,6 +121,11 @@ public class BaseRoute {
 
     public void saveAlarmInfo(Alarm alarm) {
         this.alarm = alarm;
+    }
+
+    public void updateEndCoordination(double endX, double endY) {
+        this.endX = endX;
+        this.endY = endY;
     }
 
     //entity -> dto 변환

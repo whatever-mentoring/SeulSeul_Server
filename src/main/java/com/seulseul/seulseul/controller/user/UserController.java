@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping("/v1/user")
     public ResponseEntity<ResponseData> saveUser(@RequestBody UserDto userDto) {
-        User user = userService.saveUser(userDto);
+        UserDto user = userService.saveUser(userDto);
         ResponseData responseData = new ResponseData(200, user);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

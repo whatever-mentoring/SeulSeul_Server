@@ -18,8 +18,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = false)
-    public User saveUser(UserDto userDto) {
-        return userRepository.save(new User(userDto.getUuid()));
+    public UserDto saveUser(UserDto userDto) {
+        userRepository.save(new User(userDto.getUuid()));
+        return userDto;
     }
 
     public User getUserByUuid(UUID uuid) {

@@ -119,17 +119,17 @@ public class StopTimeListService {
                 //각 배열에 접근
                 JsonNode ordArray;
                 if (baseRoute.getWayCode().get(idx) == 1) {
-                    if (baseRoute.getDayInfo().equals("토")) {
+                    if (baseRoute.getDayInfo().equals("토요일")) {
                         ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
-                    } else if (baseRoute.getDayInfo().equals("일")) {
+                    } else if (baseRoute.getDayInfo().equals("일요일")) {
                         ordArray = jsonNode.get("result").get("SunList").get("up").get("time");
                     } else {
                         ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
                     }
                 } else {
-                    if (baseRoute.getDayInfo().equals("토")) {
+                    if (baseRoute.getDayInfo().equals("토요일")) {
                         ordArray = jsonNode.get("result").get("SatList").get("down").get("time");
-                    } else if (baseRoute.getDayInfo().equals("일")) {
+                    } else if (baseRoute.getDayInfo().equals("일요일")) {
                         ordArray = jsonNode.get("result").get("SunList").get("down").get("time");
                     } else {
                         ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
