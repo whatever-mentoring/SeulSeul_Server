@@ -77,6 +77,7 @@ public class EndPosService {
         // EndPosResDto에서 base_route_id 넘겨주기 위해서 baseRoute 가져오기
         BaseRoute baseRoute = baseRouteRepository.findByUser(user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        // 이제 BaseRoute 업데이트 해줘야 함 -> 여기서? 아님 service의 다른 메소드를 만들까?
         return new EndPosResDto(endPos, baseRoute.getId());
     }
 }
