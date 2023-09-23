@@ -29,7 +29,11 @@ public class RouteDetailController {
     public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
+        //baseRoute에 존재하는 데이터 전달
         RouteDetailDto routeDetailDto = routeDetailService.routeDetailFromBaseRoute(baseRoute.getId());
+
+        //실제 시간 계산 로직
+
 
         ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
