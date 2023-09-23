@@ -13,12 +13,12 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
     @Id
     private UUID uuid;
+    private String token;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY) // user가 삭제되면 endPos도 삭제됨
     private List<EndPos> endPosList = new ArrayList<>();
@@ -26,4 +26,14 @@ public class User {
     public User(UUID uuid) {
         this.uuid = uuid;
     }
+
+    public User(UUID uuid, String token) {
+        this.uuid = uuid;
+        this.token = token;
+    }
+
+    public void updateToken(String token) {
+        this.token = token;
+    }
+
 }
