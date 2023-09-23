@@ -46,8 +46,6 @@ public class RouteDetailController {
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList);
 
-
-
         ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
