@@ -24,6 +24,7 @@ import java.util.Optional;
 public class EndPosService {
     private final EndPosRepository endPosRepository;
     private final BaseRouteRepository baseRouteRepository;
+    private final EndPosUpdateService endPosUpdateService;
 
     @Transactional
     public EndPosResDto addDest(EndPosDto form, User user) {
@@ -42,7 +43,7 @@ public class EndPosService {
         if (baseRouteRepository.findByUser(user).isEmpty()) {
             BaseRouteDto baseRouteDto = new BaseRouteDto();
             // baseRouteDto.setId(endPos.getId()); // 변경해야할듯
-            System.out.println(endPos.getId());
+//            System.out.println(endPos.getId());
             baseRouteDto.setEndX(endPosDto.getEndX());
             baseRouteDto.setEndY(endPosDto.getEndY());
             baseRouteDto.setUser(user);
@@ -77,7 +78,8 @@ public class EndPosService {
         // EndPosResDto에서 base_route_id 넘겨주기 위해서 baseRoute 가져오기
         BaseRoute baseRoute = baseRouteRepository.findByUser(user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        // 이제 BaseRoute 업데이트 해줘야 함 -> 여기서? 아님 service의 다른 메소드를 만들까?
+        // 이제 BaseRoute 업데이트 해줘야 함 -> 트랜잭션 필요 -> 다른 서비스로 넘기자 -> EndPosUpdateService
+        endPosUpdateService.updateCurrentEndPos(endPos, baseRoute);
         return new EndPosResDto(endPos, baseRoute.getId());
     }
 }
