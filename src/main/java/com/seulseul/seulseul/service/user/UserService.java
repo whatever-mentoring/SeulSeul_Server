@@ -32,6 +32,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public void saveToken(UUID uuid, FCMDto fcmDto) {
         User user = userRepository.findById(uuid).orElse(null);
         UserDto userDto = new UserDto();
