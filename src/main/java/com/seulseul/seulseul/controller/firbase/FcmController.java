@@ -29,7 +29,7 @@ public class FcmController {
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         userService.saveToken(uuid, fcmDto);
 
-        ResponseData responseData = new ResponseData(200, user);
+        ResponseData responseData = new ResponseData(200, null);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
