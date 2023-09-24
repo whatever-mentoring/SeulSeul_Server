@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +47,7 @@ public class EndPosController {
 
     // 선택한 목적지 보여주기
     @GetMapping("/v1/end/{id}")
-    public ResponseEntity<ResponseData> getEndPos(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) {
+    public ResponseEntity<ResponseData> getEndPos(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);
         EndPosResDto dto = endPosService.getEndPos(id, user);
         ResponseData responseData = new ResponseData(200, dto);
