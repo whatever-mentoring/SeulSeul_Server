@@ -34,10 +34,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//firebase fcm 라이브러리
-	implementation 'com.google.firebase:firebase-admin:6.8.1'
-	//objectMapper
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+	//firebase fcm 라이브러리 / sdk
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
