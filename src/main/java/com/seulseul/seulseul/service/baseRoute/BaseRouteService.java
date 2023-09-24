@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
-import com.seulseul.seulseul.dto.alarm.AlarmDto;
-import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
 import com.seulseul.seulseul.dto.baseRoute.*;
-import com.seulseul.seulseul.dto.firebase.FCMDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
@@ -24,10 +21,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
@@ -36,7 +32,7 @@ import java.util.UUID;
 public class BaseRouteService {
     private final ApiKey apiKey;
     private final BaseRouteRepository baseRouteRepository;
-
+//    private final ComputeResultService computeResultService;
 
     // Odsay API 불러오기
     public String getUrl(double startX, double startY, double endX, double endY) throws IOException{
@@ -79,26 +75,16 @@ public class BaseRouteService {
         return new BaseRouteStartDto(baseRoute.getId(), reqDto.getStartX(), reqDto.getStartY(), reqDto.getDayInfo());
     }
 
-    // 현재 위치 변경하기
-    @Transactional
-    public BaseRouteStartDto updateStartInfo(BaseRouteStartUpdateDto dto, User user) {
-        BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        baseRoute.updateStartCoordination(dto.getStartX(), dto.getStartY());
-        return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.getDayInfo());
-    }
-
     // 역 ID와 역 이름 가져오기
     @Transactional(readOnly = false)
-    public Optional<BaseRoute> getStationIdAndName(Long id) throws IOException {
+    public BaseRoute getStationIdAndName(User user) throws IOException {
         // baseRoute 객체 찾기
-        Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
-        if (baseRoute.isEmpty()) {
-            throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
-        }
+        BaseRoute baseRoute = baseRouteRepository.findByUser(user)
+                .orElseThrow();
+
         // json 가져오기
-        String jsonString = getJson(baseRoute.get().getStartX(), baseRoute.get().getStartY(), baseRoute.get().getEndX(),
-                baseRoute.get().getEndY());
+        String jsonString = getJson(baseRoute.getStartX(), baseRoute.getStartY(), baseRoute.getEndX(),
+                baseRoute.getEndY());
         // parsing
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
@@ -112,7 +98,7 @@ public class BaseRouteService {
             int subPathLen = jsonDto.getResult().getPath().get(0).getSubPath().size();
             int endId = jsonDto.getResult().getPath().get(0).getSubPath().get(subPathLen - 2).getEndID();
             // 해당 디비 row에 저장
-            baseRoute.get().saveIdAndNameInfo(startId, endId, firstStation, lastStation);
+            baseRoute.saveIdAndNameInfo(startId, endId, firstStation, lastStation);
             return baseRoute;
         }
         catch (Exception e) {
@@ -153,6 +139,7 @@ public class BaseRouteService {
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
+        System.out.println(baseRoute.getSID() + " " + baseRoute.getEID());
         String string = getFromAPI(baseRoute.getSID(), baseRoute.getEID());
         //원하는 데이터 찾기
         ObjectMapper objectMapper = new ObjectMapper();
@@ -162,6 +149,7 @@ public class BaseRouteService {
             //각 배열에 접근
             JsonNode driveInfoArray = jsonNode.get("result").get("driveInfoSet").get("driveInfo");
             JsonNode exChangeInfoArray = jsonNode.get("result").get("exChangeInfoSet").get("exChangeInfo");
+
             JsonNode stationSetArray = jsonNode.get("result").get("stationSet").get("stations");
 
             // "exSID" 값을 저장할 리스트 생성
@@ -235,7 +223,7 @@ public class BaseRouteService {
             //객체에 넣어서 실제 DB에 저장
             baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList1 ,exSIDList2, fastTrainDoorList, exWalkTimeList, travelTimeList);
 
-            baseRouteRepository.save(baseRoute);
+//            baseRouteRepository.save(baseRoute);
 
         } catch (Exception e) {
             log.info(e.toString());
