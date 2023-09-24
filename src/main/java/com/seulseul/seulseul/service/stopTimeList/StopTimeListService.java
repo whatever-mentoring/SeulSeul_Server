@@ -57,8 +57,12 @@ public class StopTimeListService {
         while ((line = bufferedReader.readLine()) != null) {
             sb.append(line);
         }
+        System.out.println("stationId: "+stationId);
+        System.out.println("stopTimeList: "+sb.toString());
+
         bufferedReader.close();
         conn.disconnect();
+
 
         return sb.toString();
     }
