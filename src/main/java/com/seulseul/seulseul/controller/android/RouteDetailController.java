@@ -53,7 +53,6 @@ public class RouteDetailController {
         wrapDto.setBodyList(routeDetailDto);
         wrapDto.setTimeList(routeDetailDto);
         ResponseData responseData = new ResponseData(200, wrapDto);
-//        ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }
