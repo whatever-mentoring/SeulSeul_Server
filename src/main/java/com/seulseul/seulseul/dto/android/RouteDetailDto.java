@@ -19,6 +19,7 @@ public class RouteDetailDto {
     private String[] exName;    //환승역 이름
     private  String[] fastTrainDoor; //빠른 환승
     private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
+    private String[] travelTime;
 
     //저장
     private String timeList;
@@ -26,7 +27,8 @@ public class RouteDetailDto {
 
 
     //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-    public void updateFromBaseRoute(String firstStation, String lastStation, String[] exName, String[] exWalkTime, String[] fastTrainDoor, String[] laneName, String[] wayName) {
+    public void updateFromBaseRoute(String firstStation, String lastStation, String[] exName, String[] exWalkTime, String[] fastTrainDoor, String[] laneName, String[] wayName,
+                                    String[] travelTime) {
         this.firstStation = firstStation;
         this.lastStation = lastStation;
         this.exName = exName;
@@ -34,6 +36,7 @@ public class RouteDetailDto {
         this.fastTrainDoor = fastTrainDoor;
         this.laneName = laneName;
         this.wayName = wayName;
+        this.travelTime = travelTime;
     }
 
     public void updateTimeList(String timeList, String totalTime) {

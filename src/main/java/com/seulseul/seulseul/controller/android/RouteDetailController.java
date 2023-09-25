@@ -3,6 +3,7 @@ package com.seulseul.seulseul.controller.android;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
+import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
@@ -47,8 +48,11 @@ public class RouteDetailController {
 
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
-
-        ResponseData responseData = new ResponseData(200, routeDetailDto);
+        RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
+        wrapDto.setExWalkTimeList(routeDetailDto);
+        wrapDto.setBodyList(routeDetailDto);
+        wrapDto.setTimeList(routeDetailDto);
+        ResponseData responseData = new ResponseData(200, wrapDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

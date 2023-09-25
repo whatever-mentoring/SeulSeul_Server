@@ -43,8 +43,10 @@ public class RouteDetailService {
         String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
         String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
         String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
 
-        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName);
+        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName,
+                getTravelTime);
         return detailDto;
     }
 
