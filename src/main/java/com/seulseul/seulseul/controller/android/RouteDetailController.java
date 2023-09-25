@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.controller.android;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class RouteDetailController {
 
 
     @GetMapping("/v1/route/detail")
-    public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) throws ParseException {
+    public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) throws ParseException, IOException {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
 
@@ -41,10 +43,10 @@ public class RouteDetailController {
         List<String> timeList = routeDetailService.compute(baseRoute.getId());
 
         //재확인 => 목적지 역 이전에 먼저 끊기는 역이 존재하는 경우 해당 시간에 맞춰 timeList 변경
-        timeList = routeDetailService.checkTimeList(baseRoute.getId(), timeList);
+        String timeList2 = routeDetailService.checkTimeList(baseRoute.getId(), timeList);
 
         //시간 업데이트
-        routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList);
+        routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
 
         ResponseData responseData = new ResponseData(200, routeDetailDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);

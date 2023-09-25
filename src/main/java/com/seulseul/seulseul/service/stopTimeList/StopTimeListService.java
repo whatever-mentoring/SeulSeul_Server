@@ -73,6 +73,7 @@ public class StopTimeListService {
     public StopTimeList findStopTimeListData(Long id) throws IOException {
         //출발역, 도착역, 환승역 stationId
         List<Integer> stationIdList = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         //방면
         String wayName;
@@ -83,9 +84,12 @@ public class StopTimeListService {
 
         //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
         stationIdList.add(baseRoute.getSID());
-        for (int i=0; i<baseRoute.getExSID1().size(); i++) {
-            stationIdList.add(baseRoute.getExSID1().get(i));
-            stationIdList.add(baseRoute.getExSID2().get(i));
+        String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class);
+        String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
+
+        for (int i=0; i<getExSID1.length; i++) {
+            stationIdList.add(Integer.valueOf(getExSID1[i]));
+            stationIdList.add(Integer.valueOf(getExSID2[i]));
         }
         stationIdList.add(baseRoute.getEID());
 
@@ -106,14 +110,16 @@ public class StopTimeListService {
                 check = 0;
             }
             //API 사용
-            String string = getStopTimeListFromAPI(stationId, baseRoute.getWayCode().get(idx));
+            String[] getWayCode = objectMapper.readValue(baseRoute.getWayCode(), String[].class);
+            String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+
+            String string = getStopTimeListFromAPI(stationId, Integer.parseInt(getWayCode[idx]));
             //wayName 방면
-            wayName = baseRoute.getWayName().get(idx);
+            wayName = getWayName[idx];
 
             check += 1;
 
             //원하는 데이터 찾기
-            ObjectMapper objectMapper = new ObjectMapper();
 
             try {
                 JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
@@ -122,7 +128,7 @@ public class StopTimeListService {
 
                 //각 배열에 접근
                 JsonNode ordArray;
-                if (baseRoute.getWayCode().get(idx) == 1) {
+                if (getWayCode[idx] == "1") {
                     if (baseRoute.getDayInfo().equals("토요일")) {
                         ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
                     } else if (baseRoute.getDayInfo().equals("일요일")) {

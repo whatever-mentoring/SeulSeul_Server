@@ -1,5 +1,8 @@
 package com.seulseul.seulseul.service.android;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
@@ -11,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,21 +32,39 @@ public class RouteDetailService {
     private final StopTimeListRepository stopTimeListRepository;
 
     @Transactional(readOnly = false)
-    public RouteDetailDto routeDetailFromBaseRoute(Long id) {
+    public RouteDetailDto routeDetailFromBaseRoute(Long id) throws JsonProcessingException {
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
 
         RouteDetailDto detailDto = new RouteDetailDto();
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),baseRoute.getExName(), baseRoute.getExWalkTime(), baseRoute.getFastTrainDoor(), baseRoute.getLaneName(), baseRoute.getWayName());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
+        String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+        String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
+        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+
+        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName);
         return detailDto;
     }
 
     @Transactional(readOnly = false)
-    public List<String> compute(Long id) throws ParseException {
+    public List<String> compute(Long id) throws ParseException, IOException {
         //id로 stopTimeList 가져오기
         List<StopTimeList> stopTimeLists = stopTimeListRepository.findByBaseRouteId(id);
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
-        List<Integer> exWalkTime = baseRoute.getExWalkTime();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+        List<Integer> getExWalkTime2 = new ArrayList<>();
+        for (String str : getExWalkTime) {
+            try {
+                Integer intValue = Integer.parseInt(str);
+                getExWalkTime2.add(intValue);
+            } catch (Exception e) {
+                System.out.println("올바른 숫자가 아님"+e);
+            }
+        }
 
         //맨 뒤(도착역)부터
         StopTimeList lst;
@@ -55,7 +78,7 @@ public class RouteDetailService {
         int h;
         int m;
         int transfer=0; //0인 경우 출발, 목적역 / 1인 경우 첫번째 환승역에서 내린 경우 / 2인 경우 환승역에서 exWalkTime 계산 후 타는 경우
-        int exWalkIdx = exWalkTime.size()-1;
+        int exWalkIdx = getExWalkTime2.size()-1;
 
         for (int i=stopTimeLists.size()-1; i>=0; i--) {
             lst = stopTimeLists.get(i);
@@ -83,7 +106,7 @@ public class RouteDetailService {
 
                 //환승역에서 걸어서 이동하는 시간 제외
                 if (transfer == 2) {
-                    minutes -= exWalkTime.get(exWalkIdx);
+                    minutes -= getExWalkTime2.get(exWalkIdx);
                     if (minutes < 0) {
                         minutes += 60;
                         hours -= 1;
@@ -114,15 +137,28 @@ public class RouteDetailService {
         for (int i=resultTime.size()-1;i>=0;i--) {
             result.add(resultTime.get(i));
         }
+
         return result;
     }
 
     @Transactional(readOnly = false)
-    public List<String> checkTimeList(Long id, List<String> timeList) throws ParseException {
+    public String checkTimeList(Long id, List<String> timeList) throws ParseException, JsonProcessingException {
         //id로 stopTimeList 가져오기
         List<StopTimeList> stopTimeLists = stopTimeListRepository.findByBaseRouteId(id);
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
-        List<Integer> exWalkTime = baseRoute.getExWalkTime();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String[] getExWalkTim = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+        List<Integer> getExWalkTime = new ArrayList<>();
+        for (String str:getExWalkTim) {
+            try {
+                Integer intValue = Integer.parseInt(str);
+                getExWalkTime.add(intValue);
+            } catch (Exception e) {
+                System.out.println(e+"올바른 숫자 형식이 아님");
+            }
+        }
 
         //맨 처음(출발역)부터
         StopTimeList lst;
@@ -162,7 +198,7 @@ public class RouteDetailService {
                 minutes = Integer.parseInt(parts[1]);
 
                 if (transfer == 2) {
-                    minutes += exWalkTime.get(exWalkIdx);
+                    minutes += getExWalkTime.get(exWalkIdx);
                     if (minutes > 60) {
                         minutes -= 60;
                         hours += 1;
@@ -189,16 +225,21 @@ public class RouteDetailService {
             }
         }
         System.out.println("checkTeamList resultTime: "+resultTime);
-        return resultTime;
+        String resultT = objectMapper.writeValueAsString(resultTime);
+        return resultT;
     }
 
     @Transactional
-    public RouteDetailDto updateTimeList(Long id, RouteDetailDto detailDto, List<String> timeList) {
+    public RouteDetailDto updateTimeList(Long id, RouteDetailDto detailDto, String timeList) throws JsonProcessingException {
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String[] getTimeList = objectMapper.readValue(timeList,String[].class);
+
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-        String startTime = timeList.get(0);
-        String endTime = timeList.get(timeList.size()-1);
+        String startTime = getTimeList[0];
+        String endTime = getTimeList[getTimeList.length-1];
 
         String[] parts = startTime.split(":");
         String[] part = endTime.split(":");
@@ -219,7 +260,9 @@ public class RouteDetailService {
 
         String totalTime = resultH+"시간 "+resultM+"분";
 
-        detailDto.updateTimeList(timeList, totalTime);
+        String resultT = objectMapper.writeValueAsString(timeList);
+
+        detailDto.updateTimeList(resultT, totalTime);
 
         return detailDto;
     }

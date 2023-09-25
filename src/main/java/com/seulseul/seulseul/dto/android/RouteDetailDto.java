@@ -1,10 +1,7 @@
 package com.seulseul.seulseul.dto.android;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteTransferDto;
 import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 @ToString
@@ -17,20 +14,20 @@ public class RouteDetailDto {
     private String firstStation;    //출발역 이름
     private String lastStation;     //도착역 이름
 
-    private List<String> laneName;    //지하철 호선
-    private List<String> wayName;   //방면(ex.중앙보훈병원 방면)
-    private List<String> exName;    //환승역 이름
-    private  List<String> fastTrainDoor; //빠른 환승
-    private List<Integer> exWalkTime;   //환승역에서 환승하는데 소요되는 시간
+    private String[] laneName;    //지하철 호선
+    private String[] wayName;   //방면(ex.중앙보훈병원 방면)
+    private String[] exName;    //환승역 이름
+    private  String[] fastTrainDoor; //빠른 환승
+    private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
 
 
     //아직 구현 X
-    private List<String> timeList;
+    private String timeList;
     private String totalTime;
 
 
     //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-    public void updateFromBaseRoute(String firstStation, String lastStation, List<String> exName, List<Integer> exWalkTime, List<String> fastTrainDoor, List<String> laneName, List<String> wayName) {
+    public void updateFromBaseRoute(String firstStation, String lastStation, String[] exName, String[] exWalkTime, String[] fastTrainDoor, String[] laneName, String[] wayName) {
         this.firstStation = firstStation;
         this.lastStation = lastStation;
         this.exName = exName;
@@ -40,7 +37,7 @@ public class RouteDetailDto {
         this.wayName = wayName;
     }
 
-    public void updateTimeList(List<String> timeList, String totalTime) {
+    public void updateTimeList(String timeList, String totalTime) {
         this.timeList = timeList;
         this.totalTime = totalTime;
     }
