@@ -42,33 +42,32 @@ public class BaseRoute {
 
     // 요일
     private String dayInfo;
-
     @Column(name="exSID")
-    private List<Integer> exSID1;
+    private String exSID1;
 
     @Column(name="exSID2")
-    private List<Integer> exSID2;
+    private String exSID2;
 
     @Column(name="laneName")
-    private List<String> laneName;
+    private String laneName;
 
     @Column(name="wayCode")
-    private List<Integer> wayCode;
+    private String wayCode;
 
     @Column(name="wayName")
-    private List<String> wayName;
+    private String wayName;
 
     @Column(name="fastTrainDoor")
-    private List<String> fastTrainDoor;
+    private String fastTrainDoor;
 
     @Column(name="exWalkTime")
-    private List<Integer> exWalkTime;
+    private String exWalkTime;
 
     @Column(name="exName")
-    private List<String> exName;
+    private String exName;
 
     @Column(name="travelTime")
-    private List<Integer> travelTime;
+    private String travelTime;
 
     @OneToOne
     private User user;
@@ -76,6 +75,40 @@ public class BaseRoute {
     @OneToOne
     @JoinColumn(name = "alarm_id")
     private Alarm alarm;
+
+//    @Column(name="exSID")
+//    private List<Integer> exSID1;
+//
+//    @Column(name="exSID2")
+//    private List<Integer> exSID2;
+//
+//    @Column(name="laneName")
+//    private List<String> laneName;
+//
+//    @Column(name="wayCode")
+//    private List<Integer> wayCode;
+//
+//    @Column(name="wayName")
+//    private List<String> wayName;
+//
+//    @Column(name="fastTrainDoor")
+//    private List<String> fastTrainDoor;
+//
+//    @Column(name="exWalkTime")
+//    private List<Integer> exWalkTime;
+//
+//    @Column(name="exName")
+//    private List<String> exName;
+//
+//    @Column(name="travelTime")
+//    private List<Integer> travelTime;
+//
+//    @OneToOne
+//    private User user;
+//
+//    @OneToOne
+//    @JoinColumn(name = "alarm_id")
+//    private Alarm alarm;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.startX = baseRouteDto.getStartX();
@@ -105,7 +138,22 @@ public class BaseRoute {
     }
 
     // 대중교통 길찾기 API
-    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList1, List<Integer> exSIDList2, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
+//    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList1, List<Integer> exSIDList2, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
+//        this.laneName = laneNameList;
+//
+//        this.laneName = laneNameList;
+//        this.wayCode = wayCodeList;
+//        this.wayName = wayNameList;
+//        this.exName = exNameList;
+//        this.exSID1 = exSIDList1;
+//        this.exSID2 = exSIDList2;
+//        this.fastTrainDoor = fastTrainDoorList;
+//        this.exWalkTime = exWalkTimeList;
+//        this.travelTime = travelTime;
+//    }
+
+//     대중교통 길찾기 API
+    public void update(String laneNameList, String wayCodeList, String wayNameList, String exNameList, String exSIDList1, String exSIDList2, String fastTrainDoorList, String exWalkTimeList, String travelTime) {
         this.laneName = laneNameList;
 
         this.laneName = laneNameList;
