@@ -3,6 +3,7 @@ package com.seulseul.seulseul.service.baseRoute;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.alarm.AlarmDto;
@@ -232,8 +233,27 @@ public class BaseRouteService {
                 }
             }
 
+            String StringLaneName = objectMapper.writeValueAsString(laneNameList);
+
+            String StringWayCode = objectMapper.writeValueAsString(wayCodeList);
+
+            String StringWayName = objectMapper.writeValueAsString(wayNameList);
+
+            String StringExName = objectMapper.writeValueAsString(exNameList);
+
+            String StringExSID1 = objectMapper.writeValueAsString(exSIDList1);
+
+            String StringExSID2 = objectMapper.writeValueAsString(exSIDList2);
+
+            String StringFastTrain = objectMapper.writeValueAsString(fastTrainDoorList);
+
+            String StringExWalkTime = objectMapper.writeValueAsString(exWalkTimeList);
+
+            String StringTravelTime = objectMapper.writeValueAsString(travelTimeList);
+
             //객체에 넣어서 실제 DB에 저장
-            baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList1 ,exSIDList2, fastTrainDoorList, exWalkTimeList, travelTimeList);
+            //baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList1 ,exSIDList2, fastTrainDoorList, exWalkTimeList, travelTimeList);
+            baseRoute.update(StringLaneName, StringWayCode, StringWayName, StringExName, StringExSID1, StringExSID2, StringFastTrain, StringExWalkTime, StringTravelTime);
 
             baseRouteRepository.save(baseRoute);
 
