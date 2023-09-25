@@ -8,33 +8,53 @@ import java.util.*;
 @Getter
 @Setter
 public class RouteDetailWrapDto {
-    private ArrayList<Object> exWalkTimeList;
+    private ArrayList<Object> transferSection;
     private ArrayList<Object> bodyList;
-    private ArrayList<Object> timeList;
+    private ArrayList<Object> totalTimeSection;
+
 
     public void setBodyList(RouteDetailDto routeDetailDto) {
         this.bodyList = new ArrayList<>(); // bodyList를 먼저 초기화
 
-        Map<String, Object> titleMap = new LinkedHashMap<>();
-        titleMap.put("viewType", "bodyInfo");
+        List<String> exNames = routeDetailDto.getExName();
+        int exSize = exNames.size();
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("firstStation", routeDetailDto.getFirstStation());
-        map.put("lastStation", routeDetailDto.getLastStation());
-        map.put("exName", routeDetailDto.getExName());
-        map.put("laneName", routeDetailDto.getLaneName());
-        map.put("fastTrainDoor", routeDetailDto.getFastTrainDoor());
-        map.put("wayName", routeDetailDto.getWayName());
+        for (int i = 0; i < exSize + 1; i++) {
+            Map<String, Object> bodyInfoMap = new LinkedHashMap<>();
+            bodyInfoMap.put("viewType", "bodyInfo");
 
-        titleMap.put("data", map);
-        this.bodyList.add(titleMap);
+            Map<String, Object> dataMap = new LinkedHashMap<>();
+
+            if (i == 0) {
+                // 첫 번째 경우 firstStation 설정
+                dataMap.put("firstStation", routeDetailDto.getFirstStation());
+                dataMap.put("lastStation", exNames.get(i));
+            } else if (i == exSize) {
+                // 마지막 경우 lastStation 설정
+                dataMap.put("firstStation", exNames.get(i - 1));
+                dataMap.put("lastStation", routeDetailDto.getLastStation());
+            } else {
+                // 그 외의 경우 이전역 -> 현재역 -> 다음역 순서로 표시
+                dataMap.put("firstStation", exNames.get(i - 1));
+                dataMap.put("lastStation", exNames.get(i));
+            }
+
+            // 나머지 정보 추가
+            dataMap.put("laneName", routeDetailDto.getLaneName());
+            dataMap.put("fastTrainDoor", routeDetailDto.getFastTrainDoor());
+            dataMap.put("wayName", routeDetailDto.getWayName());
+
+            bodyInfoMap.put("data", dataMap);
+
+            this.bodyList.add(bodyInfoMap);
+        }
     }
 
     public void setTimeList(RouteDetailDto routeDetailDto) {
-        this.timeList = new ArrayList<>(); // bodyList를 먼저 초기화
+        this.totalTimeSection = new ArrayList<>(); // bodyList를 먼저 초기화
 
         Map<String, Object> titleMap = new LinkedHashMap<>();
-        titleMap.put("viewType", "timeInfo");
+        titleMap.put("viewType", "totalTimeSection");
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("totalTime", routeDetailDto.getTotalTime());
@@ -42,11 +62,11 @@ public class RouteDetailWrapDto {
         map.put("arriveTime", routeDetailDto.getTimeList().get(0)); // 일단 넣어두기
 
         titleMap.put("data", map);
-        this.timeList.add(titleMap);
+        this.totalTimeSection.add(titleMap);
     }
 
     public void setExWalkTimeList(RouteDetailDto routeDetailDto) {
-        this.exWalkTimeList = new ArrayList<>(); // bodyList를 먼저 초기화
+        this.transferSection = new ArrayList<>(); // bodyList를 먼저 초기화
 
         Map<String, Object> titleMap = new LinkedHashMap<>();
         titleMap.put("viewType", "exWalkTimeInfo");
@@ -55,6 +75,6 @@ public class RouteDetailWrapDto {
         map.put("exWalkTime", routeDetailDto.getExWalkTime());
 
         titleMap.put("data", map);
-        this.exWalkTimeList.add(titleMap);
+        this.transferSection.add(titleMap);
     }
 }
