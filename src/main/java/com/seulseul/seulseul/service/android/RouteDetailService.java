@@ -138,6 +138,7 @@ public class RouteDetailService {
             result.add(resultTime.get(i));
         }
 
+        System.out.println("update"+result);
         return result;
     }
 

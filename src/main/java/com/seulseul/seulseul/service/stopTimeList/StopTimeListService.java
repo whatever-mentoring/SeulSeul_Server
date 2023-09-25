@@ -83,15 +83,18 @@ public class StopTimeListService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
 
         //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
-        stationIdList.add(baseRoute.getSID());
-        String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class);
+        stationIdList.add(baseRoute.getSID());  //출발ID
+
+        String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class); //환승ID
         String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
 
         for (int i=0; i<getExSID1.length; i++) {
             stationIdList.add(Integer.valueOf(getExSID1[i]));
             stationIdList.add(Integer.valueOf(getExSID2[i]));
         }
-        stationIdList.add(baseRoute.getEID());
+        stationIdList.add(baseRoute.getEID());  //도착ID
+
+        System.out.println("stationId: "+stationIdList);
 
         //기존의 값이 존재하는 경우 삭제
         if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
@@ -183,6 +186,8 @@ public class StopTimeListService {
                 }
                 //객체에 넣어서 실제 DB에 저장
                 StopTimeList stopTimeList = new StopTimeList();
+
+
                 stopTimeList.update(id, stationId, timeList);
                 stopTimeListRepository.save(stopTimeList);
 
