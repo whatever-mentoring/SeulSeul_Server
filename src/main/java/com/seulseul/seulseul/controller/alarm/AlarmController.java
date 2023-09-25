@@ -39,4 +39,12 @@ public class AlarmController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @PatchMapping("/v1/alarm/enabled/{id}")
+    public ResponseEntity<ResponseData> updateAlarm(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) {
+        User user = userService.getUserByUuid(uuid);
+        AlarmDto alarmDto = alarmService.updateAlarmEnabled(id, user);
+        ResponseData responseData = new ResponseData(200, alarmDto);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
 }
