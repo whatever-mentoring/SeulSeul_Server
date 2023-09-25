@@ -57,8 +57,6 @@ public class StopTimeListService {
         while ((line = bufferedReader.readLine()) != null) {
             sb.append(line);
         }
-        System.out.println("stationId: "+stationId);
-        System.out.println("stopTimeList: "+sb.toString());
 
         bufferedReader.close();
         conn.disconnect();
@@ -94,8 +92,6 @@ public class StopTimeListService {
         }
         stationIdList.add(baseRoute.getEID());  //도착ID
 
-        System.out.println("stationId: "+stationIdList);
-
         //기존의 값이 존재하는 경우 삭제
         if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
             List<StopTimeList> stopTimeList1 = stopTimeListRepository.findByBaseRouteId(id);
@@ -126,12 +122,14 @@ public class StopTimeListService {
 
             try {
                 JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
+                System.out.println("jsonNode: "+jsonNode);
                 // "exSID" 값을 저장할 리스트 생성
                 List<String> timeList = new ArrayList<>();
 
                 //각 배열에 접근
                 JsonNode ordArray;
-                if (getWayCode[idx] == "1") {
+
+                if (getWayCode[idx].equals("1")) {
                     if (baseRoute.getDayInfo().equals("토요일")) {
                         ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
                     } else if (baseRoute.getDayInfo().equals("일요일")) {
@@ -148,6 +146,7 @@ public class StopTimeListService {
                         ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
                     }
                 }
+
 
                 //가져온 값을 뒤에서 5시간까지만 받아오기
                 int totalElements = ordArray.size(); // ordArray의 총 요소 개수
@@ -187,8 +186,8 @@ public class StopTimeListService {
                 //객체에 넣어서 실제 DB에 저장
                 StopTimeList stopTimeList = new StopTimeList();
 
-
-                stopTimeList.update(id, stationId, timeList);
+                String stringTime = objectMapper.writeValueAsString(timeList);
+                stopTimeList.update(id, stationId, stringTime);
                 stopTimeListRepository.save(stopTimeList);
 
             } catch (Exception e) {
