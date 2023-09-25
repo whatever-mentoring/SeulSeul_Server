@@ -38,13 +38,20 @@ public class RouteDetailService {
         RouteDetailDto detailDto = new RouteDetailDto();
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
         ObjectMapper objectMapper = new ObjectMapper();
-        String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
-        String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-        String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+
         String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
         String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
 
-        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName);
+        if (baseRoute.getExSID1() != null) {
+            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
+            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+
+            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName);
+        } else {
+            detailDto.updateFromBaseRouteOnly(getLaneName, getWayName);
+        }
+
         return detailDto;
     }
 

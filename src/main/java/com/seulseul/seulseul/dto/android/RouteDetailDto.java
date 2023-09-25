@@ -36,6 +36,11 @@ public class RouteDetailDto {
         this.wayName = wayName;
     }
 
+    public void updateFromBaseRouteOnly(String[] laneName, String[] wayName) {
+        this.laneName = laneName;
+        this.wayName = wayName;
+    }
+
     public void updateTimeList(String timeList, String totalTime) {
         this.timeList = timeList;
         this.totalTime = totalTime;

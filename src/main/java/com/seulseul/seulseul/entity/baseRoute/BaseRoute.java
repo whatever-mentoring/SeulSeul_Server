@@ -66,8 +66,8 @@ public class BaseRoute {
     @Column(name="exName")
     private String exName;
 
-    @Column(name="travelTime")
-    private String travelTime;
+//    @Column(name="travelTime")
+//    private String travelTime;
 
     @OneToOne
     private User user;
@@ -153,7 +153,7 @@ public class BaseRoute {
 //    }
 
 //     대중교통 길찾기 API
-    public void update(String laneNameList, String wayCodeList, String wayNameList, String exNameList, String exSIDList1, String exSIDList2, String fastTrainDoorList, String exWalkTimeList, String travelTime) {
+    public void update(String laneNameList, String wayCodeList, String wayNameList, String exNameList, String exSIDList1, String exSIDList2, String fastTrainDoorList, String exWalkTimeList) {
         this.laneName = laneNameList;
 
         this.laneName = laneNameList;
@@ -164,7 +164,13 @@ public class BaseRoute {
         this.exSID2 = exSIDList2;
         this.fastTrainDoor = fastTrainDoorList;
         this.exWalkTime = exWalkTimeList;
-        this.travelTime = travelTime;
+//        this.travelTime = travelTime;
+    }
+
+    public void updateOnly(String laneNameList, String wayCodeList, String wayNameList) {
+        this.laneName = laneNameList;
+        this.wayCode = wayCodeList;
+        this.wayName = wayNameList;
     }
 
     public void saveAlarmInfo(Alarm alarm) {
