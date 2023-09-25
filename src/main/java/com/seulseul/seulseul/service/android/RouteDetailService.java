@@ -68,7 +68,8 @@ public class RouteDetailService {
 
         //맨 뒤(도착역)부터
         StopTimeList lst;
-        List<String> time;
+        String time;
+        String[] timeList2;
         List<String> resultTime = new ArrayList<>();
         String prev;
         String current;
@@ -83,8 +84,9 @@ public class RouteDetailService {
         for (int i=stopTimeLists.size()-1; i>=0; i--) {
             lst = stopTimeLists.get(i);
             time = lst.getTime();
-            index = time.size()-1;  //뒤에서 부터(stopTimeList에서 맨 뒤의 시간 index)
-
+            timeList2 = objectMapper.readValue(time, String[].class);
+            index = timeList2.length-1;  //뒤에서 부터(stopTimeList에서 맨 뒤의 시간 index)
+            System.out.println("time"+time);
             if (i!=0 && i!=stopTimeLists.size()-1) {
                 transfer += 1;
             } else {
@@ -93,7 +95,7 @@ public class RouteDetailService {
 
             //도착역인경우
             if (resultTime.isEmpty()) {
-                resultTime.add(time.get(index));
+                resultTime.add(timeList2[index]);
             } else {
                 //직전 역에서의 시간
                 prev = resultTime.get(resultTime.size()-1);
@@ -117,14 +119,14 @@ public class RouteDetailService {
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
-                    current = time.get(index);
+                    current = timeList2[index];
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");
                     // 분리된 문자열을 정수로 변환
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
                     if (h<hours || (h==hours && m<=minutes)) {
-                        resultTime.add(time.get(index));
+                        resultTime.add(timeList2[index]);
                         break;
                     } else {
                         index -= 1;
@@ -163,7 +165,8 @@ public class RouteDetailService {
 
         //맨 처음(출발역)부터
         StopTimeList lst;
-        List<String> time;
+        String time;
+        String[] timeList2;
         List<String> resultTime = new ArrayList<>();
         List<String> originalTimeList = timeList;
         String prev;
@@ -180,6 +183,7 @@ public class RouteDetailService {
         for (int i=0; i<stopTimeLists.size()-1; i++) {
             lst = stopTimeLists.get(i);
             time = lst.getTime();
+            timeList2 = objectMapper.readValue(time, String[].class);
             index = 0;
 
             if (i!=0 && i!=stopTimeLists.size()-1) {
@@ -210,14 +214,14 @@ public class RouteDetailService {
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
-                    current = time.get(index);
+                    current = timeList2[index];
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");
                     // 분리된 문자열을 정수로 변환
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
                     if (h>hours || (h==hours && m>minutes)) {
-                        resultTime.add(time.get(index));
+                        resultTime.add(timeList2[index]);
                         break;
                     } else {
                         index += 1;
