@@ -30,8 +30,8 @@ public class FcmController {
     @PostMapping("/v1/fcm/check")
     public ResponseEntity<ResponseData> findTransfer(@RequestHeader("Auth") UUID uuid, @RequestBody FCMDto fcmDto) throws IOException {
         User user = userService.getUserByUuid(uuid);
-        BaseRoute baseRoute = baseRouteService.findByUser(user);
-        userService.saveToken(uuid, fcmDto);
+//        BaseRoute baseRoute = baseRouteService.findByUser(user);
+        userService.saveToken(user, fcmDto);
 
         ResponseData responseData = new ResponseData(200, null);
         return new ResponseEntity<>(responseData, HttpStatus.OK);

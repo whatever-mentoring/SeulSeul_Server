@@ -4,6 +4,7 @@ import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.firebase.FCMDto;
 import com.seulseul.seulseul.dto.user.UserDto;
+import com.seulseul.seulseul.dto.user.UserOnlyDto;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = false)
-    public UserDto saveUser(UserDto userDto) {
-        userRepository.save(new User(userDto.getUuid()));
-        return userDto;
+    public UserOnlyDto saveUser(UserOnlyDto userOnlyDto) {
+        userRepository.save(new User(userOnlyDto.getUuid()));
+        return userOnlyDto;
     }
 
     public User getUserByUuid(UUID uuid) {
@@ -33,11 +34,11 @@ public class UserService {
     }
 
     @Transactional
-    public void saveToken(UUID uuid, FCMDto fcmDto) {
-        User user = userRepository.findById(uuid).orElse(null);
+    public void saveToken(User user, FCMDto fcmDto) {
         UserDto userDto = new UserDto();
-        userDto.setUuid(user.getUuid());
+//        userDto.setUuid(user.getUuid());
         userDto.setToken(fcmDto.getToken());
-        userRepository.saveAndFlush(new User(userDto.getUuid(), userDto.getToken()));
+//        userRepository.saveAndFlush(new User(userDto.getUuid(), userDto.getToken()));
+        user.updateToken(userDto.getToken());
     }
 }

@@ -32,6 +32,10 @@ public class User {
         this.token = token;
     }
 
+    public User(String token) {
+        this.token = token;
+    }
+
     public void updateToken(String token) {
         this.token = token;
     }
