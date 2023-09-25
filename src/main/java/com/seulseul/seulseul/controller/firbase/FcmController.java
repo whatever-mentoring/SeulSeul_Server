@@ -44,6 +44,7 @@ public class FcmController {
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         String pos = baseRoute.getFirstStation();
         Long original = baseRoute.getAlarm().getAlarmTime();
+
         String alarmTime = "";
 
         if (original >= 60) {

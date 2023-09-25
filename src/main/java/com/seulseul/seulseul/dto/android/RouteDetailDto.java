@@ -20,8 +20,7 @@ public class RouteDetailDto {
     private  String[] fastTrainDoor; //빠른 환승
     private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
 
-
-    //아직 구현 X
+    //저장
     private String timeList;
     private String totalTime;
 
