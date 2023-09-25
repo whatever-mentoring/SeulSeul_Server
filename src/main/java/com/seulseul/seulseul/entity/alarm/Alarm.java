@@ -35,4 +35,13 @@ public class Alarm {
         this.alarmTime = alarmTime;
         this.alarmTerm = alarmTerm;
     }
+
+    public void updateAlarmEnabled(boolean alarmEnabled) {
+        if (alarmEnabled == true) {
+            this.alarmEnabled = false;
+        }
+        else {
+            this.alarmEnabled = true;
+        }
+    }
 }

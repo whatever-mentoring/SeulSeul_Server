@@ -11,6 +11,7 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.alarm.AlarmRepository;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,5 +45,14 @@ public class AlarmService {
         // 알림 시간, 간격 업데이트 해주기
         alarm.updateAlarm(updateDto.getAlarmTime(), updateDto.getAlarmTerm());
         return new AlarmDto(alarm);
+    }
+
+    @Transactional(readOnly = false)
+    public AlarmDto updateAlarmEnabled(Long id, User user) {
+        Alarm alarm = alarmRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FONUD));
+        alarm.updateAlarmEnabled(alarm.isAlarmEnabled());
+        AlarmDto alarmDto = new AlarmDto(alarm.getId(), alarm.isAlarmEnabled(), alarm.getAlarmTime(), alarm.getAlarmTerm());
+        return alarmDto;
     }
 }
