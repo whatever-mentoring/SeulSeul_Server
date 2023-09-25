@@ -19,14 +19,14 @@ public class StopTimeList {
 
     private Integer stationId;
     private Long baseRouteId;
-    private List<String> time;
+    private String time;
 
-    public StopTimeList(List<String> timeList) {
-        this.time = timeList;
-    }
+//    public StopTimeList(List<String> timeList) {
+//        this.time = timeList;
+//    }
 
 
-    public void update(Long id, Integer stationId,List<String> timeList) {
+    public void update(Long id, Integer stationId,String timeList) {
         this.baseRouteId = id;
         this.stationId = stationId;
         this.time = timeList;
