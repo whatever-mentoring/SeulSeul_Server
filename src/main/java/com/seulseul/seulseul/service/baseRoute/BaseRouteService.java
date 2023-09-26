@@ -234,11 +234,19 @@ public class BaseRouteService {
                             travelTimeList.add(travelTime);
                             cnt += 1;
                         } else {
-                            System.out.println("exWalkTime: "+ exWalkTimeList.get(cnt-1));
                             currentTravelTime = stations.get("travelTime").asInt();
-                            prev += exWalkTimeList.get(cnt - 1);
-                            travelTime = currentTravelTime - prev + 1;  //exWalkTime 시 반올림하기 때문에 발생하는 1분만 추가
+                            travelTime = currentTravelTime - prev - exWalkTimeList.get(cnt-1) +1;   //exWalkTime 시 반올림하기 때문에 발생하는 시간 소요 1분 추가
+                            prev = currentTravelTime;
                             travelTimeList.add(travelTime);
+
+//                            System.out.println("exWalkTime: "+ exWalkTimeList.get(cnt-1));
+//                            currentTravelTime = stations.get("travelTime").asInt();
+//                            System.out.println("cureent: "+currentTravelTime);
+//                            prev += exWalkTimeList.get(cnt - 1);
+//                            System.out.println("prev: "+prev);
+//                            travelTime = currentTravelTime - prev;  //exWalkTime 시 반올림하기 때문에 발생하는 1분만 추가
+//                            travelTimeList.add(travelTime);
+
                             cnt += 1;
                         }
                     }
