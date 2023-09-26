@@ -52,7 +52,6 @@ public class RouteDetailService {
         } else {
             detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),getLaneName, getWayName, getTravelTime);
         }
-        System.out.println("detailDto: "+detailDto);
         return detailDto;
     }
 
