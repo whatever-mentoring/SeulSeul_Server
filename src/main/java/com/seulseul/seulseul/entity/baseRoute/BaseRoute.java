@@ -167,6 +167,13 @@ public class BaseRoute {
         this.travelTime = travelTime;
     }
 
+    public void updateOnly(String laneNameList, String wayCodeList, String wayNameList, String travelTime) {
+        this.laneName = laneNameList;
+        this.wayCode = wayCodeList;
+        this.wayName = wayNameList;
+        this.travelTime = travelTime;
+    }
+
     public void saveAlarmInfo(Alarm alarm) {
         this.alarm = alarm;
     }

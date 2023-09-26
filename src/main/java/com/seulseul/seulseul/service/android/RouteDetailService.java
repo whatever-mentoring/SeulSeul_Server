@@ -38,15 +38,20 @@ public class RouteDetailService {
         RouteDetailDto detailDto = new RouteDetailDto();
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
         ObjectMapper objectMapper = new ObjectMapper();
-        String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
-        String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-        String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+
         String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
         String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
         String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
 
-        detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName,
-                getTravelTime);
+        if (baseRoute.getExSID1() != null) {
+            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
+            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+
+            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName, getTravelTime);
+        } else {
+            detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),getLaneName, getWayName, getTravelTime);
+        }
         return detailDto;
     }
 
@@ -55,18 +60,6 @@ public class RouteDetailService {
         //id로 stopTimeList 가져오기
         List<StopTimeList> stopTimeLists = stopTimeListRepository.findByBaseRouteId(id);
         BaseRoute baseRoute = baseRouteRepository.findById(id).orElse(null);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-        List<Integer> getExWalkTime2 = new ArrayList<>();
-        for (String str : getExWalkTime) {
-            try {
-                Integer intValue = Integer.parseInt(str);
-                getExWalkTime2.add(intValue);
-            } catch (Exception e) {
-                System.out.println("올바른 숫자가 아님"+e);
-            }
-        }
 
         //맨 뒤(도착역)부터
         StopTimeList lst;
@@ -81,17 +74,34 @@ public class RouteDetailService {
         int h;
         int m;
         int transfer=0; //0인 경우 출발, 목적역 / 1인 경우 첫번째 환승역에서 내린 경우 / 2인 경우 환승역에서 exWalkTime 계산 후 타는 경우
+
+        //환승인 경우
+        List<Integer> getExWalkTime2 = new ArrayList<>();
         int exWalkIdx = getExWalkTime2.size()-1;
+        ObjectMapper objectMapper = new ObjectMapper();
+        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
+        if (baseRoute.getExSID1() != null) {
+            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+
+            for (String str : getExWalkTime) {
+                try {
+                    Integer intValue = Integer.parseInt(str);
+                    getExWalkTime2.add(intValue);
+                } catch (Exception e) {
+                    System.out.println("올바른 숫자가 아님"+e);
+                }
+            }
+        }
 
         for (int i=stopTimeLists.size()-1; i>=0; i--) {
             lst = stopTimeLists.get(i);
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);
+
             index = timeList2.length-1;  //뒤에서 부터(stopTimeList에서 맨 뒤의 시간 index)
-            System.out.println("time"+time);
-            if (i!=0 && i!=stopTimeLists.size()-1) {
+            if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
-            } else {
+            } else {                            //출발, 목적지역인 경우
                 transfer = 0;
             }
 
@@ -107,6 +117,7 @@ public class RouteDetailService {
                 // 분리된 문자열을 정수로 변환
                 hours = Integer.parseInt(parts[0]);
                 minutes = Integer.parseInt(parts[1]);
+
 
                 //환승역에서 걸어서 이동하는 시간 제외
                 if (transfer == 2) {
@@ -154,16 +165,21 @@ public class RouteDetailService {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String[] getExWalkTim = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+        //환승
         List<Integer> getExWalkTime = new ArrayList<>();
-        for (String str:getExWalkTim) {
-            try {
-                Integer intValue = Integer.parseInt(str);
-                getExWalkTime.add(intValue);
-            } catch (Exception e) {
-                System.out.println(e+"올바른 숫자 형식이 아님");
+        if (baseRoute.getExSID1() != null) {
+            String[] getExWalkTim = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+
+            for (String str:getExWalkTim) {
+                try {
+                    Integer intValue = Integer.parseInt(str);
+                    getExWalkTime.add(intValue);
+                } catch (Exception e) {
+                    System.out.println(e+"올바른 숫자 형식이 아님");
+                }
             }
         }
+
 
         //맨 처음(출발역)부터
         StopTimeList lst;
@@ -182,11 +198,13 @@ public class RouteDetailService {
         int exWalkIdx = 0;
 
         //앞에서 계산한 timeList 시간과 lst에 있는 가장 가까운 시간 비교
-        for (int i=0; i<stopTimeLists.size()-1; i++) {
+        for (int i=0; i<stopTimeLists.size(); i++) {
             lst = stopTimeLists.get(i);
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);
             index = 0;
+
+            System.out.println("stopTImeList: "+time);
 
             if (i!=0 && i!=stopTimeLists.size()-1) {
                 transfer += 1;
@@ -230,6 +248,7 @@ public class RouteDetailService {
                     }
                 }
             }
+            System.out.println("i: "+i);
         }
         System.out.println("checkTeamList resultTime: "+resultTime);
         String resultT = objectMapper.writeValueAsString(resultTime);
