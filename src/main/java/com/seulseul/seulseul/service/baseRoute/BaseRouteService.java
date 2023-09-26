@@ -181,7 +181,6 @@ public class BaseRouteService {
 
             String globalEndName = String.valueOf(jsonNode.get("result").get("globalEndName").asText());
 
-
             // driveInfoArray 내의 데이터
             for (JsonNode driveInfo : driveInfoArray) {
                 String laneName = driveInfo.get("laneName").asText();
@@ -193,9 +192,9 @@ public class BaseRouteService {
                 wayNameList.add(wayName);
             }
 
-            //환승이 반드시 하나 이상 있는 경우
+            //exChangeINfoArray 내의 데이터 : 환승이 반드시 하나 이상 있는 경우에만 존재
             // "exChangeInfo" 배열을 반복하면서 "exSID" 값을 추출하여 리스트에 추가
-            if (baseRoute.getExSID1() != null) {
+            if (laneNameList.size() != 1) {
                 JsonNode exChangeInfoArray = jsonNode.get("result").get("exChangeInfoSet").get("exChangeInfo");
 
                 for (JsonNode exChangeInfo : exChangeInfoArray) {
@@ -216,15 +215,16 @@ public class BaseRouteService {
                 }
             }
 
-            if (baseRoute.getExSID1() != null) {
+            //stationSetArray 내의 데이터
+            if (laneNameList.size() != 1) {
                 int cnt = 0;
                 int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
                 int travelTime = 0;
                 int currentTravelTime = 0;
                 for (JsonNode stations : stationSetArray) {
-                    System.out.println("1");
+                    //endName이 exNameList에 존재하는 경우 환승역의 travelTime 가져오기
                     if (exNameList.contains(stations.get("endName").asText()) || stations.get("endName").asText().equals(globalEndName)) {
-                        System.out.println("2");
+                        System.out.println("tra !!"+stations.get("travelTime").asInt());
                         if (exNameList.contains(stations.get("endName").asText())) {
                             exSIDList1.add(stations.get("endSID").asInt());
                         }
@@ -234,6 +234,7 @@ public class BaseRouteService {
                             travelTimeList.add(travelTime);
                             cnt += 1;
                         } else {
+                            System.out.println("exWalkTime: "+ exWalkTimeList.get(cnt-1));
                             currentTravelTime = stations.get("travelTime").asInt();
                             prev += exWalkTimeList.get(cnt - 1);
                             travelTime = currentTravelTime - prev + 1;  //exWalkTime 시 반올림하기 때문에 발생하는 1분만 추가
@@ -243,11 +244,10 @@ public class BaseRouteService {
                     }
                     System.out.println("travelTimeList: " + travelTimeList);
                 }
-            } else {    //환승안하는 경우
+            } else {
                 int travelTime = 0;
                 int arrayLength = stationSetArray.size();
 
-                // 배열의 마지막 요소에 접근합니다.
                 JsonNode stations = stationSetArray.get(arrayLength - 1);
                 travelTime = stations.get("travelTime").asInt();
                 travelTimeList.add(travelTime);
@@ -262,7 +262,7 @@ public class BaseRouteService {
 
             String StringTravelTime = objectMapper.writeValueAsString(travelTimeList);
 
-            if (baseRoute.getExSID1() != null) {
+            if (laneNameList.size() != 1) {
                 String StringExName = objectMapper.writeValueAsString(exNameList);
 
                 String StringExSID1 = objectMapper.writeValueAsString(exSIDList1);
