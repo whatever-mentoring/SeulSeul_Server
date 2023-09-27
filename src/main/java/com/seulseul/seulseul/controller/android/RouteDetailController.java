@@ -5,6 +5,7 @@ import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.user.UserRepository;
@@ -31,7 +32,6 @@ public class RouteDetailController {
     private final BaseRouteService baseRouteService;
     private final UserService userService;
 
-
     @GetMapping("/v1/route/detail")
     public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) throws ParseException, IOException {
         User user = userService.getUserByUuid(uuid);
@@ -50,6 +50,8 @@ public class RouteDetailController {
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
+        // RouteDetail DB에 저장
+        routeDetailService.saveRouteDetail(routeDetailDto);
         wrapDto.setExWalkTimeList(routeDetailDto);
         wrapDto.setBodyList(routeDetailDto);
         wrapDto.setTimeList(routeDetailDto);
