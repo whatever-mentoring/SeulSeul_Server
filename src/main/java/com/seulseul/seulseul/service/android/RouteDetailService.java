@@ -8,6 +8,7 @@ import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
+import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.android.RouteDetailRepository;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
@@ -371,7 +372,7 @@ public class RouteDetailService {
     }
 
     @Transactional
-    public void saveRouteDetail(RouteDetailDto dto) {
-        routeDetailRepository.save(new RouteDetail(dto));
+    public void saveRouteDetail(RouteDetailDto dto, User user) {
+        routeDetailRepository.save(new RouteDetail(dto, user));
     }
 }

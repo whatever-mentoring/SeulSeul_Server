@@ -1,10 +1,9 @@
 package com.seulseul.seulseul.entity.android;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.seulseul.seulseul.entity.user.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,11 @@ public class RouteDetail {
     private String timeList;
     private String totalTime;
 
-    public RouteDetail(RouteDetailDto dto) {
+    @JsonIgnore
+    @ManyToOne
+    private User user;
+
+    public RouteDetail(RouteDetailDto dto, User user) {
         this.firstStation = dto.getFirstStation();
         this.lastStation = dto.getLastStation();
         this.laneName = dto.getLaneName();
@@ -40,5 +43,6 @@ public class RouteDetail {
         this.travelTime = dto.getTravelTime();
         this.timeList = dto.getTimeList();
         this.totalTime = dto.getTotalTime();
+        this.user = user;
     }
 }
