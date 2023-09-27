@@ -239,7 +239,7 @@ public class BaseRouteService {
                             cnt += 1;
                         } else {
                             currentTravelTime = stations.get("travelTime").asInt();
-                            travelTime = currentTravelTime - prev - exWalkTimeList.get(cnt-1) +1;   //exWalkTime 시 반올림하기 때문에 발생하는 시간 소요 1분 추가
+                            travelTime = currentTravelTime - prev - exWalkTimeList.get(cnt-1);
                             prev = currentTravelTime;
                             travelTimeList.add(travelTime);
                             cnt += 1;
