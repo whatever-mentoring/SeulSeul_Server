@@ -240,7 +240,7 @@ public class RouteDetailService {
                     System.out.println("getExWalkTime 오류"+e);
                 }
             }
-            exWalkIdx = getExWalkTime2.size()-1;
+            exWalkIdx = 0;
         }
 
         //출발역 -> 환승역(존재하는경우) -> 도착역
@@ -251,7 +251,7 @@ public class RouteDetailService {
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);
 
-            index = timeList2.length-1;  //뒤에서 부터(stopTimeList에서 맨 뒤의 시간 index)
+            index = 0;  //앞에서 부터(stopTimeList에서 맨 앞의 시간 index)
             if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
             } else {                            //출발, 목적지역인 경우
@@ -279,11 +279,9 @@ public class RouteDetailService {
                     exWalkIdx += 1;
                 }
 
-                //환승역에서 걸어서 이동하는 시간 추가
+                //역<->역 이동시간
                 if (getLaneName.length != 1) {    //환승이 있을경우 exWalkIdx로 계산 가능
                     //getTravelTime 가져와서 minutes에서 제외!
-                    System.out.println("getTravelTime2: "+getTravelTime2);
-                    System.out.println("exWalkIdx: "+exWalkIdx);
                     travelTime = getTravelTime2.get(exWalkIdx+1);
                     minutes += travelTime;
                     if (minutes > 60) {
@@ -292,11 +290,13 @@ public class RouteDetailService {
                     }
 
                 } else {    //환승이 없는 경우
-                    travelTime = getTravelTime2.get(i);
+                    System.out.println("getTravelTime2: "+getTravelTime2);
+                    System.out.println("i: "+i);
+                    travelTime = getTravelTime2.get(i-1);
                     minutes += travelTime;
                     if (minutes < 0) {
-                        minutes += 60;
-                        hours -= 1;
+                        minutes -= 60;
+                        hours += 1;
                     }
                 }
 
@@ -310,7 +310,7 @@ public class RouteDetailService {
                     // 분리된 문자열을 정수로 변환
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
-                    if (h>hours || (h==hours && m>minutes)) {
+                    if (h>hours || (h==hours && m>=minutes)) {
                         resultTime.add(timeList2[index]);
                         break;
                     } else {
@@ -321,6 +321,7 @@ public class RouteDetailService {
         }
         System.out.println("checkTeamList resultTime: "+resultTime);
         String resultT = objectMapper.writeValueAsString(resultTime);
+
         return resultT;
     }
 
