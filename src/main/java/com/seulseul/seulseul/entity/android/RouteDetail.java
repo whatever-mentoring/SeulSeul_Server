@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.entity.android;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.entity.user.User;
@@ -16,15 +17,22 @@ public class RouteDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private String firstStation;    //출발역 이름
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private String lastStation;     //도착역 이름
-    private String[] laneName;    //지하철 호선
-    private String[] wayName;   //방면(ex.중앙보훈병원 방면)
-    private String[] exName;    //환승역 이름
-    private String[] fastTrainDoor; //빠른 환승
-    private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
-    private String[] travelTime;    //역<->역 이동시간
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    private String laneName;    //지하철 호선
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    private String wayName;   //방면(ex.중앙보훈병원 방면)
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    private String exName;    //환승역 이름
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    private String fastTrainDoor; //빠른 환승
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    private String exWalkTime;   //환승역에서 환승하는데 소요되는 시간
 
+    private String travelTime;    //역<->역 이동시간
     private String timeList;
     private String totalTime;
 
