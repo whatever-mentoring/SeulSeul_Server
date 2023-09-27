@@ -186,7 +186,6 @@ public class RouteDetailService {
             result.add(resultTime.get(i));
         }
 
-        System.out.println("update"+result);
         return result;
     }
 
@@ -290,8 +289,6 @@ public class RouteDetailService {
                     }
 
                 } else {    //환승이 없는 경우
-                    System.out.println("getTravelTime2: "+getTravelTime2);
-                    System.out.println("i: "+i);
                     travelTime = getTravelTime2.get(i-1);
                     minutes += travelTime;
                     if (minutes < 0) {
@@ -319,7 +316,6 @@ public class RouteDetailService {
                 }
             }
         }
-        System.out.println("checkTeamList resultTime: "+resultTime);
         String resultT = objectMapper.writeValueAsString(resultTime);
 
         return resultT;
