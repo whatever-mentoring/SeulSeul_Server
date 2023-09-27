@@ -10,7 +10,7 @@ public class AlarmDto {
     private Long id;
     private boolean alarmEnabled;
     private Long alarmTime;
-    private Long alarmTerm;
+    private int alarmTerm;
 
     public AlarmDto(Alarm alarm) {
         this.id = alarm.getId();
