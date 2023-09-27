@@ -67,6 +67,8 @@ public class BaseRouteService {
         conn.disconnect();
 
         String jsonString = sb.toString();
+
+        System.out.println("jsonString: "+jsonString);
         return jsonString;
     }
 
