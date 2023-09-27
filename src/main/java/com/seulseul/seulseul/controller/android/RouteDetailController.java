@@ -45,6 +45,7 @@ public class RouteDetailController {
 
         //재확인 => 목적지 역 이전에 먼저 끊기는 역이 존재하는 경우 해당 시간에 맞춰 timeList 변경
         String timeList2 = routeDetailService.checkTimeList(baseRoute.getId(), timeList);
+        System.out.println("/v1/route/detail timeList2: "+timeList2);   //여기까지 성공
 
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
