@@ -54,16 +54,14 @@ public class RouteDetailController {
         RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, user);
 
         // 환승이 있으면
-        System.out.println(routeDetail.getExName());
-        if(routeDetail.getExName() != null) {
+        if (routeDetailDto.getExName() != null) {
+            System.out.println("ex");
             wrapDto.setBodyExList(routeDetailDto);
         }
         // 환승이 없으면
         else {
             wrapDto.setBodyList(routeDetailDto);
         }
-
-        wrapDto.setBodyList(routeDetailDto);
         wrapDto.setTimeList(routeDetailDto);
         ResponseData responseData = new ResponseData(200, wrapDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
