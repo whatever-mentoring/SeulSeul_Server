@@ -100,7 +100,6 @@ public class RouteDetailWrapDto {
 
     public void setBodyList(RouteDetailDto routeDetailDto) {
         this.bodyList = new ArrayList<>(); // bodyList를 먼저 초기화
-
         String[] timeList = extractTimes(routeDetailDto.getTimeList());
 
         int timeSize = timeList.length;
@@ -108,13 +107,15 @@ public class RouteDetailWrapDto {
         Map<String, Object> dataMap = new LinkedHashMap<>();
         dataMap.put("viewType", "bodyInfo");
 
-        dataMap.put("firstStation", routeDetailDto.getFirstStation());
-        dataMap.put("lastStation", routeDetailDto.getLastStation());
-        dataMap.put("laneName", routeDetailDto.getLaneName()[0]);
-        dataMap.put("wayName", routeDetailDto.getWayName()[0]);
-        dataMap.put("departTime", timeList[timeSize-2]);
-        dataMap.put("arriveTime", timeList[timeSize-1]);
+        Map<String, Object> map = new LinkedHashMap<>();
 
+        map.put("firstStation", routeDetailDto.getFirstStation());
+        map.put("lastStation", routeDetailDto.getLastStation());
+        map.put("laneName", routeDetailDto.getLaneName()[0]);
+        map.put("wayName", routeDetailDto.getWayName()[0]);
+        map.put("departTime", timeList[timeSize-2]);
+        map.put("arriveTime", timeList[timeSize-1]);
+        dataMap.put("data", map);
         this.bodyList.add(dataMap);
 
     }
