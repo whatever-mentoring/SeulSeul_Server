@@ -206,7 +206,6 @@ public class RouteDetailService {
         List<String> originalTimeList = timeList;
         String prev;
         String current;
-        int index;
         int hours;
         int minutes;
         int h;
@@ -214,6 +213,9 @@ public class RouteDetailService {
         int transfer=0; //0인 경우 출발, 목적역 / 1인 경우 첫번째 환승역에서 내린 경우 / 2인 경우 환승역에서 exWalkTime 계산 후 타는 경우
         int exWalkIdx = 0;
         int travelTime;
+        int check=0;
+        int timeIdx;
+        int travelIdx=0;
 
         ObjectMapper objectMapper = new ObjectMapper();
         String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
@@ -247,25 +249,24 @@ public class RouteDetailService {
 
         //출발역 -> 환승역(존재하는경우) -> 도착역
         //앞에서 계산한 timeList 시간과 lst에 있는 가장 가까운 시간 비교
-        for (int i=0; i<stopTimeLists.size(); i++) {
+        for (int i=0; i<stopTimeLists.size(); i++) {    //i는 0부터 (stopTimeLists의 크기-1)까지. 환승1번=>i:0,1,2,3
 
             lst = stopTimeLists.get(i);
             time = lst.getTime();
-            timeList2 = objectMapper.readValue(time, String[].class);
+            timeList2 = objectMapper.readValue(time, String[].class);   //timeList2는 해당 stopTimeList의 시간 String[] 타입
 
-            index = 0;  //앞에서 부터(stopTimeList에서 맨 앞의 시간 index)
+
             if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
             } else {                            //출발, 목적지역인 경우
                 transfer = 0;
             }
 
-
             //출발역인경우
             if (resultTime.isEmpty()) { //출발지에서 출발시간인 경우 resultTime에 추가
                 resultTime.add(originalTimeList.get(0));
-
             } else {
+
                 prev = resultTime.get(resultTime.size()-1); //이전역에서 출발한 시간
                 String[] parts = prev.split(":");
 
@@ -273,31 +274,36 @@ public class RouteDetailService {
                 hours = Integer.parseInt(parts[0]);
                 minutes = Integer.parseInt(parts[1]);
 
-                //환승역에서 걸어서 이동하는 시간 제외
-                if (transfer == 2) {
 
-                    minutes += getExWalkTime2.get(exWalkIdx);
-                    if (minutes > 60) {
-                        minutes -= 60;
-                        hours += 1;
+                if (getLaneName.length != 1) {
+                    //내리는 경우 => travelTime 더하고 그 시간과 가장 가까운 시간 구하기(1 앞뒤로는 인정)
+                    if (check%2 == 0) {
+                        minutes += getTravelTime2.get(travelIdx);
+                        if (minutes >= 60) {
+                            if (minutes > 60) {
+                                minutes -= 60;
+                                hours += 1;
+                            }
+                        }
+                        if (travelIdx+1 != getTravelTime2.size()) {
+                            travelIdx += 1;
+                        }
                     }
 
-                    //exWalkIdx의 최대는 getExWalkTime2의 크기
-                    if (exWalkIdx+1 != getExWalkTime2.size()) {
-                        exWalkIdx += 1;
+                    //올라가는 경우 => exWalkTime 구하고 그 시간과 가장 가까운 다음 시간 구하기
+                    if (check%2 == 1) {
+                        minutes += getExWalkTime2.get(exWalkIdx);
+                        if (minutes > 60) {
+                            minutes -= 60;
+                            hours += 1;
+                        }
+                        if (exWalkIdx+1 != getExWalkTime2.size()) {
+                            exWalkIdx += 1;
+                        }
                     }
-                }
-
-                //역<->역 이동시간
-                if (getLaneName.length != 1) {    //환승이 있을경우 exWalkIdx로 계산 가능
-                    //getTravelTime 가져와서 minutes에서 제외!
-                    travelTime = getTravelTime2.get(exWalkIdx+1);
-                    minutes += travelTime;
-                    if (minutes > 60) {
-                        minutes -= 60;
-                        hours += 1;
-                    }
-                } else {    //환승이 없는 경우
+                    check += 1;
+                //애초에 exWalkTime이 없는 경우
+                } else {
                     travelTime = getTravelTime2.get(i-1);
                     minutes += travelTime;
                     if (minutes < 0) {
@@ -306,20 +312,27 @@ public class RouteDetailService {
                     }
                 }
 
+
+                timeIdx = 0;
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
-                    current = timeList2[index];
+                    current = timeList2[timeIdx];
+
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");
                     // 분리된 문자열을 정수로 변환
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
+
                     if (h>hours || (h==hours && m>=minutes)) {
-                        resultTime.add(timeList2[index]);
+                        resultTime.add(timeList2[timeIdx]);
+                        break;
+                    } else if(check%2==1 && h==hours && m+1==minutes) { //내리는 경우 1분의 오차 존재 가능성 있음
+                        resultTime.add(timeList2[timeIdx]);
                         break;
                     } else {
-                        index += 1;
+                        timeIdx += 1;
                     }
                 }
             }
@@ -350,8 +363,6 @@ public class RouteDetailService {
         int startM = Integer.parseInt(parts[1]);
         int endH = Integer.parseInt(part[0]);
         int endM = Integer.parseInt(part[1]);
-
-        System.out.println("start: "+ startH + startM +"end: "+ endH +endM);
 
         //time
         int resultH = endH - startH;
