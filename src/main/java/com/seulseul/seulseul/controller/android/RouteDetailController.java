@@ -51,11 +51,17 @@ public class RouteDetailController {
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
         // RouteDetail DB에 저장(User와 1:1 매핑)
-        routeDetailService.saveRouteDetail(routeDetailDto, user);
-        if(routeDetailDto.getExName() != null) {
-            wrapDto.setExWalkTimeList(routeDetailDto);
+        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, user);
+
+        // 환승이 있으면
+        if (routeDetailDto.getExName() != null) {
+            System.out.println("ex");
+            wrapDto.setBodyExList(routeDetailDto);
         }
-        wrapDto.setBodyList(routeDetailDto);
+        // 환승이 없으면
+        else {
+            wrapDto.setBodyList(routeDetailDto);
+        }
         wrapDto.setTimeList(routeDetailDto);
         ResponseData responseData = new ResponseData(200, wrapDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);

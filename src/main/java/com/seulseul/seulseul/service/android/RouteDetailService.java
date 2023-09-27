@@ -372,9 +372,14 @@ public class RouteDetailService {
             resultM += 60;
             resultH -= 1;
         }
+        String totalTime = "";
+        if (resultH == 0) {
+            totalTime = resultM+"분";
+        }
+        else {
+            totalTime = resultH+"시간 "+resultM+"분";
 
-        String totalTime = resultH+"시간 "+resultM+"분";
-
+        }
         String resultT = objectMapper.writeValueAsString(timeList);
 
         detailDto.updateTimeList(resultT, totalTime);
@@ -383,7 +388,8 @@ public class RouteDetailService {
     }
 
     @Transactional
-    public void saveRouteDetail(RouteDetailDto dto, User user) {
-        routeDetailRepository.save(new RouteDetail(dto, user));
+    public RouteDetail saveRouteDetail(RouteDetailDto dto, User user) {
+        RouteDetail routeDetail = routeDetailRepository.save(new RouteDetail(dto, user));
+        return routeDetail;
     }
 }
