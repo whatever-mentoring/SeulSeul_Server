@@ -21,8 +21,6 @@ public class RouteDetailDto {
     private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
     private String[] travelTime;
 
-
-
     //저장
     private String timeList;
     private String totalTime;
@@ -48,7 +46,6 @@ public class RouteDetailDto {
         this.laneName = laneName;
         this.wayName = wayName;
         this.travelTime = travelTime;
-
     }
 
     public void updateTimeList(String timeList, String totalTime) {

@@ -119,7 +119,6 @@ public class RouteDetailService {
             } else {                            //출발, 목적지역인 경우
                 transfer = 0;
             }
-
             //도착역인경우
             if (resultTime.isEmpty()) {
                 resultTime.add(timeList2[index]);
@@ -257,9 +256,11 @@ public class RouteDetailService {
                 transfer = 0;
             }
 
+
             //출발역인경우
             if (resultTime.isEmpty()) { //출발지에서 출발시간인 경우 resultTime에 추가
                 resultTime.add(originalTimeList.get(0));
+
             } else {
                 prev = resultTime.get(resultTime.size()-1); //이전역에서 출발한 시간
                 String[] parts = prev.split(":");
@@ -270,12 +271,17 @@ public class RouteDetailService {
 
                 //환승역에서 걸어서 이동하는 시간 제외
                 if (transfer == 2) {
+
                     minutes += getExWalkTime2.get(exWalkIdx);
                     if (minutes > 60) {
                         minutes -= 60;
                         hours += 1;
                     }
-                    exWalkIdx += 1;
+
+                    //exWalkIdx의 최대는 getExWalkTime2의 크기
+                    if (exWalkIdx+1 != getExWalkTime2.size()) {
+                        exWalkIdx += 1;
+                    }
                 }
 
                 //역<->역 이동시간
@@ -287,7 +293,6 @@ public class RouteDetailService {
                         minutes -= 60;
                         hours += 1;
                     }
-
                 } else {    //환승이 없는 경우
                     travelTime = getTravelTime2.get(i-1);
                     minutes += travelTime;
@@ -296,7 +301,6 @@ public class RouteDetailService {
                         hours += 1;
                     }
                 }
-
 
                 //현재역과 직전역의 시간 비교
                 while (true) {
@@ -316,6 +320,7 @@ public class RouteDetailService {
                 }
             }
         }
+
         String resultT = objectMapper.writeValueAsString(resultTime);
 
         return resultT;
@@ -342,12 +347,15 @@ public class RouteDetailService {
         int endH = Integer.parseInt(part[0]);
         int endM = Integer.parseInt(part[1]);
 
+        System.out.println("start: "+ startH + startM +"end: "+ endH +endM);
+
         //time
         int resultH = endH - startH;
         int resultM = endM - startM;
 
         if (resultM < 0) {
             resultM += 60;
+            resultH -= 1;
         }
 
         String totalTime = resultH+"시간 "+resultM+"분";
