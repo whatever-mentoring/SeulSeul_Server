@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.entity.user;
 
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +23,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY) // user가 삭제되면 endPos도 삭제됨
     private List<EndPos> endPosList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY) // user가 삭제되면 endPos도 삭제됨
+    private List<RouteDetail> routeDetailList = new ArrayList<>();
 
     public User(UUID uuid) {
         this.uuid = uuid;

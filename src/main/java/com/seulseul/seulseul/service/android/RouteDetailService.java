@@ -5,8 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
+import com.seulseul.seulseul.entity.user.User;
+import com.seulseul.seulseul.repository.android.RouteDetailRepository;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ import java.util.List;
 public class RouteDetailService {
     private final BaseRouteRepository baseRouteRepository;
     private final StopTimeListRepository stopTimeListRepository;
+    private final RouteDetailRepository routeDetailRepository;
 
     @Transactional(readOnly = false)
     public RouteDetailDto routeDetailFromBaseRoute(Long id) throws JsonProcessingException {
@@ -365,5 +369,10 @@ public class RouteDetailService {
         detailDto.updateTimeList(resultT, totalTime);
 
         return detailDto;
+    }
+
+    @Transactional
+    public void saveRouteDetail(RouteDetailDto dto, User user) {
+        routeDetailRepository.save(new RouteDetail(dto, user));
     }
 }
