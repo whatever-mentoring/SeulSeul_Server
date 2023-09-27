@@ -137,21 +137,6 @@ public class BaseRoute {
 
     }
 
-    // 대중교통 길찾기 API
-//    public void update(List<String> laneNameList, List<Integer> wayCodeList, List<String> wayNameList, List<String> exNameList, List<Integer> exSIDList1, List<Integer> exSIDList2, List<String> fastTrainDoorList, List<Integer> exWalkTimeList, List<Integer> travelTime) {
-//        this.laneName = laneNameList;
-//
-//        this.laneName = laneNameList;
-//        this.wayCode = wayCodeList;
-//        this.wayName = wayNameList;
-//        this.exName = exNameList;
-//        this.exSID1 = exSIDList1;
-//        this.exSID2 = exSIDList2;
-//        this.fastTrainDoor = fastTrainDoorList;
-//        this.exWalkTime = exWalkTimeList;
-//        this.travelTime = travelTime;
-//    }
-
 //     대중교통 길찾기 API
     public void update(String laneNameList, String wayCodeList, String wayNameList, String exNameList, String exSIDList1, String exSIDList2, String fastTrainDoorList, String exWalkTimeList, String travelTime) {
         this.laneName = laneNameList;
@@ -181,6 +166,14 @@ public class BaseRoute {
     public void updateEndCoordination(double endX, double endY) {
         this.endX = endX;
         this.endY = endY;
+    }
+
+    public void init() {
+        this.exName = null;
+        this.exSID1 = null;
+        this.exSID2 = null;
+        this.fastTrainDoor = null;
+        this.exWalkTime = null;
     }
 
     //entity -> dto 변환

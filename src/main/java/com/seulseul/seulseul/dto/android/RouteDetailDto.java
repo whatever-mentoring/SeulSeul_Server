@@ -21,7 +21,6 @@ public class RouteDetailDto {
     private String[] exWalkTime;   //환승역에서 환승하는데 소요되는 시간
     private String[] travelTime;
 
-    private String[] travelTime;    //역<->역 시간
 
 
     //저장
