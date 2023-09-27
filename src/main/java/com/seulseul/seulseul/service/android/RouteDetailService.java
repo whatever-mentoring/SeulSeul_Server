@@ -202,7 +202,6 @@ public class RouteDetailService {
         List<String> originalTimeList = timeList;
         String prev;
         String current;
-        int index;
         int hours;
         int minutes;
         int h;
@@ -252,7 +251,7 @@ public class RouteDetailService {
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);   //timeList2는 해당 stopTimeList의 시간 String[] 타입
 
-            System.out.println("resultTime: "+resultTime);
+
             if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
             } else {                            //출발, 목적지역인 경우
@@ -263,14 +262,14 @@ public class RouteDetailService {
             if (resultTime.isEmpty()) { //출발지에서 출발시간인 경우 resultTime에 추가
                 resultTime.add(originalTimeList.get(0));
             } else {
-                System.out.println("size"+resultTime.size());
+
                 prev = resultTime.get(resultTime.size()-1); //이전역에서 출발한 시간
                 String[] parts = prev.split(":");
 
                 // 분리된 문자열을 정수로 변환
                 hours = Integer.parseInt(parts[0]);
                 minutes = Integer.parseInt(parts[1]);
-                System.out.println("hours:"+hours+"minu:"+minutes);
+
 
                 if (getLaneName.length != 1) {
                     //내리는 경우 => travelTime 더하고 그 시간과 가장 가까운 시간 구하기(1 앞뒤로는 인정)
@@ -310,65 +309,18 @@ public class RouteDetailService {
                 }
 
 
-
-//                //환승역에서 걸어서 이동하는 시간 제외
-//                System.out.println("transfer2: "+transfer);
-//                if (transfer == 2) {
-//                    System.out.println("transfer2 사이");
-//                    minutes += getExWalkTime2.get(exWalkIdx);
-//                    if (minutes > 60) {
-//                        minutes -= 60;
-//                        hours += 1;
-//                    }
-//
-//                    //exWalkIdx의 최대는 getExWalkTime2의 크기
-//                    if (exWalkIdx+1 != getExWalkTime2.size()) {
-//                        exWalkIdx += 1;
-//                    }
-//                }
-//                System.out.println("transfer3: "+transfer);
-                //역<->역 이동시간
-
-
-//                if (getLaneName.length != 1 && transfer == 1) {    //환승이 있을경우 exWalkIdx로 계산 가능
-//                    //getTravelTime 가져와서 minutes에서 제외!
-//                    System.out.println("getTravelTime2: "+getTravelTime2 +"getTravelTime2[]: "+ getTravelTime2.get(exWalkIdx) + "exWalkIdx: "+exWalkIdx);
-//
-//                    travelTime = getTravelTime2.get(exWalkIdx+1);
-//                    System.out.println("travelTimelllll:");
-//                    minutes += travelTime;
-//                    System.out.println("minutes"+minutes);
-//                    if (minutes > 60) {
-//                        minutes -= 60;
-//                        hours += 1;
-//                    }
-//                } else {    //환승이 없는 경우
-//                    System.out.println("getTravelTime2: "+getTravelTime2+"exWalkIdx: "+i);
-//                    travelTime = getTravelTime2.get(i-1);
-//                    minutes += travelTime;
-//                    if (minutes < 0) {
-//                        minutes -= 60;
-//                        hours += 1;
-//                    }
-//                }
-//                System.out.println("hours: "+hours+"minutes:"+minutes);
                 timeIdx = 0;
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
-                    System.out.println(timeList2.length);
-                    System.out.println("index"+timeIdx);
-                    System.out.println("check:"+check);
                     current = timeList2[timeIdx];
-                    System.out.println("timeList2: "+timeList2[timeIdx]);
-                    System.out.println("index"+timeIdx);
+
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");
                     // 분리된 문자열을 정수로 변환
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
-                    System.out.println("h: "+h+"m: "+m);
-                    System.out.println("hours: "+hours+"minutes: "+minutes);
+
                     if (h>hours || (h==hours && m>=minutes)) {
                         resultTime.add(timeList2[timeIdx]);
                         break;
