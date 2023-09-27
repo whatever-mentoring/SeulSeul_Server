@@ -61,7 +61,6 @@ public class StopTimeListService {
         bufferedReader.close();
         conn.disconnect();
 
-
         return sb.toString();
     }
 
@@ -83,14 +82,19 @@ public class StopTimeListService {
         //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
         stationIdList.add(baseRoute.getSID());  //출발ID
 
-        String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class); //환승ID
-        String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
+        //환승 하지 않을 경우는 statinoIdList 넣지 X
+        if (baseRoute.getExSID1()!=null) {
+            String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class); //환승ID
+            String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
 
-        for (int i=0; i<getExSID1.length; i++) {
-            stationIdList.add(Integer.valueOf(getExSID1[i]));
-            stationIdList.add(Integer.valueOf(getExSID2[i]));
+            for (int i=0; i<getExSID1.length; i++) {
+                stationIdList.add(Integer.valueOf(getExSID1[i]));
+                stationIdList.add(Integer.valueOf(getExSID2[i]));
+            }
         }
+
         stationIdList.add(baseRoute.getEID());  //도착ID
+
 
         //기존의 값이 존재하는 경우 삭제
         if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
@@ -122,7 +126,7 @@ public class StopTimeListService {
 
             try {
                 JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
-                System.out.println("jsonNode: "+jsonNode);
+
                 // "exSID" 값을 저장할 리스트 생성
                 List<String> timeList = new ArrayList<>();
 
@@ -146,7 +150,6 @@ public class StopTimeListService {
                         ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
                     }
                 }
-
 
                 //가져온 값을 뒤에서 5시간까지만 받아오기
                 int totalElements = ordArray.size(); // ordArray의 총 요소 개수
@@ -185,7 +188,6 @@ public class StopTimeListService {
                 }
                 //객체에 넣어서 실제 DB에 저장
                 StopTimeList stopTimeList = new StopTimeList();
-
                 String stringTime = objectMapper.writeValueAsString(timeList);
                 stopTimeList.update(id, stationId, stringTime);
                 stopTimeListRepository.save(stopTimeList);

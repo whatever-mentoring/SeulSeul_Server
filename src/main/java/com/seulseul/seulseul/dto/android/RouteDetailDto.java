@@ -27,13 +27,22 @@ public class RouteDetailDto {
 
 
     //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-    public void updateFromBaseRoute(String firstStation, String lastStation, String[] exName, String[] exWalkTime, String[] fastTrainDoor, String[] laneName, String[] wayName,
-                                    String[] travelTime) {
+
+    public void updateFromBaseRoute(String firstStation, String lastStation, String[] exName, String[] exWalkTime, String[] fastTrainDoor, String[] laneName, String[] wayName, String[] travelTime) {
+
         this.firstStation = firstStation;
         this.lastStation = lastStation;
         this.exName = exName;
         this.exWalkTime = exWalkTime;
         this.fastTrainDoor = fastTrainDoor;
+        this.laneName = laneName;
+        this.wayName = wayName;
+        this.travelTime = travelTime;
+    }
+
+    public void updateFromBaseRouteOnly(String firstStation, String lastStation, String[] laneName, String[] wayName, String[] travelTime) {
+        this.firstStation = firstStation;
+        this.lastStation = lastStation;
         this.laneName = laneName;
         this.wayName = wayName;
         this.travelTime = travelTime;

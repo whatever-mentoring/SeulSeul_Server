@@ -5,6 +5,7 @@ import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.user.UserRepository;
@@ -31,7 +32,6 @@ public class RouteDetailController {
     private final BaseRouteService baseRouteService;
     private final UserService userService;
 
-
     @GetMapping("/v1/route/detail")
     public ResponseEntity<ResponseData> routeDetail(@RequestHeader("Auth") UUID uuid) throws ParseException, IOException {
         User user = userService.getUserByUuid(uuid);
@@ -45,12 +45,23 @@ public class RouteDetailController {
 
         //재확인 => 목적지 역 이전에 먼저 끊기는 역이 존재하는 경우 해당 시간에 맞춰 timeList 변경
         String timeList2 = routeDetailService.checkTimeList(baseRoute.getId(), timeList);
+        System.out.println("/v1/route/detail timeList2: "+timeList2);   //여기까지 성공
 
         //시간 업데이트
         routeDetailService.updateTimeList(baseRoute.getId(), routeDetailDto, timeList2);
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
-        wrapDto.setExWalkTimeList(routeDetailDto);
-        wrapDto.setBodyList(routeDetailDto);
+        // RouteDetail DB에 저장(User와 1:1 매핑)
+        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, user);
+
+        // 환승이 있으면
+        if (routeDetailDto.getExName() != null) {
+            System.out.println("ex");
+            wrapDto.setBodyExList(routeDetailDto);
+        }
+        // 환승이 없으면
+        else {
+            wrapDto.setBodyList(routeDetailDto);
+        }
         wrapDto.setTimeList(routeDetailDto);
         ResponseData responseData = new ResponseData(200, wrapDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
