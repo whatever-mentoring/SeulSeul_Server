@@ -20,6 +20,9 @@ public class NotificationService {
     private final BaseRouteService baseRouteService;
     private int cnt = 0;
     private int gap;
+    int lastStart;
+    int lastEnd;
+
     public static String[] extractTimes(String input) {
         String cleaned = input.replace("\"[\\\"", "").replace("\\\"]\"", "").replace("\\\",\\\"", ",");
         String[] times = cleaned.split(",");
@@ -27,6 +30,12 @@ public class NotificationService {
     }
 
     public String sendToken(BaseRoute baseRoute) throws FirebaseMessagingException {
+
+        if (cnt == 0) {
+            lastStart = baseRoute.getSID();
+            lastEnd = baseRoute.getEID();
+        }
+
         String pos = baseRoute.getFirstStation();
         Long original = baseRoute.getAlarm().getAlarmTime();
         String alarmTime = "";
@@ -56,14 +65,34 @@ public class NotificationService {
 //        String formattedTime = String.format("%d:%02d", hours, minutes);
 //        LocalTime stan = LocalTime.parse(stringLastTime);
 //        LocalTime term = LocalTime.parse(formattedTime);
+        if (cnt > 1) {
+            if (baseRoute.getSID() != lastStart || baseRoute.getEID() != lastEnd) {
+                cnt = 0;
+            }
+        }
 
+        lastStart = baseRoute.getSID();
+        lastEnd = baseRoute.getEID();
 
         int alarmTerm = baseRoute.getAlarm().getAlarmTerm();
         int stringToIntAlarmTime = original.intValue();
         gap = stringToIntAlarmTime / alarmTerm;
+        System.out.println(alarmTerm);
         System.out.println(gap);
-        if (cnt <= gap) {
-            String body = "마지막 위치 "+ pos + "역을 기준으로 "+ (stringToIntAlarmTime-alarmTerm*cnt) +" 뒤에 막차가 끊깁니다!";
+        if (cnt < gap) {
+            // 남은 시간
+            int remainTime = stringToIntAlarmTime-alarmTerm*cnt;
+            String remainTimetoStr = "";
+            if (remainTime >= 60) {
+                if (remainTime % 60 == 0) {
+                    remainTimetoStr = remainTime / 60 + "시간 ";
+                } else {
+                    remainTimetoStr = remainTime / 60 + "시간 " + remainTime % 60 + "분";
+                }
+            } else {
+                remainTimetoStr = remainTime + "분";
+            }
+            String body = "마지막 위치 "+ pos + "역을 기준으로 "+ remainTimetoStr +"뒤에 막차가 끊깁니다!";
 
             // See documentation on defining a message payload.
             Message message = Message.builder()
@@ -71,7 +100,6 @@ public class NotificationService {
                     .putData("body", body)
                     .setToken(baseRoute.getUser().getToken())
                     .build();
-
             String response = FirebaseMessaging.getInstance().send(message);
 
             cnt += 1;
@@ -81,8 +109,11 @@ public class NotificationService {
             }
 
             System.out.println("new" + cnt);
-
-            return response;
+            if (baseRoute.getAlarm().isAlarmEnabled() == true) {
+                System.out.println(body);
+                return response;
+            }
+            System.out.println("nono");
         }
         return "알림을 모두 보냈습니다.";
     }
