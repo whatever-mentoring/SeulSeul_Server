@@ -43,12 +43,10 @@ public class RouteDetailController {
         RouteDetailDto routeDetailDto = new RouteDetailDto();
         // 첫번째 작동 시
         if (baseRoute.getSID() == 0 && baseRoute.getEID() == 0) {
-            System.out.println("first");
             routeDetailDto = computeResultService.computeTime(baseRoute.getId());
         }
         // 출발지나 도착지 좌표가 변경되어 작동 시
         else {
-            System.out.println("changed");
             routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
         }
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
