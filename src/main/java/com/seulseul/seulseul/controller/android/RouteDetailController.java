@@ -50,12 +50,11 @@ public class RouteDetailController {
             routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
         }
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
-        // RouteDetail DB에 저장(User와 1:1 매핑)
-        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, user);
+        // RouteDetail DB에 저장
+        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
 
         // 환승이 있으면
         if (routeDetailDto.getExName() != null) {
-            System.out.println("ex");
             wrapDto.setBodyExList(routeDetailDto);
         }
         // 환승이 없으면
