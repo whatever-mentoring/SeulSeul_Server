@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
 public class RouteDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "route_detail_id")
     private Long id;
+
     private String firstStation;    //출발역 이름
     private String lastStation;     //도착역 이름
     private String[] laneName;    //지하철 호선
@@ -28,11 +30,7 @@ public class RouteDetail {
     private String timeList;
     private String totalTime;
 
-    @JsonIgnore
-    @ManyToOne
-    private User user;
-
-    public RouteDetail(RouteDetailDto dto, User user) {
+    public RouteDetail(RouteDetailDto dto) {
         this.firstStation = dto.getFirstStation();
         this.lastStation = dto.getLastStation();
         this.laneName = dto.getLaneName();
@@ -43,6 +41,19 @@ public class RouteDetail {
         this.travelTime = dto.getTravelTime();
         this.timeList = dto.getTimeList();
         this.totalTime = dto.getTotalTime();
-        this.user = user;
+    }
+
+    public void saveRouteDetail(Long id, RouteDetailDto dto) {
+        this.id = id;
+        this.firstStation = dto.getFirstStation();
+        this.lastStation = dto.getLastStation();
+        this.laneName = dto.getLaneName();
+        this.wayName = dto.getWayName();
+        this.exName = dto.getExName();
+        this.fastTrainDoor = dto.getFastTrainDoor();
+        this.exWalkTime = dto.getExWalkTime();
+        this.travelTime = dto.getTravelTime();
+        this.timeList = dto.getTimeList();
+        this.totalTime = dto.getTotalTime();
     }
 }
