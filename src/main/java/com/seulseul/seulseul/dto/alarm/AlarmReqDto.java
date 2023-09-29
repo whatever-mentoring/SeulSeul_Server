@@ -12,5 +12,5 @@ import java.time.Duration;
 public class AlarmReqDto {
     private Long base_route_id;
     private Long alarmTime;
-    private Long alarmTerm;
+    private int alarmTerm;
 }

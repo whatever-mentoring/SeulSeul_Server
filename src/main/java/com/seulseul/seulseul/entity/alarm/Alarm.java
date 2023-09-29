@@ -20,18 +20,18 @@ public class Alarm {
 
     private Long alarmTime;
 
-    private Long alarmTerm;
+    private int alarmTerm;
 
 //    @OneToOne(mappedBy = "alarm")
 //    private BaseRoute baseRoute;
 
-    public Alarm(Long alarmTime, Long alarmTerm) {
+    public Alarm(Long alarmTime, int alarmTerm) {
         this.alarmEnabled = true;
         this.alarmTime = alarmTime;
         this.alarmTerm = alarmTerm;
     }
 
-    public void updateAlarm(Long alarmTime, Long alarmTerm) {
+    public void updateAlarm(Long alarmTime, int alarmTerm) {
         this.alarmTime = alarmTime;
         this.alarmTerm = alarmTerm;
     }

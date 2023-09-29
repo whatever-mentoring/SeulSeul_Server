@@ -15,6 +15,7 @@ import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -37,15 +38,15 @@ public class FcmController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+//    @Scheduled(cron = "0 0/2 * * * ?", zone = "Asia/Seoul")
     @RequestMapping("/send/token")
     public String sendToToken(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException {
-
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         String pos = baseRoute.getFirstStation();
         Long original = baseRoute.getAlarm().getAlarmTime();
-
         String alarmTime = "";
+        int alarmTerm = baseRoute.getAlarm().getAlarmTerm();
 
         if (original >= 60) {
             if (original%60 == 0) {
@@ -58,7 +59,6 @@ public class FcmController {
         }
 
         String body = "마지막 위치 "+ pos + "역을 기준으로 "+ alarmTime +" 뒤에 막차가 끊깁니다!";
-
 
         // See documentation on defining a message payload.
         Message message = Message.builder()
