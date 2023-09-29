@@ -7,6 +7,7 @@ import com.seulseul.seulseul.dto.baseRoute.*;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
+import com.seulseul.seulseul.service.baseRoute.BaseRouteStartService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ public class BaseRouteController {
 
     private final BaseRouteService baseRouteService;
     private final UserService userService;
+    private final BaseRouteStartService baseRouteStartService;
 
     @GetMapping("/transfer/{id}")
     public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
@@ -45,9 +48,9 @@ public class BaseRouteController {
     }
 
     @PatchMapping("/v1/start")
-    public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto, @RequestHeader("Auth") UUID uuid) {
+    public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto, @RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);
-        BaseRouteStartDto startDto = baseRouteService.updateStartInfo(dto, user);
+        BaseRouteStartDto startDto = baseRouteStartService.updateStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, startDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
