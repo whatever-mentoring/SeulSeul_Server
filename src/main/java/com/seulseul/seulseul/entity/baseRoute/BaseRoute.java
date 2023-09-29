@@ -105,7 +105,6 @@ public class BaseRoute {
     public void updateStartCoordination(double startX, double startY) {
         this.startX = startX;
         this.startY = startY;
-
     }
 
 //     대중교통 길찾기 API
