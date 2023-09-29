@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.controller.firbase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -112,7 +113,7 @@ public class FcmTestController {
     }*/
 
     @PostMapping("/v1/fcm/test")
-    public void send(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException {
+    public void send(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException, JsonProcessingException {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         fcmService.schedule(baseRoute);

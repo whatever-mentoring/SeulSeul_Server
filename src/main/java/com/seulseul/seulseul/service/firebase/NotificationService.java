@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 
+import static com.seulseul.seulseul.dto.android.RouteDetailWrapDto.extractTimes;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -23,19 +25,47 @@ public class NotificationService {
         Long original = baseRoute.getAlarm().getAlarmTime();
         String alarmTime = "";
 
-        if (original >= 60) {
-            if (original%60 == 0) {
-                alarmTime = original/60 +"시간 " + "00분";
-            } else {
-                alarmTime = original/60 +"시간 " + original%60 + "분";
-            }
+        //출발시간
+        String[] timeList = extractTimes(baseRoute.getRouteDetail().getTimeList());
+        String time = timeList[0];
+        int hour=0;
+        int minute=0;
+
+        String[] parts = time.split(":");
+
+        if (parts.length == 2) {
+            // 시간과 분을 정수로 변환합니다.
+            hour = Integer.parseInt(parts[0]);
+            minute = Integer.parseInt(parts[1]);
+
         } else {
-            alarmTime = original + "분";
+            System.out.println("올바른 시간 형식이 아닙니다.");
         }
 
-        String body = "마지막 위치 "+ pos + "역을 기준으로 "+ alarmTime +" 뒤에 막차가 끊깁니다!";
-
         LocalTime now = LocalTime.now();
+        int h = now.getHour();
+        int m = now.getMinute();
+
+        int resultH = hour - h;
+        int resultM = minute - m;
+
+        if (resultM < 0) {
+            resultH -= 1;
+            resultM += 60;
+        }
+
+
+//        if (original >= 60) {
+//            if (original%60 == 0) {
+//                alarmTime = original/60 +"시간 " + "00분";
+//            } else {
+//                alarmTime = original/60 +"시간 " + original%60 + "분";
+//            }
+//        } else {
+//            alarmTime = original + "분";
+//        }
+
+        String body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultH+ "시간 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
 
         System.out.println("body: "+body);
         System.out.println("timestamp: "+now);
