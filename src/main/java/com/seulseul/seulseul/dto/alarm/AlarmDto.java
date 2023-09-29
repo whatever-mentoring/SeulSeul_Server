@@ -18,4 +18,8 @@ public class AlarmDto {
         this.alarmTime = alarm.getAlarmTime();
         this.alarmTerm = alarm.getAlarmTerm();
     }
+
+    public AlarmDto() {
+
+    }
 }

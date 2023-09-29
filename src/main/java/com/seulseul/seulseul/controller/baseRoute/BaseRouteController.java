@@ -3,11 +3,17 @@ package com.seulseul.seulseul.controller.baseRoute;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.alarm.AlarmDto;
 import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
+import com.seulseul.seulseul.dto.android.RouteDetailDto;
+import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
 import com.seulseul.seulseul.dto.baseRoute.*;
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
+import com.seulseul.seulseul.service.android.RouteDetailService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteStartService;
+import com.seulseul.seulseul.service.result.ComputeResultService;
+import com.seulseul.seulseul.service.result.UpdateResultService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +37,10 @@ public class BaseRouteController {
     private final UserService userService;
     private final BaseRouteStartService baseRouteStartService;
 
+    private final ComputeResultService computeResultService;
+    private final RouteDetailService routeDetailService;
+    private final UpdateResultService updateResultService;
+
     @GetMapping("/transfer/{id}")
     public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
         Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
@@ -40,8 +50,9 @@ public class BaseRouteController {
     }
 
     @PostMapping("/v1/start")
-    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) {
+    public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);
+        BaseRoute baseRoute = baseRouteService.findByUser(user);
         BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto, user);
         ResponseData responseData = new ResponseData(200, reqDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
@@ -51,6 +62,24 @@ public class BaseRouteController {
     public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto, @RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);
         BaseRouteStartDto startDto = baseRouteStartService.updateStartInfo(dto, user);
+        BaseRoute baseRoute = baseRouteService.findByUser(user);
+
+        //<추가>baseRoute 경로 설정
+        RouteDetailDto routeDetailDto = new RouteDetailDto();
+        routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+        RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
+        // RouteDetail DB에 저장
+        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
+        // 환승이 있으면
+        if (routeDetailDto.getExName() != null) {
+            wrapDto.setBodyExList(routeDetailDto);
+        }
+        // 환승이 없으면
+        else {
+            wrapDto.setBodyList(routeDetailDto);
+        }
+        wrapDto.setTimeList(routeDetailDto);
+
         ResponseData responseData = new ResponseData(200, startDto);
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }

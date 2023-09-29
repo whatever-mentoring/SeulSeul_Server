@@ -40,7 +40,7 @@ public class AlarmService {
         BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(updateDto.getBase_route_id(), user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         // 알림 찾고
-        Alarm alarm = alarmRepository.findById(updateDto.getId())
+        Alarm alarm = alarmRepository.findById(baseRoute.getAlarm().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FONUD));
         // 알림 시간, 간격 업데이트 해주기
         alarm.updateAlarm(updateDto.getAlarmTime(), updateDto.getAlarmTerm());
