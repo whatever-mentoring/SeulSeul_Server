@@ -43,26 +43,26 @@ public class RouteDetailService {
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
-        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
-        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
-
-        String getLaneNameString = String.join(" ", getLaneName);
-        String getWayNameString = String.join(" ", getWayName);
-        String getTravelTimeString = String.join(" ", getTravelTime);
+//        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
+//        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+//        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
+//
+//        String getLaneNameString = String.join(" ", getLaneName);
+//        String getWayNameString = String.join(" ", getWayName);
+//        String getTravelTimeString = String.join(" ", getTravelTime);
 
         if (baseRoute.getExSID1() != null) {
-            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
-            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+//            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
+//            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+//            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+//
+//            String getExNameString = String.join(" ", getExName);
+//            String getExWalkTimeString = String.join(" ", getExWalkTime);
+//            String getFastTrainString = String.join(" ", getFastTrain);
 
-            String getExNameString = String.join(" ", getExName);
-            String getExWalkTimeString = String.join(" ", getExWalkTime);
-            String getFastTrainString = String.join(" ", getFastTrain);
-
-            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExNameString, getExWalkTimeString, getFastTrainString, getLaneNameString, getWayNameString, getTravelTimeString);
+            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(), baseRoute.getExName(), baseRoute.getExWalkTime(), baseRoute.getFastTrainDoor(), baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
         } else {
-            detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),getLaneNameString, getWayNameString, getTravelTimeString);
+            detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
         }
         return detailDto;
     }
