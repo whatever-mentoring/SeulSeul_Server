@@ -10,6 +10,8 @@ import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -33,7 +35,10 @@ public class NotificationService {
 
         String body = "마지막 위치 "+ pos + "역을 기준으로 "+ alarmTime +" 뒤에 막차가 끊깁니다!";
 
+        LocalTime now = LocalTime.now();
+
         System.out.println("body: "+body);
+        System.out.println("timestamp: "+now);
 
         // See documentation on defining a message payload.
         Message message = Message.builder()
