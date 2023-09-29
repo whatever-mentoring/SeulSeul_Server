@@ -393,8 +393,13 @@ public class RouteDetailService {
     }
 
     @Transactional
-    public RouteDetail saveRouteDetail(RouteDetailDto dto, User user) {
-        RouteDetail routeDetail = routeDetailRepository.save(new RouteDetail(dto, user));
+    public RouteDetail saveRouteDetail(RouteDetailDto dto, BaseRoute baseRoute) {
+        RouteDetail routeDetail = routeDetailRepository.save(new RouteDetail(dto));
+//        RouteDetail routeDetail = new RouteDetail();
+//        Long id = baseRoute.getId();
+//        routeDetail.saveRouteDetail(id, dto);
+        // BaseRoute에 routeDetail 저장
+        baseRoute.saveRouteDetail(routeDetail);
         return routeDetail;
     }
 }

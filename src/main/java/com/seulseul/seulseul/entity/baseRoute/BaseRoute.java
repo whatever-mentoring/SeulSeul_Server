@@ -2,6 +2,7 @@ package com.seulseul.seulseul.entity.baseRoute;
 
 import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -76,39 +77,9 @@ public class BaseRoute {
     @JoinColumn(name = "alarm_id")
     private Alarm alarm;
 
-//    @Column(name="exSID")
-//    private List<Integer> exSID1;
-//
-//    @Column(name="exSID2")
-//    private List<Integer> exSID2;
-//
-//    @Column(name="laneName")
-//    private List<String> laneName;
-//
-//    @Column(name="wayCode")
-//    private List<Integer> wayCode;
-//
-//    @Column(name="wayName")
-//    private List<String> wayName;
-//
-//    @Column(name="fastTrainDoor")
-//    private List<String> fastTrainDoor;
-//
-//    @Column(name="exWalkTime")
-//    private List<Integer> exWalkTime;
-//
-//    @Column(name="exName")
-//    private List<String> exName;
-//
-//    @Column(name="travelTime")
-//    private List<Integer> travelTime;
-//
-//    @OneToOne
-//    private User user;
-//
-//    @OneToOne
-//    @JoinColumn(name = "alarm_id")
-//    private Alarm alarm;
+    @OneToOne
+    @JoinColumn(name = "route_detail_id")
+    private RouteDetail routeDetail;
 
     public BaseRoute(BaseRouteDto baseRouteDto) {
         this.startX = baseRouteDto.getStartX();
@@ -160,6 +131,10 @@ public class BaseRoute {
 
     public void saveAlarmInfo(Alarm alarm) {
         this.alarm = alarm;
+    }
+
+    public void saveRouteDetail(RouteDetail routeDetail) {
+        this.routeDetail = routeDetail;
     }
 
     public void updateEndCoordination(double endX, double endY) {
