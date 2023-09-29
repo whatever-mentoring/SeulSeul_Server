@@ -43,18 +43,26 @@ public class RouteDetailService {
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
-        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
-        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
+//        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
+//        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+//        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
+//
+//        String getLaneNameString = String.join(" ", getLaneName);
+//        String getWayNameString = String.join(" ", getWayName);
+//        String getTravelTimeString = String.join(" ", getTravelTime);
 
         if (baseRoute.getExSID1() != null) {
-            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
-            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+//            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
+//            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
+//            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
+//
+//            String getExNameString = String.join(" ", getExName);
+//            String getExWalkTimeString = String.join(" ", getExWalkTime);
+//            String getFastTrainString = String.join(" ", getFastTrain);
 
-            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(),getExName, getExWalkTime, getFastTrain, getLaneName, getWayName, getTravelTime);
+            detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(), baseRoute.getExName(), baseRoute.getExWalkTime(), baseRoute.getFastTrainDoor(), baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
         } else {
-            detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),getLaneName, getWayName, getTravelTime);
+            detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
         }
         return detailDto;
     }
@@ -255,25 +263,22 @@ public class RouteDetailService {
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);   //timeList2는 해당 stopTimeList의 시간 String[] 타입
 
-
             if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
             } else {                            //출발, 목적지역인 경우
                 transfer = 0;
             }
 
-            //출발역인경우
+            //출발역인 경우
             if (resultTime.isEmpty()) { //출발지에서 출발시간인 경우 resultTime에 추가
                 resultTime.add(originalTimeList.get(0));
             } else {
-
                 prev = resultTime.get(resultTime.size()-1); //이전역에서 출발한 시간
                 String[] parts = prev.split(":");
 
                 // 분리된 문자열을 정수로 변환
                 hours = Integer.parseInt(parts[0]);
                 minutes = Integer.parseInt(parts[1]);
-
 
                 if (getLaneName.length != 1) {
                     //내리는 경우 => travelTime 더하고 그 시간과 가장 가까운 시간 구하기(1 앞뒤로는 인정)
@@ -302,6 +307,7 @@ public class RouteDetailService {
                         }
                     }
                     check += 1;
+
                 //애초에 exWalkTime이 없는 경우
                 } else {
                     travelTime = getTravelTime2.get(i-1);
@@ -311,7 +317,6 @@ public class RouteDetailService {
                         hours += 1;
                     }
                 }
-
 
                 timeIdx = 0;
                 //현재역과 직전역의 시간 비교
@@ -383,7 +388,7 @@ public class RouteDetailService {
         String resultT = objectMapper.writeValueAsString(timeList);
 
         detailDto.updateTimeList(resultT, totalTime);
-
+        System.out.println(detailDto);
         return detailDto;
     }
 
