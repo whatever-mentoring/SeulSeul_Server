@@ -27,6 +27,8 @@ public class FcmService {
     public void schedule(BaseRoute baseRoute) {
         String cronExpression = convertToCron(baseRoute.getAlarm().getAlarmTerm()); // DB에서 alarmTerm을 가져와서 cron 표현식으로 변환
 
+        System.out.println("cronExpression: "+cronExpression);
+
         CronTrigger cronTrigger = new CronTrigger(cronExpression);
 
         if (scheduledFuture != null) {
@@ -39,6 +41,7 @@ public class FcmService {
                 BaseRoute latestBaseRoute = baseRouteRepository.findById(baseRoute.getId())
                         .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
                 if (latestBaseRoute != null && latestBaseRoute.getAlarm().isAlarmEnabled()) {
+                    System.out.println("sendToken");
                     notificationService.sendToken(latestBaseRoute); // FCM 메시지 전송
                 }
             } catch (FirebaseMessagingException e) {

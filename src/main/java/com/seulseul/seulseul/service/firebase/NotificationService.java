@@ -33,6 +33,8 @@ public class NotificationService {
 
         String body = "마지막 위치 "+ pos + "역을 기준으로 "+ alarmTime +" 뒤에 막차가 끊깁니다!";
 
+        System.out.println("body: "+body);
+
         // See documentation on defining a message payload.
         Message message = Message.builder()
                 .putData("title", "SeulSeul")
