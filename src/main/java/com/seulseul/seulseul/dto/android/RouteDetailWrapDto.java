@@ -102,28 +102,27 @@ public class RouteDetailWrapDto {
         this.totalTimeSection.add(titleMap);
     }
 
-    public void setBodyList(RouteDetailDto routeDetailDto) {
+    public void setBodyList(RouteDetailDto routeDetailDto) throws JsonProcessingException {
         this.bodyList = new ArrayList<>(); // bodyList를 먼저 초기화
         String[] timeList = extractTimes(routeDetailDto.getTimeList());
 
-
         int timeSize = timeList.length;
-
-        String[] exWalkTime = new String[]{routeDetailDto.getExWalkTime()};
-
 
         Map<String, Object> dataMap = new LinkedHashMap<>();
         dataMap.put("viewType", "bodyInfo");
 
         Map<String, Object> map = new LinkedHashMap<>();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        String[] getWayName = new String[]{routeDetailDto.getWayName()};
-        String[] getLaneName = new String[]{routeDetailDto.getLaneName()};
+//        String[] getWayName = new String[]{routeDetailDto.getWayName()};
+//        String[] getLaneName = new String[]{routeDetailDto.getLaneName()};
+        String[] laneNames = objectMapper.readValue(routeDetailDto.getLaneName(), String[].class);
+        String[] wayNames = objectMapper.readValue(routeDetailDto.getWayName(), String[].class);
 
         map.put("firstStation", routeDetailDto.getFirstStation());
         map.put("lastStation", routeDetailDto.getLastStation());
-        map.put("laneName", getLaneName[0]);
-        map.put("wayName", getWayName[0]);
+        map.put("laneName", laneNames[0]);
+        map.put("wayName", wayNames[0]);
         map.put("departTime", timeList[timeSize-2]);
         map.put("arriveTime", timeList[timeSize-1]);
         dataMap.put("data", map);
