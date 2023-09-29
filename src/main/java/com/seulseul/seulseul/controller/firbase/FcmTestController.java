@@ -9,7 +9,8 @@ import com.seulseul.seulseul.entity.TokenKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
-//import com.seulseul.seulseul.service.firebase.NotificationService;
+import com.seulseul.seulseul.service.firebase.NotificationService;
+
 import com.seulseul.seulseul.service.firebase.FcmService;
 import com.seulseul.seulseul.service.firebase.NotificationService;
 import com.seulseul.seulseul.service.user.UserService;
@@ -34,6 +35,7 @@ public class FcmTestController {
     private final BaseRouteService baseRouteService;
     private final TokenKey tokenKey;
     private final FcmService fcmService;
+
     //    @Scheduled(fixedRate = 10000)
 //    @GetMapping("/v1/fcm/test")
 //    public ResponseEntity<ResponseData> fcmTest() throws FirebaseMessagingException {
