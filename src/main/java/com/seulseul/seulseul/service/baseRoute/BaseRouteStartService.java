@@ -21,16 +21,20 @@ public class BaseRouteStartService {
 
     private final BaseRouteRepository baseRouteRepository;
     private final UpdateResultService updateResultService;
+    private final BaseRouteService baseRouteService;
 
     // 현재 위치 변경하기
     @Transactional
     public BaseRouteStartDto updateStartInfo(BaseRouteStartUpdateDto dto, User user) throws IOException, ParseException {
         BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        int sid = baseRoute.getSID();
         baseRoute.updateStartCoordination(dto.getStartX(), dto.getStartY());
-//        computeResultService.computeTime(user);
         // 오디세이 api 불러와서 디비 업데이트
-        updateResultService.getUpdatedResult(baseRoute.getId());
+        BaseRoute updatedBaseRoute = baseRouteService.getStationIdAndName(dto.getId()).orElse(null);
+        if (sid != updatedBaseRoute.getSID()) {
+            updateResultService.getUpdatedResult(baseRoute.getId());
+        }
         return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.getDayInfo());
     }
 }
