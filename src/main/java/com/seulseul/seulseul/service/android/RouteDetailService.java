@@ -126,6 +126,7 @@ public class RouteDetailService {
             timeList2 = objectMapper.readValue(time, String[].class);
 
             index = timeList2.length-1;  //뒤에서 부터(stopTimeList에서 맨 뒤의 시간 index)
+
             if (i!=0 && i!=stopTimeLists.size()-1) {    //환승역인 경우
                 transfer += 1;
             } else {                            //출발, 목적지역인 경우
@@ -133,7 +134,7 @@ public class RouteDetailService {
             }
             //도착역인경우
             if (resultTime.isEmpty()) {
-                resultTime.add(timeList2[index]);
+                resultTime.add(timeList2[timeList2.length-1]);
             } else {
                 //직전 역에서의 시간
                 prev = resultTime.get(resultTime.size()-1);
