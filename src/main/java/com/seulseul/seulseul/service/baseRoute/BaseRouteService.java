@@ -67,6 +67,7 @@ public class BaseRouteService {
         conn.disconnect();
 
         String jsonString = sb.toString();
+
         return jsonString;
     }
 
@@ -153,84 +154,104 @@ public class BaseRouteService {
         //기존에 존재하는 baseRoute id로 해당 row 찾기
         BaseRoute baseRoute = baseRouteRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+
+        //기존 데이터 초기화: 환승시 변경되는 파라미터 null로 초기화
+        baseRoute.init();
+
         //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
         String string = getFromAPI(baseRoute.getSID(), baseRoute.getEID());
+
         //원하는 데이터 찾기
         ObjectMapper objectMapper = new ObjectMapper();
+
         try {
             JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
 
             //각 배열에 접근
             JsonNode driveInfoArray = jsonNode.get("result").get("driveInfoSet").get("driveInfo");
-            JsonNode exChangeInfoArray = jsonNode.get("result").get("exChangeInfoSet").get("exChangeInfo");
             JsonNode stationSetArray = jsonNode.get("result").get("stationSet").get("stations");
 
             // "exSID" 값을 저장할 리스트 생성
-            List<Integer> exSIDList2 = new ArrayList<>();    //환승역의 두번째 stationId
-            List<Integer> exSIDList1 = new ArrayList<>();   //환승역의 첫번쨰 stationId
             List<String> laneNameList = new ArrayList<>();  //몇호선(ex. 9호선-> 1호선)
-            List<Integer> wayCodeList = new ArrayList<>();  //wayCode(방면코드. 1:상행 2:하행)
+            List<String> wayCodeList = new ArrayList<>();  //wayCode(방면코드. 1:상행 2:하행)
             List<String> wayNameList = new ArrayList<>();   //방면명
-            List<String> fastTrainDoorList = new ArrayList<>();    //최소환승
-            List<Integer> exWalkTimeList = new ArrayList<>();//환승 역 사이의 소요시간
             List<String> exNameList = new ArrayList<>();    //환승역 이름
-            List<Integer> travelTimeList = new ArrayList<>();   //역<->역 이동 시간
+            List<String> exSIDList2 = new ArrayList<>();    //환승역의 두번째 stationId
+            List<String> exSIDList1 = new ArrayList<>();   //환승역의 첫번쨰 stationId
+            List<String> fastTrainDoorList = new ArrayList<>();    //최소환승
+            List<String> exWalkTimeList = new ArrayList<>();//환승 역 사이의 소요시간
+
+            List<String> travelTimeList = new ArrayList<>();   //역<->역 이동 시간
 
             String globalEndName = String.valueOf(jsonNode.get("result").get("globalEndName").asText());
-
 
             // driveInfoArray 내의 데이터
             for (JsonNode driveInfo : driveInfoArray) {
                 String laneName = driveInfo.get("laneName").asText();
-                Integer wayCode = driveInfo.get("wayCode").asInt();
+                String wayCode = driveInfo.get("wayCode").asText();
                 String wayName = driveInfo.get("wayName").asText();
 
                 laneNameList.add(laneName);
                 wayCodeList.add(wayCode);
                 wayNameList.add(wayName);
             }
-            // "exChangeInfo" 배열을 반복하면서 "exSID" 값을 추출하여 리스트에 추가
-            for (JsonNode exChangeInfo : exChangeInfoArray) {
-                String exName = exChangeInfo.get("exName").asText();
-                Integer exSID = exChangeInfo.get("exSID").asInt();
-                Integer fastTrain = exChangeInfo.get("fastTrain").asInt();
-                Integer fastDoor = exChangeInfo.get("fastDoor").asInt();
-                Integer exWalkTime = exChangeInfo.get("exWalkTime").asInt();
-                exWalkTime = exWalkTime / 60;
-                if (exWalkTime % 60 != 0) {
-                    exWalkTime += 1;
-                }
 
-                exNameList.add(exName);
-                exSIDList2.add(exSID);
-                fastTrainDoorList.add(fastTrain+"-"+fastDoor);
-                exWalkTimeList.add(exWalkTime);
+            //exChangeINfoArray 내의 데이터 : 환승이 반드시 하나 이상 있는 경우에만 존재
+            // "exChangeInfo" 배열을 반복하면서 "exSID" 값을 추출하여 리스트에 추가
+            if (laneNameList.size() != 1) {
+                JsonNode exChangeInfoArray = jsonNode.get("result").get("exChangeInfoSet").get("exChangeInfo");
+
+                for (JsonNode exChangeInfo : exChangeInfoArray) {
+                    String exName = exChangeInfo.get("exName").asText();
+                    String exSID = exChangeInfo.get("exSID").asText();
+                    String fastTrain = exChangeInfo.get("fastTrain").asText();
+                    Integer fastDoor = exChangeInfo.get("fastDoor").asInt();
+                    Integer exWalkTime = exChangeInfo.get("exWalkTime").asInt();
+                    exWalkTime = exWalkTime / 60;
+                    if (exWalkTime % 60 != 0) {
+                        exWalkTime += 1;
+                    }
+
+                    exNameList.add(exName);
+                    exSIDList2.add(exSID);
+                    fastTrainDoorList.add(fastTrain+"-"+fastDoor);
+                    exWalkTimeList.add(exWalkTime.toString());
+                }
             }
 
-            if (!exNameList.isEmpty()) {
+            //stationSetArray 내의 데이터
+            if (laneNameList.size() != 1) {
                 int cnt = 0;
                 int prev = 0;   //첫번째 환승역: 0, 두번쨰 환승역: 두번째 환승역의 travelTime - (첫번째 환승역+첫번째 환승역의 exWalkTime)
                 int travelTime = 0;
                 int currentTravelTime = 0;
                 for (JsonNode stations : stationSetArray) {
-                    if (exNameList.contains(stations.get("endName").asText()) ||stations.get("endName").asText().equals(globalEndName)) {
+                    //endName이 exNameList에 존재하는 경우 환승역의 travelTime 가져오기
+                    if (exNameList.contains(stations.get("endName").asText()) || stations.get("endName").asText().equals(globalEndName)) {
                         if (exNameList.contains(stations.get("endName").asText())) {
-                            exSIDList1.add(stations.get("endSID").asInt());
+                            exSIDList1.add(stations.get("endSID").asText());
                         }
                         if (cnt == 0) {
                             travelTime = stations.get("travelTime").asInt();
                             prev = travelTime;
-                            travelTimeList.add(travelTime);
+                            travelTimeList.add(String.valueOf(travelTime));
                             cnt += 1;
                         } else {
                             currentTravelTime = stations.get("travelTime").asInt();
-                            prev += exWalkTimeList.get(cnt-1);
-                            travelTime = currentTravelTime - prev + 1;  //exWalkTime 시 반올림하기 때문에 발생하는 1분만 추가
-                            travelTimeList.add(travelTime);
+                            travelTime = currentTravelTime - prev - Integer.valueOf(exWalkTimeList.get(cnt-1));
+                            prev = currentTravelTime;
+                            travelTimeList.add(String.valueOf(travelTime));
                             cnt += 1;
                         }
                     }
                 }
+            } else {
+                int travelTime = 0;
+                int arrayLength = stationSetArray.size();
+
+                JsonNode stations = stationSetArray.get(arrayLength - 1);
+                travelTime = stations.get("travelTime").asInt();
+                travelTimeList.add(String.valueOf(travelTime));
             }
 
             String StringLaneName = objectMapper.writeValueAsString(laneNameList);
@@ -239,21 +260,24 @@ public class BaseRouteService {
 
             String StringWayName = objectMapper.writeValueAsString(wayNameList);
 
-            String StringExName = objectMapper.writeValueAsString(exNameList);
-
-            String StringExSID1 = objectMapper.writeValueAsString(exSIDList1);
-
-            String StringExSID2 = objectMapper.writeValueAsString(exSIDList2);
-
-            String StringFastTrain = objectMapper.writeValueAsString(fastTrainDoorList);
-
-            String StringExWalkTime = objectMapper.writeValueAsString(exWalkTimeList);
-
             String StringTravelTime = objectMapper.writeValueAsString(travelTimeList);
 
-            //객체에 넣어서 실제 DB에 저장
-            //baseRoute.update(laneNameList, wayCodeList, wayNameList, exNameList, exSIDList1 ,exSIDList2, fastTrainDoorList, exWalkTimeList, travelTimeList);
-            baseRoute.update(StringLaneName, StringWayCode, StringWayName, StringExName, StringExSID1, StringExSID2, StringFastTrain, StringExWalkTime, StringTravelTime);
+            if (laneNameList.size() != 1) {
+                String StringExName = objectMapper.writeValueAsString(exNameList);
+
+                String StringExSID1 = objectMapper.writeValueAsString(exSIDList1);
+
+                String StringExSID2 = objectMapper.writeValueAsString(exSIDList2);
+
+                String StringFastTrain = objectMapper.writeValueAsString(fastTrainDoorList);
+
+                String StringExWalkTime = objectMapper.writeValueAsString(exWalkTimeList);
+
+                baseRoute.update(StringLaneName, StringWayCode, StringWayName, StringExName, StringExSID1, StringExSID2, StringFastTrain, StringExWalkTime, StringTravelTime);
+
+            } else {
+                baseRoute.updateOnly(StringLaneName, StringWayCode, StringWayName, StringTravelTime);
+            }
 
             baseRouteRepository.save(baseRoute);
 

@@ -1,5 +1,6 @@
 package com.seulseul.seulseul.entity.user;
 
+import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
