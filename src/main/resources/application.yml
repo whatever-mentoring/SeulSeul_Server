@@ -30,7 +30,7 @@ spring:
       on-profile: aws
   datasource:
     url: ${url}
-    username: ${name}
+    username: ${username}
     password: ${password}
     driver-class-name: com.mysql.cj.jdbc.Driver # aws에서는 mysql 사용
 
