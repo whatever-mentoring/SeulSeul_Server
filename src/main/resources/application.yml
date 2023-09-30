@@ -35,8 +35,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver # aws에서는 mysql 사용
 
   jpa:
-    hibernate:
-      ddl-auto: create # 서버 시작될 때마다 테이블 제거
     properties:
       hibernate:
         format_sql: true
