@@ -3,6 +3,9 @@ package com.seulseul.seulseul.entity.stopTimeList;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
+import org.hibernate.type.EntityType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Getter
@@ -31,6 +34,7 @@ public class StopTimeList {
         this.stationId = stationId;
         this.time = timeList;
     }
+
 
 //    public void update(List<Integer> hourList, List<String> minuteList) {
 //        this.SIDIdx = hourList;

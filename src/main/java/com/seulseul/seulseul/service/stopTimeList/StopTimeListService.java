@@ -162,6 +162,12 @@ public class StopTimeListService {
                     String[] minute = minutes.split(" ");
 
                     //wayName에 해당하는 시간만 DB에 저장
+                    if (wayName.contains("내선순환")) {
+                        for (String m : minute) {
+                            String min = m.split("\\(")[0];
+                            timeList.add(hour + ":" + min);
+                        }
+                    }
                     if (wayName.contains(".")) {
                         // 정규표현식 패턴 설정
                         Pattern pattern = Pattern.compile("\\.");

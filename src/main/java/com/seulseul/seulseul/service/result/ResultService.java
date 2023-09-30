@@ -44,6 +44,7 @@ public class ResultService {
         // 3. 역마다 도착하는 시간 리스트로 가져오기
         StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(baseRoute.getId());
 //        StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(baseRoute);
+        System.out.println("stopTimeLIst: "+stopTimeList);
         return baseRoute;
     }
 

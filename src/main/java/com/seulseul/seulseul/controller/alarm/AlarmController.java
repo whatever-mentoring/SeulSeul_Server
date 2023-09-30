@@ -48,8 +48,10 @@ public class AlarmController {
         //<추가>baseRoute 경로 설정
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
         RouteDetailDto routeDetailDto = computeResultService.computeTime(baseRoute.getId());
+        System.out.println("routeD: "+routeDetailDto);
         // RouteDetail DB에 저장
         RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
+
         // 환승이 있으면
         if (routeDetailDto.getExName() != null) {
             wrapDto.setBodyExList(routeDetailDto);

@@ -21,8 +21,11 @@ public class ComputeResultService {
 
     @Transactional
     public RouteDetailDto computeTime(Long base_route_id) throws IOException, ParseException {
+        //SID + transfer + 모든 list 받기
         BaseRoute baseRoute = resultService.getResult(base_route_id);
+        //
         RouteDetailDto routeDetailDto = resultService.getRouteDetail(baseRoute);
+        System.out.println("dto: "+routeDetailDto);
         //실제 시간 계산 로직 => 뒤에서부터 확인
         List<String> timeList = routeDetailService.compute(baseRoute.getId());
 
