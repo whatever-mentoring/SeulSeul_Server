@@ -12,6 +12,7 @@ import java.util.List;
 public interface StopTimeListRepository extends JpaRepository<StopTimeList, Long> {
     List<StopTimeList> findByBaseRouteId(Long baseRouteId);
 
+
 //    @Autowired
 //    EntityManager entityManager = null;
 //

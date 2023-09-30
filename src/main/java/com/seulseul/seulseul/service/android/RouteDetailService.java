@@ -121,6 +121,7 @@ public class RouteDetailService {
 
         //도착역 -> 환승역(존재하는경우) -> 출발역
         for (int i=stopTimeLists.size()-1; i>=0; i--) {
+            System.out.println(stopTimeLists.get(i));
             lst = stopTimeLists.get(i);
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);
@@ -177,6 +178,7 @@ public class RouteDetailService {
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
+                    System.out.println("index"+index);
                     current = timeList2[index];
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");
@@ -184,6 +186,10 @@ public class RouteDetailService {
                     h = Integer.parseInt(p[0]);
                     m = Integer.parseInt(p[1]);
                     if (h<hours || (h==hours && m<=minutes)) {
+                        resultTime.add(timeList2[index]);
+                        break;
+                    } else if(h==hours && m-1==minutes)
+                    { //내리는 경우 1분의 오차 존재 가능성 있음
                         resultTime.add(timeList2[index]);
                         break;
                     } else {
