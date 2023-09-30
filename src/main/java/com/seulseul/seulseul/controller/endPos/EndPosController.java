@@ -63,6 +63,7 @@ public class EndPosController {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         EndPosResDto dto = endPosService.getEndPos(id, user);
+        System.out.println("dto: "+dto);
         System.out.println("baseRoute: "+baseRoute);
 
         //<추가>baseRoute 경로 설정
