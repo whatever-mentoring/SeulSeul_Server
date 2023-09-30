@@ -12,6 +12,7 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.alarm.AlarmService;
 import com.seulseul.seulseul.service.android.RouteDetailService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
+import com.seulseul.seulseul.service.firebase.FcmService;
 import com.seulseul.seulseul.service.result.ComputeResultService;
 import com.seulseul.seulseul.service.result.UpdateResultService;
 import com.seulseul.seulseul.service.user.UserService;
@@ -36,6 +37,7 @@ public class AlarmController {
     private final RouteDetailService routeDetailService;
     private final ComputeResultService computeResultService;
     private final UpdateResultService updateResultService;
+    private final FcmService fcmService;
 
     @PostMapping("/v1/alarm")
     public ResponseEntity<ResponseData> saveAlarm(@RequestBody AlarmReqDto dto, @RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
@@ -63,6 +65,7 @@ public class AlarmController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, alarmDto);
+        fcmService.schedule(baseRoute);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
