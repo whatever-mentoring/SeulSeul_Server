@@ -9,8 +9,10 @@ import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -162,8 +165,15 @@ public class StopTimeListService {
                     String[] minute = minutes.split(" ");
 
                     //wayName에 해당하는 시간만 DB에 저장
-                    if (wayName.contains("내선순환")) {
-                        for (String m : minute) {
+
+                    //내선순환, 외선순환은 반만 저장 ㅠ
+                    if (wayName.contains("내선순환") || wayName.contains("외선순환")) {
+                        int middle = minute.length / 2;
+                        // 첫 번째 배열 (0부터 middle-1까지의 요소)
+                        String[] firstHalf = Arrays.copyOfRange(minute, 0, middle);
+                        // 두 번째 배열 (middle부터 끝까지의 요소)
+                        String[] secondHalf = Arrays.copyOfRange(minute, middle, minute.length);
+                        for (String m : firstHalf) {
                             String min = m.split("\\(")[0];
                             timeList.add(hour + ":" + min);
                         }
@@ -196,7 +206,13 @@ public class StopTimeListService {
                 StopTimeList stopTimeList = new StopTimeList();
                 String stringTime = objectMapper.writeValueAsString(timeList);
                 stopTimeList.update(id, stationId, stringTime);
-                stopTimeListRepository.save(stopTimeList);
+                try {
+                    stopTimeListRepository.save(stopTimeList);
+                } catch (DataIntegrityViolationException e) {
+                    System.out.println("hibernate exception 발생: "+e);
+                    throw e;
+                }
+
 
             } catch (Exception e) {
                 log.info(e.toString());
