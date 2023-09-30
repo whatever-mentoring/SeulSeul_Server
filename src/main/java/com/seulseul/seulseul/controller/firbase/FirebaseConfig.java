@@ -10,17 +10,18 @@ import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
     @Value("classpath:firebase/service-account.json")
-    private File file;
+    private Resource resource;
 
     @PostConstruct
     public void initFirebase() {
         try {
             // Service Account를 이용하여 Fireabse Admin SDK 초기화
-            FileInputStream serviceAccount = new FileInputStream(file);
+            InputStream serviceAccount = resource.getInputStream();
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
