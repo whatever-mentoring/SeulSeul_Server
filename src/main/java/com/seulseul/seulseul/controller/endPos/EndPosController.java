@@ -14,6 +14,7 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.android.RouteDetailService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import com.seulseul.seulseul.service.endPos.EndPosService;
+import com.seulseul.seulseul.service.firebase.FcmService;
 import com.seulseul.seulseul.service.result.UpdateResultService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class EndPosController {
     private final BaseRouteService baseRouteService;
     private final UpdateResultService updateResultService;
     private final RouteDetailService routeDetailService;
+    private final FcmService fcmService;
 
     //(1)endPos table에 저장: 사용자가 입력한 값에 기반 -> (2)baseRoute table에 저장
     @PostMapping("/v1/end")
@@ -83,6 +85,7 @@ public class EndPosController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, dto);
+        fcmService.schedule(baseRoute);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

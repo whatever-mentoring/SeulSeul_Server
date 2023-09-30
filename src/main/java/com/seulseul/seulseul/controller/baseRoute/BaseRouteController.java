@@ -12,6 +12,7 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.android.RouteDetailService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteStartService;
+import com.seulseul.seulseul.service.firebase.FcmService;
 import com.seulseul.seulseul.service.result.ComputeResultService;
 import com.seulseul.seulseul.service.result.UpdateResultService;
 import com.seulseul.seulseul.service.user.UserService;
@@ -40,6 +41,7 @@ public class BaseRouteController {
     private final ComputeResultService computeResultService;
     private final RouteDetailService routeDetailService;
     private final UpdateResultService updateResultService;
+    private final FcmService fcmService;
 
     @GetMapping("/transfer/{id}")
     public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
@@ -81,6 +83,8 @@ public class BaseRouteController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, startDto);
+        fcmService.schedule(baseRoute);
+
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
 }

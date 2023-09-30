@@ -90,6 +90,7 @@ public class AlarmController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, alarmDto);
+        fcmService.schedule(baseRoute);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
