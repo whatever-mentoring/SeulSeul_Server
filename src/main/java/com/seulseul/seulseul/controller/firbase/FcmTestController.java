@@ -112,7 +112,7 @@ public class FcmTestController {
         }
     }*/
 
-    @PostMapping("/v1/fcm/test")
+    @PostMapping("/v1/notice")
     public void send(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException, JsonProcessingException {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);

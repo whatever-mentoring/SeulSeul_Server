@@ -31,10 +31,10 @@ public class BaseRouteStartService {
         int sid = baseRoute.getSID();
         baseRoute.updateStartCoordination(dto.getStartX(), dto.getStartY());
         // 오디세이 api 불러와서 디비 업데이트
-        BaseRoute updatedBaseRoute = baseRouteService.getStationIdAndName(dto.getId()).orElse(null);
-        if (sid != updatedBaseRoute.getSID()) {
-            updateResultService.getUpdatedResult(baseRoute.getId());
-        }
+//        BaseRoute updatedBaseRoute = baseRouteService.getStationIdAndName(dto.getId()).orElse(null);
+//        if (sid != updatedBaseRoute.getSID()) {
+//            updateResultService.getUpdatedResult(baseRoute.getId());
+//        }
         return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.getDayInfo());
     }
 }
