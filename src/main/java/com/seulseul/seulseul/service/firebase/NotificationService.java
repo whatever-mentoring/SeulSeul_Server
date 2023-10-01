@@ -65,7 +65,13 @@ public class NotificationService {
 //            alarmTime = original + "분";
 //        }
 
-        String body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultH+ "시간 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
+        String body = "";
+        if (resultH == 0) {
+            body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
+        }
+        else {
+            body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultH+ "시간 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
+        }
 
         System.out.println("body: "+body);
         System.out.println("timestamp: "+now);
