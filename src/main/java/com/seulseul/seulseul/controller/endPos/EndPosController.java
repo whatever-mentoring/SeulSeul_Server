@@ -85,7 +85,9 @@ public class EndPosController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, dto);
-        fcmService.schedule(baseRoute);
+        if (baseRoute.getAlarm() != null && baseRoute.getAlarm().isAlarmEnabled() == true) {
+            fcmService.schedule(baseRoute);
+        }
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

@@ -83,7 +83,9 @@ public class BaseRouteController {
         wrapDto.setTimeList(routeDetailDto);
 
         ResponseData responseData = new ResponseData(200, startDto);
-        fcmService.schedule(baseRoute);
+        if (baseRoute.getAlarm() != null && baseRoute.getAlarm().isAlarmEnabled() == true) {
+            fcmService.schedule(baseRoute);
+        }
 
         return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
     }
