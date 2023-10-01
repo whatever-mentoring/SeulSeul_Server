@@ -36,8 +36,7 @@ public class ResultService {
     public BaseRoute getResult(Long base_route_id) throws IOException {
         // 1. SID, EID 받기
         System.out.println("baseRouteId: "+base_route_id);
-        BaseRoute baseRoute = baseRouteService.getStationIdAndName(base_route_id)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+        BaseRoute baseRoute = baseRouteService.getStationIdAndName(base_route_id);
 
         // 2. BaseRoute에 저장할 데이터 처리하는 findTransferData 부르기
         baseRouteService.findTransferData(baseRoute.getId());

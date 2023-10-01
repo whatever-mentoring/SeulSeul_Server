@@ -44,4 +44,8 @@ public class Alarm {
             this.alarmEnabled = true;
         }
     }
+
+    public void setAlarmEnabled(boolean alarmEnabled) {
+        this.alarmEnabled = false;
+    }
 }

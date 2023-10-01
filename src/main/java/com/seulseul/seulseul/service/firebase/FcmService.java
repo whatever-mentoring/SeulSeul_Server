@@ -47,6 +47,32 @@ public class FcmService {
             scheduledFuture.cancel(false);
         }
 
+        //현재시간
+        LocalTime now = LocalTime.now();
+        int hour = now.getHour();
+        int minute = now.getMinute();
+
+        //출발역에서 출발 시간
+        String[] parts = timeList[0].split(":");
+        int h=0,m=0 ;
+        if (parts.length == 2) {
+            // 시간과 분을 정수로 변환합니다.
+            h = Integer.parseInt(parts[0]);
+            m = Integer.parseInt(parts[1]);
+
+        } else {
+            System.out.println("올바른 시간 형식이 아닙니다.");
+        }
+        System.out.println(hour);
+        System.out.println(minute);
+        System.out.println(h);
+        System.out.println(m);
+
+
+        if(hour == h && minute == m) {
+            baseRoute.getAlarm().setAlarmEnabled(baseRoute.getAlarm().isAlarmEnabled());
+        }
+
         Runnable task = () -> {
             try {
                 // DB에서 최신 정보 조회
@@ -54,10 +80,6 @@ public class FcmService {
                         .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
                 if (latestBaseRoute != null && latestBaseRoute.getAlarm().isAlarmEnabled()) {
                     //cron에 의해 알림을 전송하는
-                    LocalTime now = LocalTime.now();
-                    int hour = now.getHour();
-                    int minute = now.getMinute();
-
                     System.out.println("timestamp"+now);
                     System.out.println("sendToken");
                     notificationService.sendToken(latestBaseRoute); // FCM 메시지 전송

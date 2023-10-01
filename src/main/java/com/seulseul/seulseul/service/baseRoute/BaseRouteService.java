@@ -92,15 +92,14 @@ public class BaseRouteService {
 
     // 역 ID와 역 이름 가져오기
     @Transactional(readOnly = false)
-    public Optional<BaseRoute> getStationIdAndName(Long id) throws IOException {
+    public BaseRoute getStationIdAndName(Long id) throws IOException {
         // baseRoute 객체 찾기
-        Optional<BaseRoute> baseRoute = baseRouteRepository.findById(id);
-        if (baseRoute.isEmpty()) {
-            throw new CustomException(ErrorCode.BASEROUTE_NOT_FOUND);
-        }
+        BaseRoute baseRoute = baseRouteRepository.findById(id).orElseThrow(() -> new
+                CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+
         // json 가져오기
-        String jsonString = getJson(baseRoute.get().getStartX(), baseRoute.get().getStartY(), baseRoute.get().getEndX(),
-                baseRoute.get().getEndY());
+        String jsonString = getJson(baseRoute.getStartX(), baseRoute.getStartY(), baseRoute.getEndX(),
+                baseRoute.getEndY());
         // parsing
         ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
@@ -114,7 +113,7 @@ public class BaseRouteService {
             int subPathLen = jsonDto.getResult().getPath().get(0).getSubPath().size();
             int endId = jsonDto.getResult().getPath().get(0).getSubPath().get(subPathLen - 2).getEndID();
             // 해당 디비 row에 저장
-            baseRoute.get().saveIdAndNameInfo(startId, endId, firstStation, lastStation);
+            baseRoute.saveIdAndNameInfo(startId, endId, firstStation, lastStation);
             return baseRoute;
         }
         catch (Exception e) {
