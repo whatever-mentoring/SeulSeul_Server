@@ -35,6 +35,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver # aws에서는 mysql 사용
 
   jpa:
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
