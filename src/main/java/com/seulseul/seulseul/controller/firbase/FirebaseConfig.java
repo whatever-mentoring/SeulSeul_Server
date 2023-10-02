@@ -19,44 +19,20 @@ import java.util.List;
 
 @Configuration
 public class FirebaseConfig {
-//    @Value("classpath:firebase/service-account.json")
-//    private Resource resource;
-//
-//    @PostConstruct
-//    public void initFirebase() {
-//        try {
-//            // Service Account를 이용하여 Fireabse Admin SDK 초기화
-//            InputStream serviceAccount = resource.getInputStream();
-//            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//                    .build();
-//            FirebaseApp.initializeApp(options);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-    @Bean
-    FirebaseMessaging firebaseMessaging() throws IOException {
-        ClassPathResource resource = new ClassPathResource("firebase/service-account.json");
-        InputStream refreshToken = resource.getInputStream();
+    @Value("classpath:firebase/service-account.json")
+    private Resource resource;
 
-        FirebaseApp firebaseApp = null;
-        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
-
-        if(firebaseAppList != null && !firebaseAppList.isEmpty()) {
-            for (FirebaseApp app : firebaseAppList) {
-                if (firebaseApp.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
-                    firebaseApp = app;
-                }
-            }
-        }
-        else {
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(refreshToken))
+    @PostConstruct
+    public void initFirebase() {
+        try {
+            // Service Account를 이용하여 Fireabse Admin SDK 초기화
+            InputStream serviceAccount = resource.getInputStream();
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
-
-            firebaseApp = FirebaseApp.initializeApp(options);
+            FirebaseApp.initializeApp(options);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return FirebaseMessaging.getInstance(firebaseApp);
     }
 }
