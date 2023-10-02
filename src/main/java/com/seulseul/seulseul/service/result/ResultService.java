@@ -33,6 +33,7 @@ public class ResultService {
     private final UserRepository userRepository;
     private final BaseRouteRepository baseRouteRepository;
 
+    @Transactional
     public BaseRoute getResult(Long base_route_id) throws IOException {
         // 1. SID, EID 받기
         System.out.println("baseRouteId: "+base_route_id);
@@ -48,6 +49,7 @@ public class ResultService {
         return baseRoute;
     }
 
+    @Transactional
     public RouteDetailDto getRouteDetail(BaseRoute baseRoute) throws JsonProcessingException {
         // 4. 사용자가 역을 타는데 필요한 시간들 가져오기
         RouteDetailDto routeDetailDto = routeDetailService.routeDetailFromBaseRoute(baseRoute.getId());
