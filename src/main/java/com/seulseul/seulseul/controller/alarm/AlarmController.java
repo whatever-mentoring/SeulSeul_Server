@@ -46,6 +46,8 @@ public class AlarmController {
 
         //알람 저장
         AlarmDto alarmDto = alarmService.saveAlarm(dto, user);
+        System.out.println("alarmDto : " + alarmDto);
+        System.out.println("baseroute(alarm) : " + baseRoute);
 
         //<추가>baseRoute 경로 설정
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
