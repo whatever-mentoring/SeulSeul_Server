@@ -64,8 +64,11 @@ public class AlarmController {
         }
         wrapDto.setTimeList(routeDetailDto);
 
-        ResponseData responseData = new ResponseData(200, alarmDto);
+        System.out.println("schedule start");
         fcmService.schedule(baseRoute);
+        System.out.println("schedule end");
+
+        ResponseData responseData = new ResponseData(200, alarmDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
@@ -89,10 +92,11 @@ public class AlarmController {
         }
         wrapDto.setTimeList(routeDetailDto);
 
-        ResponseData responseData = new ResponseData(200, alarmDto);
         if (baseRoute.getAlarm().isAlarmEnabled() == true) {
             fcmService.schedule(baseRoute);
         }
+        ResponseData responseData = new ResponseData(200, alarmDto);
+
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 

@@ -14,6 +14,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -70,7 +71,8 @@ public class FcmService {
 
 
         if(hour == h && minute == m) {
-            baseRoute.getAlarm().setAlarmEnabled(baseRoute.getAlarm().isAlarmEnabled());
+            System.out.println("done");
+            baseRoute.getAlarm().setAlarmEnabled();
         }
 
         Runnable task = () -> {

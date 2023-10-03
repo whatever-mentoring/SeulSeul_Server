@@ -68,26 +68,25 @@ public class EndPosController {
         System.out.println("dto: "+dto);
         System.out.println("baseRoute: "+baseRoute);
 
-        //<추가>baseRoute 경로 설정
-        RouteDetailDto routeDetailDto = new RouteDetailDto();
-        routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
-        RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
-        // RouteDetail DB에 저장
-        RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
-        // 환승이 있으면
-        if (routeDetailDto.getExName() != null) {
-            wrapDto.setBodyExList(routeDetailDto);
-        }
-        // 환승이 없으면
-        else {
-            wrapDto.setBodyList(routeDetailDto);
-        }
-        wrapDto.setTimeList(routeDetailDto);
-
-        ResponseData responseData = new ResponseData(200, dto);
         if (baseRoute.getAlarm() != null && baseRoute.getAlarm().isAlarmEnabled() == true) {
+            //<추가>baseRoute 경로 설정
+            RouteDetailDto routeDetailDto = new RouteDetailDto();
+            routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+            RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
+            // RouteDetail DB에 저장
+            RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
+            // 환승이 있으면
+            if (routeDetailDto.getExName() != null) {
+                wrapDto.setBodyExList(routeDetailDto);
+            }
+            // 환승이 없으면
+            else {
+                wrapDto.setBodyList(routeDetailDto);
+            }
+            wrapDto.setTimeList(routeDetailDto);
             fcmService.schedule(baseRoute);
         }
+        ResponseData responseData = new ResponseData(200, dto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }
