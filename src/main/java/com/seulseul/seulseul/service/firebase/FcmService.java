@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
+import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
@@ -72,7 +73,7 @@ public class FcmService {
 
         if(hour == h && minute == m) {
             System.out.println("done");
-            baseRoute.getAlarm().setAlarmEnabled();
+            alarmEnabledFalse(baseRoute.getAlarm());
         }
 
         Runnable task = () -> {
@@ -127,5 +128,10 @@ public class FcmService {
         LocalTime now = LocalTime.now();
 
         return "0 "+ resultM + "/" + minutesInterval + " " + resultH + " * * ?";
+    }
+
+    @Transactional
+    public void alarmEnabledFalse(Alarm alarm) {
+        alarm.setAlarmEnabled();
     }
 }
