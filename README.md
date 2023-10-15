@@ -27,18 +27,82 @@
 ## 🚉 Structure
 
 ```markdown
-src/main
-├── main
-|     ├── java
-|     |
-|     └── resources
-
+src.main
+├── java
+|     └── com.seulseul.seulseul
+|                ├── config
+|                |      ├── CustomException
+|                |      ├── CustomExceptionHandler
+|                |      └── ErrorCode
+|                |
+|                ├── controller  
+|                |      ├── alarm
+|                |      ├── android   
+|                |      ├── baseRoute
+|                |      ├── endPos
+|                |      ├── firebase
+|                |      ├── stopTimeList
+|                |      ├── transferInfo  
+|                |      └── user
+|                |
+|                ├── dto
+|                |      ├── alarm
+|                |      ├── android   
+|                |      ├── baseRoute
+|                |      ├── endPos
+|                |      ├── firebase
+|                |      ├── Response
+|                |      ├── stopTimeList
+|                |      ├── transferInfo  
+|                |      └── user
+|                |
+|                ├── entity 
+|                |      ├── alarm
+|                |      ├── android   
+|                |      ├── baseRoute
+|                |      ├── endPos
+|                |      ├── stopTimeList
+|                |      ├── transferInfo  
+|                |      ├── user
+|                |      ├── ApiKey
+|                |      └── TokenKey
+|                |
+|                ├── repository
+|                |      ├── alarm
+|                |      ├── android   
+|                |      ├── baseRoute
+|                |      ├── endPos
+|                |      ├── stopTimeList
+|                |      ├── transferInfo  
+|                |      └── user
+|                |
+|                ├── service
+|                |      ├── alarm
+|                |      ├── android   
+|                |      ├── baseRoute
+|                |      ├── endPos
+|                |      ├── firebase
+|                |      ├── result
+|                |      ├── stopTimeList
+|                |      ├── transferInfo  
+|                |      └── user
+|                |
+|                └── SeulseulApplication
+|     
+└── resources
+       ├── firebase
+       |       └── service-account.json
+       |    
+       ├── application.yml
+       ├── application-API-KEY.properties
+       ├── application-aws.yml
+       └── application-token.properties
 ```
 
 
 ## 🚉 Architecture
 
-## 🚉 Tech Skill
+## 🚉 Tech Stack
 
 Language: Java
 
