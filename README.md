@@ -29,6 +29,6 @@
 <br>
 
 ## 4. Contributor
-|<img width=150 src="https://user-images.githubusercontent.com/85485290/191734505-e5be8b0d-86e7-48f1-a673-716ff00272a0.png" />|<img width=150 src="https://user-images.githubusercontent.com/110798031/212794861-ee4da79b-8989-4bbe-8b6e-8c661e73fcd8.png" />
+|<img width=150 src="https://avatars.githubusercontent.com/u/125520029?v=4" />|<img width=150 src="https://user-images.githubusercontent.com/110798031/212794861-ee4da79b-8989-4bbe-8b6e-8c661e73fcd8.png" />
 |:----:|:----:|
 | [박서연](https://github.com/seoyeon0201) | [주다애](https://github.com/jooda00)
