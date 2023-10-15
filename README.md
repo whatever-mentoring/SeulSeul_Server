@@ -1,19 +1,17 @@
 ![image](https://media.discordapp.net/attachments/1143088443224772680/1163125169766805574/6fefef5562b75d85.jpg?ex=653e6fba&is=652bfaba&hm=0b08d0a7401d80e45f7007ad7a04c9ec1e9bf784f60cc7f650818083daa1e698&=&width=1193&height=671)
 
 
-## 1. Introduce 
+## 🚉 Introduce 
 
-**🚉 지하철 막차를 놓치지 않도록 알림 서비스를 제공합니다.**
-<br>
+지하철 막차를 놓치지 않도록 알림 서비스를 제공합니다.
 
-**🚉 항상 아슬아슬하게 타거나 막차를 놓쳤던 당신!**
-<br>
+항상 아슬아슬하게 타거나 막차를 놓쳤던 당신!
 
-**🚉 슬슬을 통해 여유있고 안전한 귀가를 경험해보세요.**
-<br>
+슬슬을 통해 여유있고 안전한 귀가를 경험해보세요.
 
 
-## 2. Core Function
+
+## 🚉 Core Function
 
 |목적지 설정|알림 설정|경로 안내|알림 온 오프|알림 수신|
 |-----------|---------|--------|--------|--------|
@@ -22,13 +20,13 @@
 
 
 
+
+
+## 🚉 Architecture
+
 <br>
 
-## 3. Architecture
-
-<br>
-
-## 4. Contributor
+## 🚉 Contributor
 |<img width=150 src="https://avatars.githubusercontent.com/u/125520029?v=4" />|<img width=150 src="https://avatars.githubusercontent.com/u/68958749?v=4" />
 |:----:|:----:|
 | [박서연](https://github.com/seoyeon0201) | [주다애](https://github.com/jooda00)
