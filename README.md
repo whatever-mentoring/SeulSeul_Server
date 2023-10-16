@@ -94,6 +94,8 @@ src.main
 
 
 ## 🚉 Architecture
+![KakaoTalk_20231016_170308654](https://github.com/whatever-mentoring/SeulSeul_Server/assets/68958749/b69f2577-10ec-455b-8aad-4f057695dc47)
+
 
 ## 🚉 Tech Stack
 
