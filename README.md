@@ -88,7 +88,6 @@ src.main
                 |      └── user
                 |
                 └── SeulseulApplication
-     
 
 ```
 
@@ -108,6 +107,8 @@ Database: AWS RDS (MySQL)
 Deploy: AWS EC2
 
 ## 🚉 시연 영상
+
+develop branch's commit 88cdb7702a145cfeccdd1b8f2645e694a7f720d9
 
 <https://youtu.be/K_m05GKCufQ?si=N9H8KQdBQ5DJ1u65>
 
