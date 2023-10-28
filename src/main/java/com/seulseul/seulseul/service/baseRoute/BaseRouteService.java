@@ -125,7 +125,6 @@ public class BaseRouteService {
     @Transactional(readOnly = false)
     public String getFromAPI(int SID, int EID) throws IOException {
         //1. API 연결
-
         String urlInfo = "https://api.odsay.com/v1/api/subwayPath?lang=0&CID=1000&SID="+ SID +"&EID="+ EID +"&Sopt=2&apiKey=" + URLEncoder.encode(apiKey.getApiKey(), "UTF-8");
 
         // http 연결

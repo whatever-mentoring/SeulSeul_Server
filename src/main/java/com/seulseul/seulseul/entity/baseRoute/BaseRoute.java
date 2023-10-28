@@ -150,14 +150,4 @@ public class BaseRoute {
         this.exWalkTime = null;
     }
 
-    //entity -> dto 변환
-    public BaseRouteDto toDto(BaseRoute entity) {
-        BaseRouteDto dto = new BaseRouteDto();
-        dto.setStartX(entity.getStartX());
-        dto.setStartY(entity.getStartY());
-        dto.setEndX(entity.getEndX());
-        dto.setEndY(entity.getEndY());
-        return dto;
-    }
-
 }

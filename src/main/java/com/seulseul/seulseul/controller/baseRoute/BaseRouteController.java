@@ -43,14 +43,6 @@ public class BaseRouteController {
     private final UpdateResultService updateResultService;
     private final FcmService fcmService;
 
-//    @GetMapping("/transfer/{id}")
-//    public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id) throws IOException {
-//        Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
-//        BaseRoute result = baseRouteService.findTransferData(baseRoute.get().getId());
-//        ResponseData responseData = new ResponseData(200, result);
-//        return new ResponseEntity<>(responseData, HttpStatus.OK);
-//    }
-
     @PostMapping("/v1/start")
     public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto, @RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);

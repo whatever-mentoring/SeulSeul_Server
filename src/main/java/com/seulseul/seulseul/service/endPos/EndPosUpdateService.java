@@ -21,9 +21,6 @@ public class EndPosUpdateService {
     @Transactional(readOnly = false)
     public void updateCurrentEndPos(EndPos endPos, BaseRoute baseRoute) throws IOException, ParseException {
         baseRoute.updateEndCoordination(endPos.getEndX(), endPos.getEndY());
-//        computeResultService.computeTime(baseRoute.getUser());
-        // 디비 변경
-        // 오디세이 api 불러와서 디비 업데이트
-//        updateResultService.getUpdatedResult(baseRoute.getId());
+
     }
 }

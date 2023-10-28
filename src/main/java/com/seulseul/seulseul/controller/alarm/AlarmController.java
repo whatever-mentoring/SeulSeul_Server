@@ -46,13 +46,11 @@ public class AlarmController {
 
         //알람 저장
         AlarmDto alarmDto = alarmService.saveAlarm(dto, user);
-        System.out.println("alarmDto : " + alarmDto);
-        System.out.println("baseroute(alarm) : " + baseRoute);
 
         //<추가>baseRoute 경로 설정
         RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
         RouteDetailDto routeDetailDto = computeResultService.computeTime(baseRoute.getId());
-        System.out.println("routeD: "+routeDetailDto);
+
         // RouteDetail DB에 저장
         RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
 
@@ -66,9 +64,7 @@ public class AlarmController {
         }
         wrapDto.setTimeList(routeDetailDto);
 
-        System.out.println("schedule start");
         fcmService.schedule(baseRoute);
-        System.out.println("schedule end");
 
         ResponseData responseData = new ResponseData(200, alarmDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);

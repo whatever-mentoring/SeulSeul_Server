@@ -36,9 +36,7 @@ public class UserService {
     @Transactional
     public void saveToken(User user, FCMDto fcmDto) {
         UserDto userDto = new UserDto();
-//        userDto.setUuid(user.getUuid());
         userDto.setToken(fcmDto.getToken());
-//        userRepository.saveAndFlush(new User(userDto.getUuid(), userDto.getToken()));
         user.updateToken(userDto.getToken());
     }
 }

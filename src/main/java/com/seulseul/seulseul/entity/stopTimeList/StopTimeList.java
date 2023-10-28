@@ -24,21 +24,10 @@ public class StopTimeList {
     private Long baseRouteId;
     private String time;
 
-//    public StopTimeList(List<String> timeList) {
-//        this.time = timeList;
-//    }
-
-
     public void update(Long id, Integer stationId,String timeList) {
         this.baseRouteId = id;
         this.stationId = stationId;
         this.time = timeList;
     }
-
-
-//    public void update(List<Integer> hourList, List<String> minuteList) {
-//        this.SIDIdx = hourList;
-//        this.SIDList = minuteList;
-//    }
 
 }

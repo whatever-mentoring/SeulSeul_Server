@@ -36,12 +36,8 @@ public class FcmService {
     public void schedule(BaseRoute baseRoute) throws JsonProcessingException {
 
         String[] timeList = extractTimes(baseRoute.getRouteDetail().getTimeList());
-        System.out.println("timeList: "+timeList[0]);
-//        String[] timeList = objectMapper.readValue(baseRoute.getRouteDetail().getTimeList(), String[].class);
 
         String cronExpression = convertToCron(timeList[0], Math.toIntExact(baseRoute.getAlarm().getAlarmTime()), baseRoute.getAlarm().getAlarmTerm()); // DB에서 alarmTerm을 가져와서 cron 표현식으로 변환
-
-        System.out.println("cronExpression: "+cronExpression);
 
         CronTrigger cronTrigger = new CronTrigger(cronExpression);
 
@@ -72,7 +68,6 @@ public class FcmService {
 
 
         if(hour == h && minute == m) {
-            System.out.println("done");
             alarmEnabledFalse(baseRoute.getAlarm());
         }
 
@@ -83,8 +78,6 @@ public class FcmService {
                         .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
                 if (latestBaseRoute != null && latestBaseRoute.getAlarm().isAlarmEnabled()) {
                     //cron에 의해 알림을 전송하는
-                    System.out.println("timestamp"+now);
-                    System.out.println("sendToken");
                     notificationService.sendToken(latestBaseRoute); // FCM 메시지 전송
                 }
             } catch (FirebaseMessagingException e) {

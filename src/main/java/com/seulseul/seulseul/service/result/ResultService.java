@@ -35,7 +35,6 @@ public class ResultService {
 
     public BaseRoute getResult(Long base_route_id) throws IOException {
         // 1. SID, EID 받기
-        System.out.println("baseRouteId: "+base_route_id);
         BaseRoute baseRoute = baseRouteService.getStationIdAndName(base_route_id);
 
         // 2. BaseRoute에 저장할 데이터 처리하는 findTransferData 부르기
@@ -43,8 +42,6 @@ public class ResultService {
 
         // 3. 역마다 도착하는 시간 리스트로 가져오기
         StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(baseRoute.getId());
-//        StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(baseRoute);
-        System.out.println("stopTimeLIst: "+stopTimeList);
         return baseRoute;
     }
 

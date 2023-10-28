@@ -43,23 +43,8 @@ public class RouteDetailService {
         //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
         ObjectMapper objectMapper = new ObjectMapper();
 
-//        String[] getLaneName = objectMapper.readValue(baseRoute.getLaneName(), String[].class);
-//        String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
-//        String[] getTravelTime = objectMapper.readValue(baseRoute.getTravelTime(), String[].class);
-//
-//        String getLaneNameString = String.join(" ", getLaneName);
-//        String getWayNameString = String.join(" ", getWayName);
-//        String getTravelTimeString = String.join(" ", getTravelTime);
 
         if (baseRoute.getExSID1() != null) {
-//            String[] getExName = objectMapper.readValue(baseRoute.getExName(), String[].class);
-//            String[] getExWalkTime = objectMapper.readValue(baseRoute.getExWalkTime(), String[].class);
-//            String[] getFastTrain = objectMapper.readValue(baseRoute.getFastTrainDoor(), String[].class);
-//
-//            String getExNameString = String.join(" ", getExName);
-//            String getExWalkTimeString = String.join(" ", getExWalkTime);
-//            String getFastTrainString = String.join(" ", getFastTrain);
-
             detailDto.updateFromBaseRoute(baseRoute.getFirstStation(), baseRoute.getLastStation(), baseRoute.getExName(), baseRoute.getExWalkTime(), baseRoute.getFastTrainDoor(), baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
         } else {
             detailDto.updateFromBaseRouteOnly(baseRoute.getFirstStation(), baseRoute.getLastStation(),baseRoute.getLaneName(),baseRoute.getWayName(), baseRoute.getTravelTime());
@@ -121,7 +106,6 @@ public class RouteDetailService {
 
         //도착역 -> 환승역(존재하는경우) -> 출발역
         for (int i=stopTimeLists.size()-1; i>=0; i--) {
-            System.out.println(stopTimeLists.get(i));
             lst = stopTimeLists.get(i);
             time = lst.getTime();
             timeList2 = objectMapper.readValue(time, String[].class);
@@ -178,7 +162,6 @@ public class RouteDetailService {
                 //현재역과 직전역의 시간 비교
                 while (true) {
                     //현재 역에서의 시간
-                    System.out.println("index"+index);
                     current = timeList2[index];
                     // 콜론을 기준으로 문자열을 분리
                     String[] p = current.split(":");

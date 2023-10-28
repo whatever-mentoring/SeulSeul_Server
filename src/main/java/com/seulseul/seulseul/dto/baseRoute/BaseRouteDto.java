@@ -37,14 +37,4 @@ public class BaseRouteDto {
 
     private Alarm alarm;
 
-    //dto -> entity 변환
-//    public BaseRoute toEntity(BaseRouteDto dto) {
-//        BaseRoute entity = new BaseRoute();
-//        entity.setId(dto.getId());
-//        entity.setStartX(dto.getStartX());
-//        entity.setStartY(dto.getStartY());
-//        entity.setEndX(dto.getEndX());
-//        entity.setEndY(dto.getEndY());
-//        return entity;
-//    }
 }

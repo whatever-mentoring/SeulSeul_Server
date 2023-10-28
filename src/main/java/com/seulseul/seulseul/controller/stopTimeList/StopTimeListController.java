@@ -22,25 +22,6 @@ import java.io.IOException;
 public class StopTimeListController {
     private final StopTimeListService stopTimeListService;
 
-
-
-//    @GetMapping("/stopTimeList/{id}")
-//    public ResponseEntity<ResponseData> findTransfer(@PathVariable Long id, @RequestHeader("Auth") UUID uuid) throws IOException {
-//        //id를 통해 해당 baseRoute 찾기
-//        Optional<BaseRoute> baseRoute = baseRouteService.getStationIdAndName(id);
-//        //출발역과 환승역, 목적지 역의 정차시간 가져오기
-//        //출발역
-//        stopTimeListService.getStopTimeListFromAPI(baseRoute.get().getSID(),baseRoute.get().getWayCode().get(0));
-//        //환승역 하나의 경우
-//        stopTimeListService.getStopTimeListFromAPI(baseRoute.get().getExSID().get(0),baseRoute.get().getWayCode().get(0));
-//        stopTimeListService.getStopTimeListFromAPI(baseRoute.get().getExSID().get(0),baseRoute.get().getWayCode().get(1));
-//        //목적지역
-//        stopTimeListService.getStopTimeListFromAPI(baseRoute.get().getEID(),baseRoute.get().getWayCode().get(1));
-//
-//        ResponseData responseData = new ResponseData(200, result);
-//        return new ResponseEntity<>(responseData, HttpStatus.OK);
-//    }
-
     @PostMapping("/stopTimeList/{id}")
     public ResponseEntity<ResponseData> findStopTimeList(@PathVariable Long id) throws IOException {
         StopTimeList stopTimeList = stopTimeListService.findStopTimeListData(id);

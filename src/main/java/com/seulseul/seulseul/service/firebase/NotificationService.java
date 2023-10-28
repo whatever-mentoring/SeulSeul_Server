@@ -54,17 +54,6 @@ public class NotificationService {
             resultM += 60;
         }
 
-
-//        if (original >= 60) {
-//            if (original%60 == 0) {
-//                alarmTime = original/60 +"시간 " + "00분";
-//            } else {
-//                alarmTime = original/60 +"시간 " + original%60 + "분";
-//            }
-//        } else {
-//            alarmTime = original + "분";
-//        }
-
         String body = "";
         if (resultH == 0) {
             body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
@@ -72,9 +61,6 @@ public class NotificationService {
         else {
             body = "마지막 위치 "+ pos + "역을 기준으로 "+ resultH+ "시간 "+ resultM +"분" +" 뒤에 막차가 끊깁니다!";
         }
-
-        System.out.println("body: "+body);
-        System.out.println("timestamp: "+now);
 
         // See documentation on defining a message payload.
         Message message = Message.builder()

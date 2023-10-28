@@ -52,9 +52,7 @@ public class EndPosController {
     @GetMapping("/v1/end")
     public ResponseEntity<ResponseData> getAllEndPos(@RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
         User user = userService.getUserByUuid(uuid);
-
         List<EndPos> endPosList = endPosService.getAllEndPos(user);
-
         ResponseData responseData = new ResponseData(200, endPosList);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
@@ -65,8 +63,6 @@ public class EndPosController {
         User user = userService.getUserByUuid(uuid);
         BaseRoute baseRoute = baseRouteService.findByUser(user);
         EndPosResDto dto = endPosService.getEndPos(id, user);
-        System.out.println("dto: "+dto);
-        System.out.println("baseRoute: "+baseRoute);
 
         if (baseRoute.getAlarm() != null && baseRoute.getAlarm().isAlarmEnabled() == true) {
             //<추가>baseRoute 경로 설정

@@ -31,6 +31,7 @@ public class AlarmService {
         Alarm alarm = alarmRepository.save(new Alarm(dto.getAlarmTime(), dto.getAlarmTerm()));
         // 경로에도 저장해주기(oneToOne이므로)
         baseRoute.saveAlarmInfo(alarm);
+
         return new AlarmDto(alarm);
     }
 
