@@ -107,6 +107,10 @@ Database: AWS RDS (MySQL)
 
 Deploy: AWS EC2
 
+## 🚉 시연 영상
+
+<https://youtu.be/K_m05GKCufQ?si=N9H8KQdBQ5DJ1u65>
+
 ## 🚉 Contributor
 |<img width=150 src="https://avatars.githubusercontent.com/u/125520029?v=4" />|<img width=150 src="https://avatars.githubusercontent.com/u/68958749?v=4" />
 |:----:|:----:|
