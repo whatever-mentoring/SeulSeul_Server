@@ -21,7 +21,12 @@
 
 |목적지 설정|알림 설정|경로 안내|알림 온 오프|알림 수신|
 |-----------|---------|--------|--------|--------|
-|![](https://media.discordapp.net/attachments/1143088443224772680/1163127279363313674/2.png?ex=653e71b1&is=652bfcb1&hm=2139b369609fff6e0e9cc9d1a73f1f01808f480e21e6f5903559a2512212410f&=&width=377&height=670)|![](https://media.discordapp.net/attachments/1143088443224772680/1163127279845654558/3.png?ex=653e71b1&is=652bfcb1&hm=9d5b04f2eabe386af671e7dd3f7a9bbcece6b1000f712aa85014e6840b3e28ba&=&width=377&height=670)|![](https://media.discordapp.net/attachments/1143088443224772680/1163127280273477654/4.png?ex=653e71b1&is=652bfcb1&hm=7b65f98781b0f99556e8f699260d36a2d47f04cb3f33f4e9a6409e2bab730843&=&width=377&height=670)|![](https://media.discordapp.net/attachments/1143088443224772680/1163127280692895785/5.png?ex=653e71b1&is=652bfcb1&hm=5c72c6e9aca7e4f968803f100bdae80250bf4275f879d5348a65cba7fde8b50d&=&width=377&height=670)|![](https://media.discordapp.net/attachments/1143088443224772680/1163129626344828969/6.png?ex=653e73e0&is=652bfee0&hm=c0dc5af139b01eb1c5e3a0439d7dcd997a326b9f8c68b22dd453e96c899899cb&=&width=377&height=670)
+|![목적지설정](https://github.com/whatever-mentoring/SeulSeul_Server/assets/125520029/aad9a67a-03b2-431f-92ab-1d3c6fa2aaf5)|![알림설정](https://github.com/whatever-mentoring/SeulSeul_Server/assets/125520029/3a05d88f-b061-45f1-a347-ca86654f353e)|![경로안내](https://github.com/whatever-mentoring/SeulSeul_Server/assets/125520029/016a03c8-0943-4bab-ad01-96ce5e009035)|![알림온오프](https://github.com/whatever-mentoring/SeulSeul_Server/assets/125520029/6d17999f-03cc-4dd0-b461-67de1815e0e0)|![알림수신](https://github.com/whatever-mentoring/SeulSeul_Server/assets/125520029/4d0db273-dfc6-4128-b3d6-dbba51329f5e)
+
+
+
+
+
 
 
 ## 🚉 Structure
