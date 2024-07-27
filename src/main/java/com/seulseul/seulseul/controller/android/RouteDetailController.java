@@ -1,15 +1,11 @@
 package com.seulseul.seulseul.controller.android;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
 import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
-import com.seulseul.seulseul.repository.user.UserRepository;
-import com.seulseul.seulseul.service.alarm.AlarmService;
 import com.seulseul.seulseul.service.android.RouteDetailService;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import com.seulseul.seulseul.service.result.ComputeResultService;
@@ -19,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
