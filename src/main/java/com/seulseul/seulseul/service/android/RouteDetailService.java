@@ -371,7 +371,6 @@ public class RouteDetailService {
         String resultT = objectMapper.writeValueAsString(timeList);
 
         detailDto.updateTimeList(resultT, totalTime);
-        System.out.println(detailDto);
         return detailDto;
     }
 

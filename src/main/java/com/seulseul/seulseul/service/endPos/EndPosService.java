@@ -44,8 +44,6 @@ public class EndPosService {
         */
         if (baseRouteRepository.findByUser(user).isEmpty()) {
             BaseRouteDto baseRouteDto = new BaseRouteDto();
-            // baseRouteDto.setId(endPos.getId()); // 변경해야할듯
-//            System.out.println(endPos.getId());
             baseRouteDto.setEndX(endPosDto.getEndX());
             baseRouteDto.setEndY(endPosDto.getEndY());
             baseRouteDto.setUser(user);
