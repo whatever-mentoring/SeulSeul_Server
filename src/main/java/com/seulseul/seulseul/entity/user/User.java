@@ -1,12 +1,13 @@
 package com.seulseul.seulseul.entity.user;
 
-import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
