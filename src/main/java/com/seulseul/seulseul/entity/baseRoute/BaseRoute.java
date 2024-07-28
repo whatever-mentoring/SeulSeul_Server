@@ -1,13 +1,14 @@
 package com.seulseul.seulseul.entity.baseRoute;
 
-import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
+import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
@@ -33,7 +34,6 @@ public class BaseRoute {
 
     @Column(name="EID")
     private int EID;
-
 
     // 출발역 이름
     private String firstStation;
@@ -110,7 +110,6 @@ public class BaseRoute {
 //     대중교통 길찾기 API
     public void update(String laneNameList, String wayCodeList, String wayNameList, String exNameList, String exSIDList1, String exSIDList2, String fastTrainDoorList, String exWalkTimeList, String travelTime) {
         this.laneName = laneNameList;
-
         this.laneName = laneNameList;
         this.wayCode = wayCodeList;
         this.wayName = wayNameList;

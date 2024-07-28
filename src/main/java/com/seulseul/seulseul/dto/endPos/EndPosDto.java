@@ -1,9 +1,5 @@
 package com.seulseul.seulseul.dto.endPos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteDto;
-import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
-import com.seulseul.seulseul.entity.endPos.EndPos;
 import lombok.*;
 
 @ToString
@@ -22,6 +18,4 @@ public class EndPosDto {
     private String roadNameAddress;
 
     private String jibunAddress;
-
-
 }

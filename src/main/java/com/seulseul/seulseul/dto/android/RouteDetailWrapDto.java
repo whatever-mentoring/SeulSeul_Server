@@ -106,7 +106,6 @@ public class RouteDetailWrapDto {
         this.bodyList = new ArrayList<>(); // bodyList를 먼저 초기화
         String[] timeList = extractTimes(routeDetailDto.getTimeList());
 
-
         int timeSize = timeList.length;
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -119,7 +118,6 @@ public class RouteDetailWrapDto {
 
         Map<String, Object> map = new LinkedHashMap<>();
 
-
         map.put("firstStation", routeDetailDto.getFirstStation());
         map.put("lastStation", routeDetailDto.getLastStation());
         map.put("laneName", laneName[0]);
@@ -128,6 +126,5 @@ public class RouteDetailWrapDto {
         map.put("arriveTime", timeList[timeSize-1]);
         dataMap.put("data", map);
         this.bodyList.add(dataMap);
-
     }
 }

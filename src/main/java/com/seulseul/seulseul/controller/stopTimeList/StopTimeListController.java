@@ -2,7 +2,6 @@ package com.seulseul.seulseul.controller.stopTimeList;
 
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
-import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
 import com.seulseul.seulseul.service.stopTimeList.StopTimeListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

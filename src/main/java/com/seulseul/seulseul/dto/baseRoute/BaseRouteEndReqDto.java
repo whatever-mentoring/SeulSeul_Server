@@ -1,6 +1,5 @@
 package com.seulseul.seulseul.dto.baseRoute;
 
-import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import lombok.*;
 
 @ToString

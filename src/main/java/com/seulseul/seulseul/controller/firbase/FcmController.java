@@ -4,18 +4,15 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.seulseul.seulseul.dto.Response.ResponseData;
-//import com.seulseul.seulseul.dto.firebase.RequestDTO;
 import com.seulseul.seulseul.dto.firebase.FCMDto;
 import com.seulseul.seulseul.entity.TokenKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
-//import com.seulseul.seulseul.service.firebase.FirebaseCloudMessageService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,7 +33,6 @@ public class FcmController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
-//    @Scheduled(cron = "0 0/2 * * * ?", zone = "Asia/Seoul")
     @RequestMapping("/send/token")
     public String sendToToken(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException {
         User user = userService.getUserByUuid(uuid);

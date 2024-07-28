@@ -18,17 +18,13 @@ import java.text.ParseException;
 @Service
 @RequiredArgsConstructor
 public class BaseRouteStartService {
-
     private final BaseRouteRepository baseRouteRepository;
-    private final UpdateResultService updateResultService;
-    private final BaseRouteService baseRouteService;
 
     // 현재 위치 변경하기
     @Transactional
     public BaseRouteStartDto updateStartInfo(BaseRouteStartUpdateDto dto, User user) throws IOException, ParseException {
         BaseRoute baseRoute = baseRouteRepository.findByIdAndUser(dto.getId(), user)
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
-        int sid = baseRoute.getSID();
         baseRoute.updateStartCoordination(dto.getStartX(), dto.getStartY());
         return new BaseRouteStartDto(dto.getId(), dto.getStartX(), dto.getStartY(), baseRoute.getDayInfo());
     }

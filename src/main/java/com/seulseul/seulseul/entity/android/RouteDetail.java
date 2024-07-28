@@ -1,9 +1,6 @@
 package com.seulseul.seulseul.entity.android;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
-import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

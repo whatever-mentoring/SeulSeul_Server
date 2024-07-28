@@ -2,7 +2,6 @@ package com.seulseul.seulseul.service.result;
 
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
-import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.service.android.RouteDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

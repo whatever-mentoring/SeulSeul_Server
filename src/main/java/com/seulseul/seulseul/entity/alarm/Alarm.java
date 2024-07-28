@@ -1,6 +1,5 @@
 package com.seulseul.seulseul.entity.alarm;
 
-import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

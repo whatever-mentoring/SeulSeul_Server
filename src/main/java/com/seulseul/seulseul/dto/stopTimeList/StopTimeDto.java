@@ -1,7 +1,6 @@
 package com.seulseul.seulseul.dto.stopTimeList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteTransferDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

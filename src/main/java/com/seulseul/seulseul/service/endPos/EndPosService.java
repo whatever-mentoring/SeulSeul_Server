@@ -44,8 +44,6 @@ public class EndPosService {
         */
         if (baseRouteRepository.findByUser(user).isEmpty()) {
             BaseRouteDto baseRouteDto = new BaseRouteDto();
-            // baseRouteDto.setId(endPos.getId()); // 변경해야할듯
-//            System.out.println(endPos.getId());
             baseRouteDto.setEndX(endPosDto.getEndX());
             baseRouteDto.setEndY(endPosDto.getEndY());
             baseRouteDto.setUser(user);
@@ -82,7 +80,6 @@ public class EndPosService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
         // 이제 BaseRoute 업데이트 해줘야 함 -> 트랜잭션 필요 -> 다른 서비스로 넘기자 -> EndPosUpdateService
         baseRoute.updateEndCoordination(endPos.getEndX(), endPos.getEndY());
-//        endPosUpdateService.updateCurrentEndPos(endPos, baseRoute);
         return new EndPosResDto(endPos, baseRoute.getId());
     }
 }

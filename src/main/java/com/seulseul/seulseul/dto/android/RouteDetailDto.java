@@ -2,8 +2,6 @@ package com.seulseul.seulseul.dto.android;
 
 import lombok.*;
 
-import java.util.List;
-
 @ToString
 @Getter //dto.get() 사용 가능
 @Setter //dto.set() 사용 가능
@@ -25,11 +23,7 @@ public class RouteDetailDto {
     private String timeList;
     private String totalTime;
 
-
-    //firstStation, lastStation, exName, exWalkTime, fastTrainDoor, laneName, wayName
-
     public void updateFromBaseRoute(String firstStation, String lastStation, String exName, String exWalkTime, String fastTrainDoor, String laneName, String wayName, String travelTime) {
-
         this.firstStation = firstStation;
         this.lastStation = lastStation;
         this.exName = exName;

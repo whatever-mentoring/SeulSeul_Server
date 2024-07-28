@@ -1,12 +1,9 @@
 package com.seulseul.seulseul.service.result;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.seulseul.seulseul.config.CustomException;
-import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
-import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.user.UserRepository;
 import com.seulseul.seulseul.service.android.RouteDetailService;
@@ -15,12 +12,8 @@ import com.seulseul.seulseul.service.stopTimeList.StopTimeListService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

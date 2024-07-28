@@ -2,7 +2,6 @@ package com.seulseul.seulseul.dto.baseRoute;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seulseul.seulseul.entity.alarm.Alarm;
-import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import lombok.*;
 
@@ -36,5 +35,4 @@ public class BaseRouteDto {
     private User user;
 
     private Alarm alarm;
-
 }

@@ -3,10 +3,7 @@ package com.seulseul.seulseul.service.firebase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.seulseul.seulseul.entity.TokenKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
-import com.seulseul.seulseul.service.baseRoute.BaseRouteService;
-import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +14,6 @@ import static com.seulseul.seulseul.dto.android.RouteDetailWrapDto.extractTimes;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private final UserService userService;
-    private final BaseRouteService baseRouteService;
 
     public String sendToken(BaseRoute baseRoute) throws FirebaseMessagingException {
         String pos = baseRoute.getFirstStation();
