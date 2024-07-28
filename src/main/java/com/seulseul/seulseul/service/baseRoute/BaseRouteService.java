@@ -3,13 +3,12 @@ package com.seulseul.seulseul.service.baseRoute;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
-import com.seulseul.seulseul.dto.alarm.AlarmDto;
-import com.seulseul.seulseul.dto.alarm.AlarmReqDto;
-import com.seulseul.seulseul.dto.baseRoute.*;
-import com.seulseul.seulseul.dto.firebase.FCMDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteJsonDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartReqDto;
+import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
 import com.seulseul.seulseul.entity.ApiKey;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
@@ -27,8 +26,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능

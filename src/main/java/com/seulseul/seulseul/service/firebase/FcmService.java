@@ -1,25 +1,20 @@
 package com.seulseul.seulseul.service.firebase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.seulseul.seulseul.config.CustomException;
 import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.entity.alarm.Alarm;
-import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.concurrent.ScheduledFuture;
 
 import static com.seulseul.seulseul.dto.android.RouteDetailWrapDto.extractTimes;
@@ -61,12 +56,6 @@ public class FcmService {
         } else {
             System.out.println("올바른 시간 형식이 아닙니다.");
         }
-        System.out.println(hour);
-        System.out.println(minute);
-        System.out.println(h);
-        System.out.println(m);
-
-
         if(hour == h && minute == m) {
             alarmEnabledFalse(baseRoute.getAlarm());
         }

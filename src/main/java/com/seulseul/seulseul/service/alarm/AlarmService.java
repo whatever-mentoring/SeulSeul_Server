@@ -11,7 +11,6 @@ import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.alarm.AlarmRepository;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
