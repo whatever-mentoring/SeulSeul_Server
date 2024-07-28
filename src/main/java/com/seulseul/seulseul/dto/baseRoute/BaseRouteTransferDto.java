@@ -3,7 +3,6 @@ package com.seulseul.seulseul.dto.baseRoute;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
@@ -23,7 +22,6 @@ public class BaseRouteTransferDto {
 
         @JsonProperty("stationSet")
         private StationSet stationSet;
-
     }
 
     @Getter
@@ -36,7 +34,6 @@ public class BaseRouteTransferDto {
     @Getter
     @NoArgsConstructor
     public class DriveInfo {
-
         @JsonProperty("laneName")
         private String laneName;
 
@@ -47,6 +44,7 @@ public class BaseRouteTransferDto {
         private String wayName;
 
     }
+
     @Getter
     @NoArgsConstructor
     public class ExChangeInfoSet {
@@ -54,16 +52,17 @@ public class BaseRouteTransferDto {
         private List<ExChangeInfo> exChangeInfo;
 
     }
+
     @Getter
     @NoArgsConstructor
     public class ExChangeInfo {
-
         private String exName;
         private int exSID;
         private int fastTrain;
         private int fastDoor;
         private int exWalkTime;
     }
+
     @Getter
     @NoArgsConstructor
     public class StationSet {
@@ -74,7 +73,6 @@ public class BaseRouteTransferDto {
     @Getter
     @NoArgsConstructor
     public class Stations {
-
         private int travelTime;
     }
 }

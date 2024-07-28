@@ -1,7 +1,6 @@
 package com.seulseul.seulseul.dto.transferInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.seulseul.seulseul.dto.baseRoute.BaseRouteJsonDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

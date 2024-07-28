@@ -1,6 +1,5 @@
 package com.seulseul.seulseul.dto.endPos;
 
-
 import com.seulseul.seulseul.entity.endPos.EndPos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +24,4 @@ public class EndPosResDto {
         this.roadNameAddress = endPos.getRoadNameAddress();
         this.jibunAddress = endPos.getJibunAddress();
     }
-
 }
