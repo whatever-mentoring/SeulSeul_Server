@@ -27,7 +27,6 @@ public class FcmService {
     private ScheduledFuture<?> scheduledFuture;
     private final BaseRouteRepository baseRouteRepository;
 
-
     public void schedule(BaseRoute baseRoute) throws JsonProcessingException {
 
         String[] timeList = extractTimes(baseRoute.getRouteDetail().getTimeList());

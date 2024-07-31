@@ -7,7 +7,6 @@ import com.seulseul.seulseul.dto.baseRoute.BaseRouteStartUpdateDto;
 import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
-import com.seulseul.seulseul.service.result.UpdateResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

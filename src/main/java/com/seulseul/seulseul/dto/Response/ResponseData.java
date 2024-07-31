@@ -3,8 +3,8 @@ package com.seulseul.seulseul.dto.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class ResponseData {
     private int code;
     private Object data;

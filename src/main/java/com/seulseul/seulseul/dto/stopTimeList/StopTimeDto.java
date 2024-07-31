@@ -3,11 +3,9 @@ package com.seulseul.seulseul.dto.stopTimeList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
-@ToString
 @Getter
 public class StopTimeDto {
     private Result result;

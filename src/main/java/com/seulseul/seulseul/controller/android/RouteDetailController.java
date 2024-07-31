@@ -12,7 +12,6 @@ import com.seulseul.seulseul.service.result.ComputeResultService;
 import com.seulseul.seulseul.service.result.UpdateResultService;
 import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class RouteDetailController {
     private final RouteDetailService routeDetailService;
     private final BaseRouteService baseRouteService;

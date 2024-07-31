@@ -1,7 +1,5 @@
 package com.seulseul.seulseul.controller.endPos;
 
-import com.seulseul.seulseul.config.CustomException;
-import com.seulseul.seulseul.config.ErrorCode;
 import com.seulseul.seulseul.dto.Response.ResponseData;
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import com.seulseul.seulseul.dto.android.RouteDetailWrapDto;
@@ -20,7 +18,6 @@ import com.seulseul.seulseul.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,7 +25,6 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
 @RestController
 @RequiredArgsConstructor    //service 선언한 후 초기화 단계 필요한데, 초기화하지 않아도 되도록 해줌
 public class EndPosController {

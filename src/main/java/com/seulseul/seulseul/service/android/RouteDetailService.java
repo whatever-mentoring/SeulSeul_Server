@@ -10,7 +10,6 @@ import com.seulseul.seulseul.repository.android.RouteDetailRepository;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +18,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
-@Slf4j  //log.info() 사용가능
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RouteDetailService {
     private final BaseRouteRepository baseRouteRepository;

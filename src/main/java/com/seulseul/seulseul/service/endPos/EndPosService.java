@@ -10,19 +10,18 @@ import com.seulseul.seulseul.entity.endPos.EndPos;
 import com.seulseul.seulseul.entity.user.User;
 import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
 import com.seulseul.seulseul.repository.endPos.EndPosRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
-@Slf4j  //log.info() 사용가능
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EndPosService {
     private final EndPosRepository endPosRepository;
     private final BaseRouteRepository baseRouteRepository;

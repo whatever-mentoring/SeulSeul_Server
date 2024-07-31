@@ -5,14 +5,10 @@ import com.seulseul.seulseul.entity.alarm.Alarm;
 import com.seulseul.seulseul.entity.android.RouteDetail;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="BaseRoute")
@@ -43,6 +39,7 @@ public class BaseRoute {
 
     // 요일
     private String dayInfo;
+
     @Column(name="exSID")
     private String exSID1;
 
@@ -148,5 +145,4 @@ public class BaseRoute {
         this.fastTrainDoor = null;
         this.exWalkTime = null;
     }
-
 }

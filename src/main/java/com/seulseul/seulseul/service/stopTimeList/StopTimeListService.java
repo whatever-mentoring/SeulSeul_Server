@@ -37,7 +37,7 @@ public class StopTimeListService {
     private final StopTimeListRepository stopTimeListRepository;
 
     // Odsay에서 데이터 가져오기
-    @Transactional(readOnly = false)
+    @Transactional
     public String getStopTimeListFromAPI(int stationId, int wayCode) throws IOException {
 
         //1. API 연결

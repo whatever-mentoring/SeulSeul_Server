@@ -19,7 +19,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Transactional(readOnly = false)
+    @Transactional
     public UserOnlyDto saveUser(UserOnlyDto userOnlyDto) {
         userRepository.save(new User(userOnlyDto.getUuid()));
         return userOnlyDto;

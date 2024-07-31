@@ -4,14 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seulseul.seulseul.dto.endPos.EndPosDto;
 import com.seulseul.seulseul.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="EndPos")
