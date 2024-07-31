@@ -45,8 +45,8 @@ public class EndPosController {
 	//(1)endPos table에 저장: 사용자가 입력한 값에 기반 -> (2)baseRoute table에 저장
 	@PostMapping("/v1/end")
 	public ResponseEntity<?> createEndPos(@RequestBody EndPosDto form, @RequestHeader("Auth") UUID uuid) {
-		User user = userService.getUserByUuid(uuid);
-		EndPosResDto dto = endPosService.addDest(form, user);
+		User user = userService.findUserByUuid(uuid);
+		EndPosResDto dto = endPosService.saveEndPos(form, user);
 		ResponseData responseData = new ResponseData(200, dto);
 		return ResponseEntity.ok(responseData);
 	}
@@ -54,8 +54,8 @@ public class EndPosController {
 	// 유저의 모든 목적지 List로 보여주기
 	@GetMapping("/v1/end")
 	public ResponseEntity<ResponseData> getAllEndPos(@RequestHeader("Auth") UUID uuid) {
-		User user = userService.getUserByUuid(uuid);
-		List<EndPos> endPosList = endPosService.getAllEndPos(user);
+		User user = userService.findUserByUuid(uuid);
+		List<EndPos> endPosList = endPosService.findAllEndPos(user);
 		ResponseData responseData = new ResponseData(200, endPosList);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
 	}
@@ -65,14 +65,14 @@ public class EndPosController {
 	public ResponseEntity<ResponseData> getEndPos(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) throws
 		IOException,
 		ParseException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
-		EndPosResDto dto = endPosService.getEndPos(id, user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
+		EndPosResDto dto = endPosService.findEndPos(id, user);
 
 		if (baseRoute.getAlarm() != null && baseRoute.getAlarm().isAlarmEnabled() == true) {
 			//<추가>baseRoute 경로 설정
 			RouteDetailDto routeDetailDto = new RouteDetailDto();
-			routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+			routeDetailDto = updateResultService.findUpdatedResult(baseRoute.getId());
 			RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
 			// RouteDetail DB에 저장
 			RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);

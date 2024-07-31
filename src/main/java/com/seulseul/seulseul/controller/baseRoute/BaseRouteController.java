@@ -44,8 +44,8 @@ public class BaseRouteController {
 	@PostMapping("/v1/start")
 	public ResponseEntity<ResponseData> saveStartInfo(@RequestBody BaseRouteStartReqDto dto,
 		@RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 		BaseRouteStartDto reqDto = baseRouteService.saveStartInfo(dto, user);
 		ResponseData responseData = new ResponseData(200, reqDto);
 		return new ResponseEntity<ResponseData>(responseData, HttpStatus.OK);
@@ -54,13 +54,13 @@ public class BaseRouteController {
 	@PatchMapping("/v1/start")
 	public ResponseEntity<ResponseData> updateStartInfo(@RequestBody BaseRouteStartUpdateDto dto,
 		@RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
-		User user = userService.getUserByUuid(uuid);
+		User user = userService.findUserByUuid(uuid);
 		BaseRouteStartDto startDto = baseRouteStartService.updateStartInfo(dto, user);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 
 		//<추가>baseRoute 경로 설정
 		RouteDetailDto routeDetailDto = new RouteDetailDto();
-		routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+		routeDetailDto = updateResultService.findUpdatedResult(baseRoute.getId());
 		RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
 		// RouteDetail DB에 저장
 		RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);

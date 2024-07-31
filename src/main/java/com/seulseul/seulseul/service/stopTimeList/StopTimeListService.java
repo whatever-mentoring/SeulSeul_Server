@@ -1,20 +1,5 @@
 package com.seulseul.seulseul.service.stopTimeList;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seulseul.seulseul.config.CustomException;
-import com.seulseul.seulseul.config.ErrorCode;
-import com.seulseul.seulseul.entity.ApiKey;
-import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
-import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
-import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
-import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,196 +11,211 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seulseul.seulseul.config.CustomException;
+import com.seulseul.seulseul.config.ErrorCode;
+import com.seulseul.seulseul.entity.ApiKey;
+import com.seulseul.seulseul.entity.baseRoute.BaseRoute;
+import com.seulseul.seulseul.entity.stopTimeList.StopTimeList;
+import com.seulseul.seulseul.repository.baseRoute.BaseRouteRepository;
+import com.seulseul.seulseul.repository.stopTimeList.StopTimeListRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @RequiredArgsConstructor
 @Slf4j  //log.info() 사용가능
 @Service
 @Transactional(readOnly = true)
 public class StopTimeListService {
-    private final ApiKey apiKey;
-    private StopTimeList stopTimeList;
-    private final BaseRouteRepository baseRouteRepository;
-    private final StopTimeListRepository stopTimeListRepository;
+	private final ApiKey apiKey;
+	private StopTimeList stopTimeList;
+	private final BaseRouteRepository baseRouteRepository;
+	private final StopTimeListRepository stopTimeListRepository;
 
-    // Odsay에서 데이터 가져오기
-    @Transactional
-    public String getStopTimeListFromAPI(int stationId, int wayCode) throws IOException {
+	// Odsay에서 데이터 가져오기
+	@Transactional
+	public String findStopTimeListFromAPI(int stationId, int wayCode) throws IOException {
+		//1. API 연결
+		String urlInfo =
+			"https://api.odsay.com/v1/api/subwayTimeTable?lang=0&stationID=" + stationId + "&wayCode=" + wayCode
+				+ "&apiKey=" + URLEncoder.encode(apiKey.getApiKey(), "UTF-8");
 
-        //1. API 연결
-        String urlInfo = "https://api.odsay.com/v1/api/subwayTimeTable?lang=0&stationID="+ stationId +"&wayCode="+ wayCode +"&apiKey=" + URLEncoder.encode(apiKey.getApiKey(), "UTF-8");
+		// http 연결
+		URL url = new URL(urlInfo);
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-type", "application/json");
 
-        // http 연결
-        URL url = new URL(urlInfo);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
+		BufferedReader bufferedReader =
+			new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-        BufferedReader bufferedReader =
-                new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = bufferedReader.readLine()) != null) {
+			sb.append(line);
+		}
 
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            sb.append(line);
-        }
+		bufferedReader.close();
+		conn.disconnect();
 
-        bufferedReader.close();
-        conn.disconnect();
+		return sb.toString();
+	}
 
-        return sb.toString();
-    }
+	// 데이터 저장 => 일단 출발역만!!!!!!. 변하는것: 역Id, wayCode에따라up/down, 요일에따라OrdList/SatList/SunList
+	//[시작역,환승역1,도착역], [2,1]
+	@Transactional
+	public StopTimeList findStopTimeListData(Long id) throws IOException {
+		//출발역, 도착역, 환승역 stationId
+		List<Integer> stationIdList = new ArrayList<>();
+		ObjectMapper objectMapper = new ObjectMapper();
 
-    // 데이터 저장 => 일단 출발역만!!!!!!. 변하는것: 역Id, wayCode에따라up/down, 요일에따라OrdList/SatList/SunList
-    //[시작역,환승역1,도착역], [2,1]
-    @Transactional
-    public StopTimeList findStopTimeListData(Long id) throws IOException {
-        //출발역, 도착역, 환승역 stationId
-        List<Integer> stationIdList = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
+		//방면
+		String wayName;
 
-        //방면
-        String wayName;
+		//기존에 존재하는 baseRoute id로 해당 row 찾기
+		BaseRoute baseRoute = baseRouteRepository.findById(id)
+			.orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
 
-        //기존에 존재하는 baseRoute id로 해당 row 찾기
-        BaseRoute baseRoute = baseRouteRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASEROUTE_NOT_FOUND));
+		//거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
+		stationIdList.add(baseRoute.getSID());  //출발ID
 
-        //거치는 모든 역의 stationId 순서대로 :출발id->환승id->(동일한 환승역이름 But 환승id 다름)환승id->도착
-        stationIdList.add(baseRoute.getSID());  //출발ID
+		//환승 하지 않을 경우는 statinoIdList 넣지 X
+		if (baseRoute.getExSID1() != null) {
+			String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class); //환승ID
+			String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
 
-        //환승 하지 않을 경우는 statinoIdList 넣지 X
-        if (baseRoute.getExSID1()!=null) {
-            String[] getExSID1 = objectMapper.readValue(baseRoute.getExSID1(), String[].class); //환승ID
-            String[] getExSID2 = objectMapper.readValue(baseRoute.getExSID2(), String[].class);
+			for (int i = 0; i < getExSID1.length; i++) {
+				stationIdList.add(Integer.valueOf(getExSID1[i]));
+				stationIdList.add(Integer.valueOf(getExSID2[i]));
+			}
+		}
 
-            for (int i=0; i<getExSID1.length; i++) {
-                stationIdList.add(Integer.valueOf(getExSID1[i]));
-                stationIdList.add(Integer.valueOf(getExSID2[i]));
-            }
-        }
+		stationIdList.add(baseRoute.getEID());  //도착ID
 
-        stationIdList.add(baseRoute.getEID());  //도착ID
+		//기존의 값이 존재하는 경우 삭제
+		if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
+			List<StopTimeList> stopTimeList1 = stopTimeListRepository.findByBaseRouteId(id);
+			for (int i = 0; i < stopTimeList1.size(); i++) {
+				stopTimeListRepository.delete(stopTimeList1.get(i));
+			}
+		}
 
+		//미리 저장된 출발역과 도착역 정보를 넣어 API 받기
+		int check = 0;
+		int idx = 0;
+		for (Integer stationId : stationIdList) {
+			if (check == 2) {
+				idx += 1;
+				check = 0;
+			}
+			//API 사용
+			String[] getWayCode = objectMapper.readValue(baseRoute.getWayCode(), String[].class);
+			String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
 
-        //기존의 값이 존재하는 경우 삭제
-        if (!stopTimeListRepository.findByBaseRouteId(id).isEmpty()) {
-            List<StopTimeList> stopTimeList1 = stopTimeListRepository.findByBaseRouteId(id);
-            for (int i=0;i<stopTimeList1.size();i++) {
-                stopTimeListRepository.delete(stopTimeList1.get(i));
-            }
-        }
+			String string = findStopTimeListFromAPI(stationId, Integer.parseInt(getWayCode[idx]));
+			//wayName 방면
+			wayName = getWayName[idx];
 
-        //미리 저장된 출발역과 도착역 정보를 넣어 API 받기
-        int check = 0;
-        int idx = 0;
-        for (Integer stationId : stationIdList) {
-            if (check == 2) {
-                idx += 1;
-                check = 0;
-            }
-            //API 사용
-            String[] getWayCode = objectMapper.readValue(baseRoute.getWayCode(), String[].class);
-            String[] getWayName = objectMapper.readValue(baseRoute.getWayName(), String[].class);
+			check += 1;
 
-            String string = getStopTimeListFromAPI(stationId, Integer.parseInt(getWayCode[idx]));
-            //wayName 방면
-            wayName = getWayName[idx];
+			//원하는 데이터 찾기
 
-            check += 1;
+			try {
+				JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
 
-            //원하는 데이터 찾기
+				// "exSID" 값을 저장할 리스트 생성
+				List<String> timeList = new ArrayList<>();
 
-            try {
-                JsonNode jsonNode = objectMapper.readTree(string); // jsonString은 JSON 문자열을 담고 있는 변수
+				//각 배열에 접근
+				JsonNode ordArray;
 
-                // "exSID" 값을 저장할 리스트 생성
-                List<String> timeList = new ArrayList<>();
+				if (getWayCode[idx].equals("1")) {
+					if (baseRoute.getDayInfo().equals("토요일")) {
+						ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
+					} else if (baseRoute.getDayInfo().equals("일요일")) {
+						ordArray = jsonNode.get("result").get("SunList").get("up").get("time");
+					} else {
+						ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
+					}
+				} else {
+					if (baseRoute.getDayInfo().equals("토요일")) {
+						ordArray = jsonNode.get("result").get("SatList").get("down").get("time");
+					} else if (baseRoute.getDayInfo().equals("일요일")) {
+						ordArray = jsonNode.get("result").get("SunList").get("down").get("time");
+					} else {
+						ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
+					}
+				}
 
-                //각 배열에 접근
-                JsonNode ordArray;
+				//가져온 값을 뒤에서 5시간까지만 받아오기
+				int totalElements = ordArray.size(); // ordArray의 총 요소 개수
+				int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
 
-                if (getWayCode[idx].equals("1")) {
-                    if (baseRoute.getDayInfo().equals("토요일")) {
-                        ordArray = jsonNode.get("result").get("SatList").get("up").get("time");
-                    } else if (baseRoute.getDayInfo().equals("일요일")) {
-                        ordArray = jsonNode.get("result").get("SunList").get("up").get("time");
-                    } else {
-                        ordArray = jsonNode.get("result").get("OrdList").get("up").get("time");
-                    }
-                } else {
-                    if (baseRoute.getDayInfo().equals("토요일")) {
-                        ordArray = jsonNode.get("result").get("SatList").get("down").get("time");
-                    } else if (baseRoute.getDayInfo().equals("일요일")) {
-                        ordArray = jsonNode.get("result").get("SunList").get("down").get("time");
-                    } else {
-                        ordArray = jsonNode.get("result").get("OrdList").get("down").get("time");
-                    }
-                }
+				for (int i = startIndex; i < totalElements; i++) {
+					JsonNode ordInfo = ordArray.get(i);
+					Integer hour = ordInfo.get("Idx").asInt();
+					String minutes = ordInfo.get("list").asText();
+					String[] minute = minutes.split(" ");
 
-                //가져온 값을 뒤에서 5시간까지만 받아오기
-                int totalElements = ordArray.size(); // ordArray의 총 요소 개수
-                int startIndex = Math.max(totalElements - 5, 0); // 뒤에서 5개 요소의 시작 인덱스 계산
+					//wayName에 해당하는 시간만 DB에 저장
 
-                for (int i = startIndex; i < totalElements; i++) {
-                    JsonNode ordInfo = ordArray.get(i);
-                    Integer hour = ordInfo.get("Idx").asInt();
-                    String minutes = ordInfo.get("list").asText();
-                    String[] minute = minutes.split(" ");
+					//내선순환, 외선순환은 반만 저장 ㅠ
+					if (wayName.contains("내선순환") || wayName.contains("외선순환")) {
+						int middle = minute.length / 2;
+						// 첫 번째 배열 (0부터 middle-1까지의 요소)
+						String[] firstHalf = Arrays.copyOfRange(minute, 0, middle);
+						// 두 번째 배열 (middle부터 끝까지의 요소)
+						String[] secondHalf = Arrays.copyOfRange(minute, middle, minute.length);
+						for (String m : firstHalf) {
+							String min = m.split("\\(")[0];
+							timeList.add(hour + ":" + min);
+						}
+					}
+					if (wayName.contains(".")) {
+						// 정규표현식 패턴 설정
+						Pattern pattern = Pattern.compile("\\.");
+						String[] parts = pattern.split(wayName);
 
-                    //wayName에 해당하는 시간만 DB에 저장
+						// 문자열을 점(".")을 기준으로 분할한 결과를 배열로 저장
+						for (String part : parts) {
+							for (String m : minute) {
+								if (m.contains(part)) {
+									String min = m.split("\\(")[0];
+									timeList.add(hour + ":" + min);
+								}
+							}
+						}
 
-                    //내선순환, 외선순환은 반만 저장 ㅠ
-                    if (wayName.contains("내선순환") || wayName.contains("외선순환")) {
-                        int middle = minute.length / 2;
-                        // 첫 번째 배열 (0부터 middle-1까지의 요소)
-                        String[] firstHalf = Arrays.copyOfRange(minute, 0, middle);
-                        // 두 번째 배열 (middle부터 끝까지의 요소)
-                        String[] secondHalf = Arrays.copyOfRange(minute, middle, minute.length);
-                        for (String m : firstHalf) {
-                            String min = m.split("\\(")[0];
-                            timeList.add(hour + ":" + min);
-                        }
-                    }
-                    if (wayName.contains(".")) {
-                        // 정규표현식 패턴 설정
-                        Pattern pattern = Pattern.compile("\\.");
-                        String[] parts = pattern.split(wayName);
+					} else {
+						for (String m : minute) {
+							if (m.contains(wayName)) {
+								String min = m.split("\\(")[0];
+								timeList.add(hour + ":" + min);
+							}
+						}
+					}
+				}
+				//객체에 넣어서 실제 DB에 저장
+				StopTimeList stopTimeList = new StopTimeList();
+				String stringTime = objectMapper.writeValueAsString(timeList);
+				stopTimeList.update(id, stationId, stringTime);
+				try {
+					stopTimeListRepository.save(stopTimeList);
+				} catch (DataIntegrityViolationException e) {
+					System.out.println("hibernate exception 발생: " + e);
+					throw e;
+				}
 
-                        // 문자열을 점(".")을 기준으로 분할한 결과를 배열로 저장
-                        for (String part : parts) {
-                            for (String m : minute) {
-                                if (m.contains(part)) {
-                                    String min = m.split("\\(")[0];
-                                    timeList.add(hour + ":" + min);
-                                }
-                            }
-                        }
-
-                    } else {
-                        for (String m : minute) {
-                            if (m.contains(wayName)) {
-                                String min = m.split("\\(")[0];
-                                timeList.add(hour + ":" + min);
-                            }
-                        }
-                    }
-                }
-                //객체에 넣어서 실제 DB에 저장
-                StopTimeList stopTimeList = new StopTimeList();
-                String stringTime = objectMapper.writeValueAsString(timeList);
-                stopTimeList.update(id, stationId, stringTime);
-                try {
-                    stopTimeListRepository.save(stopTimeList);
-                } catch (DataIntegrityViolationException e) {
-                    System.out.println("hibernate exception 발생: "+e);
-                    throw e;
-                }
-
-
-            } catch (Exception e) {
-                log.info(e.toString());
-            }
-        }
-
-        return stopTimeList;
-    }
+			} catch (Exception e) {
+				log.info(e.toString());
+			}
+		}
+		return stopTimeList;
+	}
 }

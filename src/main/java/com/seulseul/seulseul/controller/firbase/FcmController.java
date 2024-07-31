@@ -34,7 +34,7 @@ public class FcmController {
 	@PostMapping("/v1/fcm/check")
 	public ResponseEntity<ResponseData> getTransfer(@RequestHeader("Auth") UUID uuid,
 		@RequestBody FCMDto fcmDto) throws IOException {
-		User user = userService.getUserByUuid(uuid);
+		User user = userService.findUserByUuid(uuid);
 		userService.saveToken(user, fcmDto);
 		ResponseData responseData = new ResponseData(200, null);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -42,8 +42,8 @@ public class FcmController {
 
 	@RequestMapping("/send/token")
 	public String creteToken(@RequestHeader("Auth") UUID uuid) throws FirebaseMessagingException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 		String pos = baseRoute.getFirstStation();
 		Long original = baseRoute.getAlarm().getAlarmTime();
 		String alarmTime = "";

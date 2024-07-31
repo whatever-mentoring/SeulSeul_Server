@@ -37,8 +37,8 @@ public class RouteDetailController {
 	public ResponseEntity<ResponseData> getRouteDetail(@RequestHeader("Auth") UUID uuid) throws
 		ParseException,
 		IOException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 		RouteDetailDto routeDetailDto = new RouteDetailDto();
 		// 첫번째 작동 시
 		if (baseRoute.getSID() == 0 && baseRoute.getEID() == 0) {
@@ -46,7 +46,7 @@ public class RouteDetailController {
 		}
 		// 출발지나 도착지 좌표가 변경되어 작동 시
 		else {
-			routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+			routeDetailDto = updateResultService.findUpdatedResult(baseRoute.getId());
 		}
 		RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
 		// RouteDetail DB에 저장
