@@ -2,13 +2,11 @@ package com.seulseul.seulseul.entity.android;
 
 import com.seulseul.seulseul.dto.android.RouteDetailDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class RouteDetail {
     @Id
