@@ -46,8 +46,8 @@ public class AlarmController {
 	@PostMapping("/v1/alarm")
 	public ResponseEntity<ResponseData> createAlarm(@RequestBody AlarmReqDto dto,
 		@RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 
 		//알람 저장
 		AlarmDto alarmDto = alarmService.saveAlarm(dto, user);
@@ -78,14 +78,14 @@ public class AlarmController {
 	@PatchMapping("/v1/alarm")
 	public ResponseEntity<ResponseData> updateAlarm(@RequestBody AlarmUpdateDto updateDto,
 		@RequestHeader("Auth") UUID uuid) throws IOException, ParseException {
-		User user = userService.getUserByUuid(uuid);
-		BaseRoute baseRoute = baseRouteService.findByUser(user);
+		User user = userService.findUserByUuid(uuid);
+		BaseRoute baseRoute = baseRouteService.findBaseRouteByUser(user);
 
 		//알람 수정
 		AlarmDto alarmDto = alarmService.updateAlarm(updateDto, user);
 
 		//<추가>baseRoute 경로 설정
-		RouteDetailDto routeDetailDto = updateResultService.getUpdatedResult(baseRoute.getId());
+		RouteDetailDto routeDetailDto = updateResultService.findUpdatedResult(baseRoute.getId());
 		RouteDetailWrapDto wrapDto = new RouteDetailWrapDto();
 		// RouteDetail DB에 저장
 		RouteDetail routeDetail = routeDetailService.saveRouteDetail(routeDetailDto, baseRoute);
@@ -106,7 +106,7 @@ public class AlarmController {
 
 	@PatchMapping("/v1/alarm/enabled/{id}")
 	public ResponseEntity<ResponseData> updateAlarm(@RequestHeader("Auth") UUID uuid, @PathVariable("id") Long id) {
-		User user = userService.getUserByUuid(uuid);
+		User user = userService.findUserByUuid(uuid);
 		AlarmDto alarmDto = alarmService.updateAlarmEnabled(id, user);
 		ResponseData responseData = new ResponseData(200, alarmDto);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);

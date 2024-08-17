@@ -1,79 +1,80 @@
 package com.seulseul.seulseul.dto.stopTimeList;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 public class StopTimeDto {
-    private Result result;
+	private Result result;
 
-    @Getter
-    @NoArgsConstructor
-    public class Result {
-        @JsonProperty("OrdList")
-        private OrdList ordList;
-        @JsonProperty("SatList")
-        private SatList satList;
+	@Getter
+	@NoArgsConstructor
+	public class Result {
+		@JsonProperty("OrdList")
+		private OrdList ordList;
+		@JsonProperty("SatList")
+		private SatList satList;
 
-        @JsonProperty("SunList")
-        private SunList sunList;
+		@JsonProperty("SunList")
+		private SunList sunList;
 
-    }
+	}
 
-    @Getter
-    @NoArgsConstructor
-    public class OrdList {
-        @JsonProperty("up")
-        private Up up;
+	@Getter
+	@NoArgsConstructor
+	public class OrdList {
+		@JsonProperty("up")
+		private Up up;
 
-        @JsonProperty("down")
-        private Down down;
+		@JsonProperty("down")
+		private Down down;
 
-    }
-    @Getter
-    @NoArgsConstructor
-    public class SatList {
-        @JsonProperty("up")
-        private Up up;
+	}
 
-        @JsonProperty("down")
-        private Down down;
-    }
+	@Getter
+	@NoArgsConstructor
+	public class SatList {
+		@JsonProperty("up")
+		private Up up;
 
-    @Getter
-    @NoArgsConstructor
-    public class SunList {
-        @JsonProperty("up")
-        private Up up;
+		@JsonProperty("down")
+		private Down down;
+	}
 
-        @JsonProperty("down")
-        private Down down;
-    }
-    @Getter
-    @NoArgsConstructor
-    public class Up {
-        @JsonProperty("time")
-        private List<Time> time;
-    }
+	@Getter
+	@NoArgsConstructor
+	public class SunList {
+		@JsonProperty("up")
+		private Up up;
 
-    @Getter
-    @NoArgsConstructor
-    public class Down {
-        @JsonProperty("time")
-        private List<Time> time;
-    }
+		@JsonProperty("down")
+		private Down down;
+	}
 
-    @Getter
-    @NoArgsConstructor
-    public class Time {
-        @JsonProperty("idx")
-        private Integer idx;
-        @JsonProperty("list")
-        private String list;
-    }
+	@Getter
+	@NoArgsConstructor
+	public class Up {
+		@JsonProperty("time")
+		private List<Time> time;
+	}
 
+	@Getter
+	@NoArgsConstructor
+	public class Down {
+		@JsonProperty("time")
+		private List<Time> time;
+	}
 
+	@Getter
+	@NoArgsConstructor
+	public class Time {
+		@JsonProperty("idx")
+		private Integer idx;
+		@JsonProperty("list")
+		private String list;
+	}
 }
